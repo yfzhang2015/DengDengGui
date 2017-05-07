@@ -4,12 +4,12 @@ using System.Data;
 using System.Data.Common;
 
 
-namespace GeneralBusinessData
+namespace GeneralBusinessData.SqlServer
 {
     /// <summary>
-    /// SQL语句数据执行类
+    /// MSSqlServer语句执行类
     /// </summary>
-    public interface ISqlHelper
+    public class SqlServerHelper : ISqlHelper
     {
         /// <summary>
         /// 查询列表
@@ -17,26 +17,38 @@ namespace GeneralBusinessData
         /// <param name="sql">查询语句</param>
         /// <param name="parmeters">参数列表</param>
         /// <returns></returns>
-        List<Dictionary<string, dynamic>> QueryList(string sql, params DbParameter[] parmeters);
+        public List<Dictionary<string, dynamic>> QueryList(string sql, params DbParameter[] parmeters)
+        {
+            return null;
+        }
         /// <summary>
         /// 查询列表
         /// </summary>
         /// <param name="sqlOperation">SQL操作对象</param>
         /// <returns></returns>
-        List<Dictionary<string, dynamic>> QueryList(SqlOperation sqlOperation);
+        public List<Dictionary<string, dynamic>> QueryList(SqlOperation sqlOperation)
+        {
+            return null;
+        }
         /// <summary>
         /// 查询单值
         /// </summary>
         /// <param name="sql">查询语句</param>
         /// <param name="parmeters">参数列表</param>
         /// <returns></returns>
-        object QueryValue(string sql, params DbParameter[] parmeters);
+        public object QueryValue(string sql, params DbParameter[] parmeters)
+        {
+            return null;
+        }
         /// <summary>
         /// 查询单值
         /// </summary>
         /// <param name="sqlOperation">SQL操作对象</param>
         /// <returns></returns>
-        object QueryValue(SqlOperation sqlOperation);
+        public object QueryValue(SqlOperation sqlOperation)
+        {
+            return null;
+        }
 
         /// <summary>
         /// 增删改数据
@@ -44,21 +56,30 @@ namespace GeneralBusinessData
         /// <param name="sql">sql语句</param>
         /// <param name="parmeters">参数列表</param>
         /// <returns></returns>
-        int ChangeData(string sql, params DbParameter[] parmeters);
+        public int ChangeData(string sql, params DbParameter[] parmeters)
+        {
+            return 0;
+        }
 
         /// <summary>
         /// 增删改数据
         /// </summary>
         /// <param name="sqlOperation">SQL操作对象</param>
         /// <returns></returns>
-        int ChangeData(SqlOperation sqlOperation);
+        public int ChangeData(SqlOperation sqlOperation)
+        {
+            return 0;
+        }
 
         /// <summary>
         /// 在事务中执行批量SQL
         /// </summary>
         /// <param name="sqlOperations">多个SQL操作对象</param>
         /// <returns></returns>
-        bool ExecuteTransactionSql(List<SqlOperation> sqlOperations);
+        public bool ExecuteTransactionSql(List<SqlOperation> sqlOperations)
+        {
+            return false;
+        }
 
     }
 
