@@ -13,6 +13,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "代码规范", "代码规�
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GeneralBusinessData", "GeneralBusinessData\GeneralBusinessData.csproj", "{6C53484D-97BD-4974-B1A3-84CA549907C1}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GeneralBusinessRepository", "GeneralBusinessRepository\GeneralBusinessRepository.csproj", "{359E778B-157E-4FE3-AA5F-B173AB8DF472}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{6C53484D-97BD-4974-B1A3-84CA549907C1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6C53484D-97BD-4974-B1A3-84CA549907C1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6C53484D-97BD-4974-B1A3-84CA549907C1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{359E778B-157E-4FE3-AA5F-B173AB8DF472}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{359E778B-157E-4FE3-AA5F-B173AB8DF472}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{359E778B-157E-4FE3-AA5F-B173AB8DF472}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{359E778B-157E-4FE3-AA5F-B173AB8DF472}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

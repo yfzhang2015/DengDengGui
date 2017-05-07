@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
+using System.Text;
 
 namespace GeneralBusinessSystem
 {
@@ -11,6 +12,9 @@ namespace GeneralBusinessSystem
     {
         public static void Main(string[] args)
         {
+            //支持中文
+            Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
+
             var host = new WebHostBuilder()
                 .UseKestrel()
                 .UseContentRoot(Directory.GetCurrentDirectory())
