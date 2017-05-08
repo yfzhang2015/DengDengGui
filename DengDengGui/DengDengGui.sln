@@ -9,6 +9,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "代码规范", "代码规�
 	ProjectSection(SolutionItems) = preProject
 		Css.txt = Css.txt
 		JavaScript.txt = JavaScript.txt
+		SqlServer.txt = SqlServer.txt
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GeneralBusinessData", "GeneralBusinessData\GeneralBusinessData.csproj", "{6C53484D-97BD-4974-B1A3-84CA549907C1}"
