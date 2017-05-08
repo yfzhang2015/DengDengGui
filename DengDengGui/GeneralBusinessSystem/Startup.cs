@@ -8,6 +8,10 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using GeneralBusinessRepository;
+using GeneralBusinessSystem.Model;
+using GeneralBusinessData;
+using Microsoft.Extensions.Options;
+using GeneralBusinessData.SqlServer;
 
 namespace GeneralBusinessSystem
 {
@@ -28,9 +32,14 @@ namespace GeneralBusinessSystem
 
         public void ConfigureServices(IServiceCollection services)
         {
+            //配置文件
+            services.AddOptions();
+            services.Configure<AppSettings>(Configuration.GetSection("AppSettings"));
+            //连接字符串
+            services.Configure<ConnectionStrings>(Configuration.GetSection("ConnectionStrings"));
+
             //注释业务处理模块，for sql server
-           // services.AddTransient<IBusinessRepository, BusinessForSqlServerRepository>();
-          
+            services.AddSingleton<IBusinessRepository>(new BusinessForSqlServerRepository(CreateSqlHelper()));
 
             services.AddMvc();
         }
@@ -38,7 +47,7 @@ namespace GeneralBusinessSystem
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
-      
+
 
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
@@ -61,6 +70,26 @@ namespace GeneralBusinessSystem
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
+        }
+
+        /// <summary>
+        /// 创建SqlHelper
+        /// </summary>
+        /// <param name="settings">配置文件</param>
+        /// <param name="connectionStrings">数据库连接字符串</param>
+        /// <returns></returns>
+        ISqlHelper CreateSqlHelper()
+        {           
+            ISqlHelper sqlHelper = null;
+            var dataBase = Configuration.GetSection("AppSettings")["DataBase"];
+            var defaultConnection = Configuration.GetSection("ConnectionStrings")["DefaultConnection"];
+            switch (dataBase)
+            {
+                case "sqlserver":
+                    sqlHelper = new SqlServerHelper(defaultConnection);
+                    break;
+            }
+            return sqlHelper;
         }
     }
 }
