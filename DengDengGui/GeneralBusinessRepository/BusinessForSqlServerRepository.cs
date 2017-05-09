@@ -75,5 +75,58 @@ namespace GeneralBusinessRepository
             return _sqlHelper.ChangeData(sql, idParameter);
         }
         #endregion
+
+        #region 角色管理
+        /// <summary>
+        /// 查询全部角色
+        /// </summary>
+        /// <returns></returns>
+        public List<Dictionary<string, dynamic>> GetRoles()
+        {
+            var sql = "select * from roles";
+            return _sqlHelper.QueryList(sql);
+        }
+        /// <summary>
+        /// 添加角色
+        /// </summary>
+        /// <param name="roleName">角色名</param>
+        /// <returns></returns>
+        public int AddRole(string roleName)
+        {
+            var sql = $@"insert into roles(name) values(@name)";
+            var roleNameParameter = new SqlParameter() { Value = roleName, ParameterName = "@name" };
+            return _sqlHelper.ChangeData(sql, roleNameParameter);
+        }
+
+        /// <summary>
+        /// 修改角色
+        /// </summary>
+        /// <param name="id">编号</param>
+        /// <param name="roleName">角色名</param>
+        /// <returns></returns>
+        public int Modify角色(int id, string roleName)
+        {
+            var sql = $@"update  roles set name=@name,password) =@password where id=@id";
+            var userNameParameter = new SqlParameter() { Value = roleName, ParameterName = "@name" };
+            var idParameter = new SqlParameter() { Value = id, ParameterName = "@id" };
+            return _sqlHelper.ChangeData(sql, userNameParameter, idParameter);
+        }
+
+        /// <summary>
+        /// 删除角色
+        /// </summary>
+        /// <param name="id">编号</param>
+        /// <returns></returns>
+        public int RemoveRole(int id)
+        {
+            var sql = $@"delete roles where id=@id";
+            var idParameter = new SqlParameter() { Value = id, ParameterName = "@id" };
+            return _sqlHelper.ChangeData(sql, idParameter);
+        }
+        #endregion
+
+       
+
+
     }
 }
