@@ -16,6 +16,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GeneralBusinessData", "Gene
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GeneralBusinessRepository", "GeneralBusinessRepository\GeneralBusinessRepository.csproj", "{359E778B-157E-4FE3-AA5F-B173AB8DF472}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "通用业务平台", "通用业务平台", "{CAFD7866-29D5-4244-AF96-134A3713A367}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -37,5 +39,11 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{896A5701-3335-407C-9DA9-D7B4BCA96207} = {CAFD7866-29D5-4244-AF96-134A3713A367}
+		{A9EA6AD1-1A76-4599-AB5D-4CCF7842454B} = {CAFD7866-29D5-4244-AF96-134A3713A367}
+		{6C53484D-97BD-4974-B1A3-84CA549907C1} = {CAFD7866-29D5-4244-AF96-134A3713A367}
+		{359E778B-157E-4FE3-AA5F-B173AB8DF472} = {CAFD7866-29D5-4244-AF96-134A3713A367}
 	EndGlobalSection
 EndGlobal
