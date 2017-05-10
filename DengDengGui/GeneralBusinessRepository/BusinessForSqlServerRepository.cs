@@ -101,22 +101,19 @@ namespace GeneralBusinessRepository
         /// <param name="userName">用户名</param>
         /// <param name="newPassword">新密码</param>
         /// <returns></returns>
-        public bool ModifyPassword(string userName,string newPassword)
+        public bool ModifyPassword(string userName, string newPassword)
         {
             var sql = "update  users set password=@newpassword where username=@username ";
-            var userNameParameter = new SqlParameter() { Value = userName, ParameterName = "@username" };         
+            var userNameParameter = new SqlParameter() { Value = userName, ParameterName = "@username" };
             var newPasswordParameter = new SqlParameter() { Value = newPassword, ParameterName = "@newpassword" };
             var result = _sqlHelper.ChangeData(sql, userNameParameter, newPasswordParameter);
             if (result > 0)
             {
                 return true;
-            }else
-            {
-                return false;
             }
             else
             {
-                return null;
+                return false;
             }
         }
         #endregion
@@ -149,7 +146,7 @@ namespace GeneralBusinessRepository
         /// <param name="id">编号</param>
         /// <param name="roleName">角色名</param>
         /// <returns></returns>
-        public int Modify角色(int id, string roleName)
+        public int ModifyRole(int id, string roleName)
         {
             var sql = $@"update  roles set name=@name,password) =@password where id=@id";
             var userNameParameter = new SqlParameter() { Value = roleName, ParameterName = "@name" };
