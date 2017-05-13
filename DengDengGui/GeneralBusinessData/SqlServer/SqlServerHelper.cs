@@ -37,7 +37,6 @@ namespace GeneralBusinessData.SqlServer
             {
                 var command = new SqlCommand();
                 command.Connection = connection;
-                command.CommandType = System.Data.CommandType.StoredProcedure;
                 command.CommandText = sql;
                 command.Parameters.AddRange(parmeters);
                 connection.Open();

@@ -116,6 +116,24 @@ namespace GeneralBusinessRepository
                 return false;
             }
         }
+        /// <summary>
+        /// 查用户名查询权限中的action
+        /// </summary>
+        /// <param name="username">用户名</param>
+        /// <returns></returns>
+        public List<Dictionary<string, dynamic>> GetPermissionByUserID(string username)
+        {
+            var sql = $@"SELECT  [Permissions].[Action]
+FROM    dbo.Users
+        JOIN dbo.UserRoles ON Users.ID = UserRoles.UserID
+        JOIN dbo.Roles ON Roles.ID = UserRoles.RoleID
+        JOIN RolePermissions ON Roles.ID = RolePermissions.RoleID
+        JOIN [Permissions] ON [Permissions].ID = RolePermissions.PermissionID
+WHERE   Users.UserName = @username";
+            var userNameParameter = new SqlParameter() { Value = username, ParameterName = "@username" };
+            return _sqlHelper.QueryList(sql, userNameParameter);
+        }
+
         #endregion
 
         #region 角色管理
@@ -175,7 +193,7 @@ namespace GeneralBusinessRepository
         /// <returns></returns>
         public List<Dictionary<string, dynamic>> GetMenusByUserName(string userName)
         {
-            var sql = $@"SELECT rolemodules.menuid ,menus.name,rolemodules.moduleid,modules.name
+            var sql = $@"SELECT rolemodules.menuid ,menus.name AS menuname,rolemodules.moduleid,modules.name AS modulename
 FROM    users
         JOIN userroles ON users.id = userroles.userid
         JOIN roles ON userroles.roleid = roles.id

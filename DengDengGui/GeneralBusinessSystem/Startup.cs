@@ -12,7 +12,7 @@ using GeneralBusinessSystem.Model;
 using GeneralBusinessData;
 using Microsoft.Extensions.Options;
 using GeneralBusinessData.SqlServer;
-
+using GeneralBusinessSystem.Middleware;
 namespace GeneralBusinessSystem
 {
     public class Startup
@@ -32,6 +32,7 @@ namespace GeneralBusinessSystem
 
         public void ConfigureServices(IServiceCollection services)
         {
+          
             //配置文件
             services.AddOptions();
             services.Configure<AppSettings>(Configuration.GetSection("AppSettings"));
@@ -47,7 +48,7 @@ namespace GeneralBusinessSystem
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
-
+        
 
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
@@ -61,9 +62,15 @@ namespace GeneralBusinessSystem
             {
                 app.UseExceptionHandler("/Home/Error");
             }
+         
 
             app.UseStaticFiles();
-
+            //添加权限中间件
+            app.UsePermission(new PermissionMiddlewareOption()
+            {
+                LoginAction = @"/login",
+                NoPermissionAction = @"/nopermission"
+            });
             app.UseMvc(routes =>
             {
                 routes.MapRoute(

@@ -82,6 +82,14 @@ namespace GeneralBusinessRepository
         /// <param name="id">编号</param>
         /// <returns></returns>
         int RemoveRole(int id);
+
+        /// <summary>
+        /// 查用户名查询权限中的action
+        /// </summary>
+        /// <param name="username">用户名</param>
+        /// <returns></returns>
+        List<Dictionary<string, dynamic>> GetPermissionByUserID(string username);
+
         #endregion
 
         #region 菜单管理

@@ -1,0 +1,92 @@
+﻿@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>登录</title>
+    <link href="~/lib/bootstrap/dist/css/bootstrap.css" rel="stylesheet" />
+    <style>
+        .main {
+            height: 600px;
+            width: 100%;
+            background: url(/images/back.jpg) center bottom no-repeat;
+            position: relative;
+        }
+        .col-md-12 {
+            text-align: center;
+            margin-top: 10px;
+        }
+
+        .input-group {
+            width: 300px;
+            margin: 0 auto;
+        }
+
+        .input-group-addon {
+            width: 80px;
+        }
+    </style>
+</head>
+<body>
+    <div class="main">
+        <br />
+        <span style="margin-left:30%; font-size:4em;color:#808080;font-family:'Yu Gothic UI'">欢迎登录</span><br />
+        <span style="margin-left:30%; font-size:2.2em;color:#808080;font-family:'Yu Gothic UI'">业务通用平台</span>
+        <form method="post" action="/login" id="myform" >
+                <div class="row" style="margin-top:100px" >
+                    <div class="col-md-12">
+                        <div class="input-group">
+                            <span class="input-group-addon" id="basic-addon1">用户名</span>
+                            <input type="text" class="form-control" name="username" id="username" aria-describedby="basic-addon1" >
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="input-group">
+                            <span class="input-group-addon" id="basic-addon1">密&nbsp;&nbsp;码</span>
+                            <input type="password" class="form-control" name="password" id="password" aria-describedby="basic-addon1" >
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12" style="text-align:center;">
+                        <div class="input-group">
+                            <span style="margin-top:6px;font-weight:900;font-size:16px;" id="errors">@ViewBag.error</span>
+                            <button type="button" class=" btn btn-primary" style="width:90px;" onclick="Checkin()">登录</button>
+                        </div>
+                    </div>
+                </div>
+        </form>
+    </div>
+
+    <script src="~/lib/jquery/dist/jquery.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
+
+
+    <script>
+        function Checkin() {
+            var str = '';
+            // 判断名称
+            if ($.trim($('#username').val()).length == 0) {
+                str += '请输入用户名！';
+                $('#username').focus();
+            }
+            if ($.trim($('#password').val()).length == 0) {
+                str += '请输入密码！';
+                $('#password').focus();
+            } 
+            if (str != '') {
+                $('#errors').text(str)
+                return false;
+            } else {
+                //页面验证通过后提交表单
+                $("#myform").submit();
+            }
+        }
+    </script>
+</body>
+</html>
