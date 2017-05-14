@@ -40,7 +40,7 @@ namespace GeneralBusinessSystem
             services.Configure<ConnectionStrings>(Configuration.GetSection("ConnectionStrings"));
 
             //注释业务处理模块，for sql server
-            services.AddSingleton<IBusinessRepository>(new BusinessForSqlServerRepository(CreateSqlHelper()));
+            services.AddSingleton<IBusinessRepository>(new GeneralBusinessRepository.SqlServer.BusinessRepository(CreateSqlHelper()));
 
             services.AddMvc();
         }

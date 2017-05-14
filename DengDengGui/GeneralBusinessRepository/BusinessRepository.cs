@@ -3,12 +3,12 @@ using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
 
-namespace GeneralBusinessRepository
+namespace GeneralBusinessRepository.SqlServer
 {
     /// <summary>
     /// 通用业务平台仓储处理类（For MS SqlServer)
     /// </summary>
-    public class BusinessForSqlServerRepository : IBusinessRepository
+    public class BusinessRepository : IBusinessRepository
     {
         /// <summary>
         /// 数据库操作类
@@ -18,7 +18,7 @@ namespace GeneralBusinessRepository
         /// 实例化sqlserver的仓储对象
         /// </summary>
         /// <param name="sqlHelper"></param>
-        public BusinessForSqlServerRepository(ISqlHelper sqlHelper)
+        public BusinessRepository(ISqlHelper sqlHelper)
         {
             _sqlHelper = sqlHelper;
         }
