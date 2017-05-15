@@ -13,6 +13,9 @@ using GeneralBusinessData;
 using Microsoft.Extensions.Options;
 using GeneralBusinessData.SqlServer;
 using GeneralBusinessSystem.Middleware;
+using NLog.Web;
+using NLog.Extensions.Logging;
+
 namespace GeneralBusinessSystem
 {
     public class Startup
@@ -52,6 +55,12 @@ namespace GeneralBusinessSystem
 
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
+            // 添加NLog到.net core框架中
+            loggerFactory.AddNLog();
+            //添加NLog的中间件
+            app.AddNLogWeb();
+            // 指定NLog的配置文件
+            env.ConfigureNLog("nlog.config");
 
             if (env.IsDevelopment())
             {
