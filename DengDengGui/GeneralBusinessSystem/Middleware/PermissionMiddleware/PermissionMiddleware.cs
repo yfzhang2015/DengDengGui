@@ -48,9 +48,15 @@ namespace GeneralBusinessSystem.Middleware
         /// <returns></returns>
         public Task Invoke(HttpContext context)
         {
+            if (context.Request.Cookies["browseweb"] == null)
+            {
+                context.Response.Cookies.Append("browseweb", Guid.NewGuid().ToString().Replace("-", ""), new CookieOptions() { Path = "/", HttpOnly = true });
+            }
+
             //过滤客户端文件和无权限页面
             if (!Path.HasExtension(context.Request.Path.Value) && context.Request.Path.Value != _option.NoPermissionAction && context.Request.Path.Value != @"/ws")
             {
+                //todo 这里的验证有待优化，可以为每浏览分配一个号
                 var cookie = context.Request.Cookies["login"];
                 if (cookie == null)
                 {
