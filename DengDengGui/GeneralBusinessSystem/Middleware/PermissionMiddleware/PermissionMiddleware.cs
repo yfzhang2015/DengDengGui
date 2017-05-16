@@ -51,7 +51,7 @@ namespace GeneralBusinessSystem.Middleware
             //过滤客户端文件和无权限页面
             if (!Path.HasExtension(context.Request.Path.Value) && context.Request.Path.Value != _option.NoPermissionAction && context.Request.Path.Value != @"/ws")
             {
-                //todo 这里的验证有待优化，可以为每浏览分配一个号
+                //前台用cookies存一个标识，来对应后台的session的中的真正用户数据
                 var cookie = context.Request.Cookies["browseweb"];
                 if (cookie == null)
                 {
