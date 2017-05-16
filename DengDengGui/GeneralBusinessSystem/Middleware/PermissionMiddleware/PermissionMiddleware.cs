@@ -48,16 +48,11 @@ namespace GeneralBusinessSystem.Middleware
         /// <returns></returns>
         public Task Invoke(HttpContext context)
         {
-            if (context.Request.Cookies["browseweb"] == null)
-            {
-                context.Response.Cookies.Append("browseweb", Guid.NewGuid().ToString().Replace("-", ""), new CookieOptions() { Path = "/", HttpOnly = true });
-            }
-
             //过滤客户端文件和无权限页面
             if (!Path.HasExtension(context.Request.Path.Value) && context.Request.Path.Value != _option.NoPermissionAction && context.Request.Path.Value != @"/ws")
             {
                 //todo 这里的验证有待优化，可以为每浏览分配一个号
-                var cookie = context.Request.Cookies["login"];
+                var cookie = context.Request.Cookies["browseweb"];
                 if (cookie == null)
                 {
                     if (context.Request.Path.Value == _option.LoginAction)
@@ -72,7 +67,9 @@ namespace GeneralBusinessSystem.Middleware
                             if (userDic != null && userDic.Count > 0)
                             {
                                 //添加cookie
-                                context.Response.Cookies.Append("login", userName, new CookieOptions() { Path = "/", HttpOnly = true });
+                                var guid = Guid.NewGuid().ToString().Replace("-", "");
+                                context.Response.Cookies.Append("browseweb", guid, new CookieOptions() { Path = "/", HttpOnly = true });
+                                context.Session.SetString(guid, userName);
                             }
                             else
                             {
@@ -88,7 +85,7 @@ namespace GeneralBusinessSystem.Middleware
                 else
                 {
                     //验证权限
-                    var permissions = _businessRepository.GetPermissionByUserID(cookie);
+                    var permissions = _businessRepository.GetPermissionByUserID(context.Session.GetString(cookie));
                     var actions = new List<string>();
                     foreach (var dic in permissions)
                     {

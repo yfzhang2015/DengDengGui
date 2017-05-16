@@ -32,7 +32,10 @@ namespace GeneralBusinessSystem
 
         public IConfigurationRoot Configuration { get; }
 
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="services"></param>
         public void ConfigureServices(IServiceCollection services)
         {
           
@@ -41,6 +44,17 @@ namespace GeneralBusinessSystem
             services.Configure<AppSettings>(Configuration.GetSection("AppSettings"));
             //连接字符串
             services.Configure<ConnectionStrings>(Configuration.GetSection("ConnectionStrings"));
+
+            #region 添加session
+            // Adds a default in-memory implementation of IDistributedCache.
+            services.AddDistributedMemoryCache();
+            services.AddSession(options =>
+            {
+                // Set a short timeout for easy testing.
+                options.IdleTimeout = TimeSpan.FromSeconds(120000);
+                options.CookieHttpOnly = true;
+            });
+            #endregion
 
             //注释业务处理模块，for sql server
             services.AddSingleton<IBusinessRepository>(new GeneralBusinessRepository.SqlServer.BusinessRepository(CreateSqlHelper()));
@@ -61,6 +75,9 @@ namespace GeneralBusinessSystem
             app.AddNLogWeb();
             // 指定NLog的配置文件
             env.ConfigureNLog("nlog.config");
+
+            //添加session
+            app.UseSession();
 
             if (env.IsDevelopment())
             {
