@@ -48,6 +48,7 @@ namespace GeneralBusinessSystem.Middleware
         /// <returns></returns>
         public Task Invoke(HttpContext context)
         {
+
             //过滤客户端文件和无权限页面
             if (!Path.HasExtension(context.Request.Path.Value) && context.Request.Path.Value != _option.NoPermissionAction && context.Request.Path.Value != @"/ws")
             {
@@ -67,9 +68,9 @@ namespace GeneralBusinessSystem.Middleware
                             if (userDic != null && userDic.Count > 0)
                             {
                                 //添加cookie
-                                var guid = Guid.NewGuid().ToString().Replace("-", "");
+                                var guid = Guid.NewGuid().ToString("N");
                                 context.Response.Cookies.Append("browseweb", guid, new CookieOptions() { Path = "/", HttpOnly = true });
-                                context.Session.SetString(guid, userName);
+                                context.Session.SetString(guid+context.Connection.RemoteIpAddress.ToString(), userName);
                             }
                             else
                             {
@@ -85,15 +86,25 @@ namespace GeneralBusinessSystem.Middleware
                 else
                 {
                     //验证权限
-                    var permissions = _businessRepository.GetPermissionByUserID(context.Session.GetString(cookie));
-                    var actions = new List<string>();
-                    foreach (var dic in permissions)
+                    var username = context.Session.GetString(cookie + context.Connection.RemoteIpAddress.ToString());
+                    if (string.IsNullOrEmpty(username))
                     {
-                        actions.Add(dic["Action"].ToString());
+                        context.Response.Cookies.Delete("browseweb");
+                        context.Response.Redirect(_option.LoginAction);
                     }
-                    if (!actions.Contains(context.Request.Path.Value))
+                    else
                     {
-                        context.Response.Redirect(_option.NoPermissionAction);
+                        //todo 可以把权限角色用户全部取出来，放在内存中，不用每次去数据库核对
+                        var permissions = _businessRepository.GetPermissionByUserID(username);
+                        var actions = new List<string>();
+                        foreach (var dic in permissions)
+                        {
+                            actions.Add(dic["Action"].ToString());
+                        }
+                        if (!actions.Contains(context.Request.Path.Value))
+                        {
+                            context.Response.Redirect(_option.NoPermissionAction);
+                        }
                     }
                 }
             }
