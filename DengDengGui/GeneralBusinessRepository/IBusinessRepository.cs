@@ -53,6 +53,18 @@ namespace GeneralBusinessRepository
         /// <param name="newPassword">新密码</param>
         /// <returns></returns>
         bool ModifyPassword(string userName, string newPassword);
+
+        /// <summary>
+        /// 获取全部用户和全部权限
+        /// </summary>
+        /// <returns></returns>
+        List<Dictionary<string, dynamic>> GetUserPermissions();
+        /// <summary>
+        /// 查用户名查询权限中的action
+        /// </summary>
+        /// <param name="username">用户名</param>
+        /// <returns></returns>
+        List<Dictionary<string, dynamic>> GetPermissionByUserID(string username);
         #endregion
 
         #region 角色管理
@@ -83,12 +95,8 @@ namespace GeneralBusinessRepository
         /// <returns></returns>
         int RemoveRole(int id);
 
-        /// <summary>
-        /// 查用户名查询权限中的action
-        /// </summary>
-        /// <param name="username">用户名</param>
-        /// <returns></returns>
-        List<Dictionary<string, dynamic>> GetPermissionByUserID(string username);
+  
+
 
         #endregion
 

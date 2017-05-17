@@ -133,6 +133,20 @@ WHERE   Users.UserName = @username";
             var userNameParameter = new SqlParameter() { Value = username, ParameterName = "@username" };
             return _sqlHelper.QueryList(sql, userNameParameter);
         }
+        /// <summary>
+        /// 获取全部用户和全部权限
+        /// </summary>
+        /// <returns></returns>
+        public List<Dictionary<string,dynamic>> GetUserPermissions()
+        {
+            var sql = @"SELECT  [Permissions].[Action],[Users].[UserName],[Users].[ID] AS UserID
+FROM    dbo.Users
+        JOIN dbo.UserRoles ON Users.ID = UserRoles.UserID
+        JOIN dbo.Roles ON Roles.ID = UserRoles.RoleID
+        JOIN RolePermissions ON Roles.ID = RolePermissions.RoleID
+        JOIN [Permissions] ON [Permissions].ID = RolePermissions.PermissionID";
+            return _sqlHelper.QueryList(sql);
+        }
 
         #endregion
 

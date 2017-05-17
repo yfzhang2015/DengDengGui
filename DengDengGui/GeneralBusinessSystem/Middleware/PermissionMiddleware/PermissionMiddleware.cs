@@ -30,6 +30,11 @@ namespace GeneralBusinessSystem.Middleware
         IBusinessRepository _businessRepository;
 
         /// <summary>
+        /// 用户权限集合
+        /// </summary>
+        static List<dynamic> _userPermissions;
+
+        /// <summary>
         /// 权限中间件构造
         /// </summary>
         /// <param name="next">管道代理对象</param>
@@ -40,6 +45,21 @@ namespace GeneralBusinessSystem.Middleware
             _option = option;
             _businessRepository = businessRepository;
             _next = next;
+            LoadUserPermissions();
+        }
+        /// <summary>
+        /// 获取用户权限
+        /// </summary>
+        void LoadUserPermissions()
+        {
+            if (_userPermissions == null)
+            {
+                _userPermissions = new List<dynamic>();
+                foreach (var dic in _businessRepository.GetUserPermissions())
+                {
+                    _userPermissions.Add(new { UserName = dic["UserName"], Action = dic["Action"] });
+                }
+            }
         }
         /// <summary>
         /// 调用管道
@@ -70,7 +90,7 @@ namespace GeneralBusinessSystem.Middleware
                                 //添加cookie
                                 var guid = Guid.NewGuid().ToString("N");
                                 context.Response.Cookies.Append("browseweb", guid, new CookieOptions() { Path = "/", HttpOnly = true });
-                                context.Session.SetString(guid+context.Connection.RemoteIpAddress.ToString(), userName);
+                                context.Session.SetString(guid + context.Connection.RemoteIpAddress.ToString(), userName);
                             }
                             else
                             {
@@ -93,15 +113,10 @@ namespace GeneralBusinessSystem.Middleware
                         context.Response.Redirect(_option.LoginAction);
                     }
                     else
-                    {
-                        //todo 可以把权限角色用户全部取出来，放在内存中，不用每次去数据库核对
-                        var permissions = _businessRepository.GetPermissionByUserID(username);
-                        var actions = new List<string>();
-                        foreach (var dic in permissions)
-                        {
-                            actions.Add(dic["Action"].ToString());
-                        }
-                        if (!actions.Contains(context.Request.Path.Value))
+                    { 
+                        var actionCount = _userPermissions.Where(w => w.UserName == username&&w.Action== context.Request.Path.Value).Count();
+
+                        if (actionCount<1)
                         {
                             context.Response.Redirect(_option.NoPermissionAction);
                         }
