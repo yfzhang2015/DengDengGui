@@ -3,12 +3,13 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - 通用业务平台</title>
-        <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-        <link rel="stylesheet" href="~/css/site.css" />
+    <title>@ViewData["Title"] - 通用业务平台管理</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" />
+    @RenderSection("css", required: false)
 </head>
 <body>
- 
+
     <nav class="navbar navbar-inverse navbar-fixed-top">
         <div class="container">
             <div class="navbar-header">
@@ -23,7 +24,6 @@
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
                     <li><a asp-area="" asp-controller="Home" asp-action="Index">主页</a></li>
-                    <li><a asp-area="" asp-controller="Home" asp-action="About">关于</a></li>
                     <li><a asp-area="" asp-controller="Home" asp-action="Contact">联系我们</a></li>
                 </ul>
             </div>
@@ -31,13 +31,11 @@
     </nav>
     <div class="container body-content" style="min-height:600px;background-color:#efefef;">
         @RenderBody()
-      
     </div>
     <hr />
     <footer style="text-align:center">
         <p>&copy; 2017 - 通用业务平台</p>
     </footer>
-
     <script src="~/lib/jquery/dist/jquery.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>

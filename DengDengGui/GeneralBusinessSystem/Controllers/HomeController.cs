@@ -9,24 +9,16 @@ using NLog;
 
 namespace GeneralBusinessSystem.Controllers
 {
-    public class HomeController : Controller
+    public class HomeController : GBController
     {
-        /// <summary>
-        /// 业务仓储类
-        /// </summary>
-        IBusinessRepository _businessRepository;
-        /// <summary>
-        /// 日志类
-        /// </summary>
-        Logger _log;
+
         /// <summary>
         /// 实例化homecontroller
         /// </summary>
         /// <param name="businessRepository">业务仓储类</param>
-        public HomeController(IBusinessRepository businessRepository)
+        public HomeController(IBusinessRepository businessRepository) : base(businessRepository)
         {
-            _log = LogManager.GetCurrentClassLogger();
-            _businessRepository = businessRepository;
+
         }
         public IActionResult Index()
         {
@@ -39,23 +31,38 @@ namespace GeneralBusinessSystem.Controllers
 
             return View();
         }
-
+        /// <summary>
+        /// 错误
+        /// </summary>
+        /// <returns></returns>
         public IActionResult Error()
         {
             return View();
         }
+        /// <summary>
+        /// 无权限action
+        /// </summary>
+        /// <returns></returns>
         [HttpGet("nopermission")]
         public IActionResult NoPermission()
         {
             return View();
         }
-
+        /// <summary>
+        /// 登录
+        /// </summary>
+        /// <returns></returns>
         [HttpGet("login")]
         public IActionResult Login()
         {
             return View();
         }
-
+        /// <summary>
+        /// 登录提交
+        /// </summary>
+        /// <param name="username">用户名</param>
+        /// <param name="password">密码</param>
+        /// <returns></returns>
         [HttpPost("login")]
         public IActionResult Login(string username,string password)
         {
