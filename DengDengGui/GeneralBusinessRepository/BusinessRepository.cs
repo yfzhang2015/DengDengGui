@@ -33,18 +33,32 @@ namespace GeneralBusinessRepository.SqlServer
             var sql = "select * from users";
             return _sqlHelper.QueryList(sql);
         }
+
+        /// <summary>
+        /// 按用户名或名称查询用户
+        /// </summary>
+        /// <returns></returns>
+        public List<Dictionary<string, dynamic>> GetUsers(string queryName)
+        {
+            var sql = "select * from users where username like @queryname or name like @queryname";
+            var nameParameter = new SqlParameter() { Value ="%"+ queryName+"%", ParameterName = "@queryname" };
+            return _sqlHelper.QueryList(sql);
+        }
+        
         /// <summary>
         /// 添加用户
         /// </summary>
         /// <param name="userName">用户名</param>
         /// <param name="password">密码</param>
+        /// <param name="name">名称</param>
         /// <returns></returns>
-        public int AddUser(string userName, string password)
+        public int AddUser(string userName, string password,string name)
         {
             var sql = $@"insert into users(username,password) values(@username,@password)";
             var userNameParameter = new SqlParameter() { Value = userName, ParameterName = "@username" };
             var passwordParameter = new SqlParameter() { Value = password, ParameterName = "@password" };
-            return _sqlHelper.ChangeData(sql, userNameParameter, passwordParameter);
+            var nameParameter = new SqlParameter() { Value = name, ParameterName = "@name" };
+            return _sqlHelper.ChangeData(sql, userNameParameter, passwordParameter,nameParameter);
         }
 
         /// <summary>
@@ -53,14 +67,16 @@ namespace GeneralBusinessRepository.SqlServer
         /// <param name="id">编号</param>
         /// <param name="userName">用户名</param>
         /// <param name="password">密码</param>
+        /// <param name="name">名称</param>
         /// <returns></returns>
-        public int ModifyUser(int id, string userName, string password)
+        public int ModifyUser(int id, string userName, string password,string name)
         {
-            var sql = $@"update  users set username=@username,password) =@password where id=@id";
+            var sql = $@"update  users set username=@username,password) =@password,[name]=@name where id=@id";
             var userNameParameter = new SqlParameter() { Value = userName, ParameterName = "@username" };
             var passwordParameter = new SqlParameter() { Value = password, ParameterName = "@password" };
             var idParameter = new SqlParameter() { Value = id, ParameterName = "@id" };
-            return _sqlHelper.ChangeData(sql, userNameParameter, passwordParameter, idParameter);
+            var nameParameter = new SqlParameter() { Value = name, ParameterName = "@name" };
+            return _sqlHelper.ChangeData(sql, userNameParameter, passwordParameter, idParameter, nameParameter);
         }
 
         /// <summary>

@@ -17,12 +17,17 @@ namespace GeneralBusinessRepository
         /// <returns></returns>
         List<Dictionary<string, dynamic>> GetUsers();
         /// <summary>
+        /// 按用户名或名称查询用户
+        /// </summary>
+        /// <returns></returns>
+        List<Dictionary<string, dynamic>> GetUsers(string queryName);
+        /// <summary>
         /// 添加用户
         /// </summary>
         /// <param name="userName">用户名</param>
         /// <param name="password">密码</param>
         /// <returns></returns>
-        int AddUser(string userName, string password);
+        int AddUser(string userName, string password,string name);
 
         /// <summary>
         /// 修改用户
@@ -31,7 +36,7 @@ namespace GeneralBusinessRepository
         /// <param name="userName">用户名</param>
         /// <param name="password">密码</param>
         /// <returns></returns>
-        int ModifyUser(int id, string userName, string password);
+        int ModifyUser(int id, string userName, string password,string name);
 
         /// <summary>
         /// 删除用户

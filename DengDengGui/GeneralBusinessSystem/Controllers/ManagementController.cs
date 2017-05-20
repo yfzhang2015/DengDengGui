@@ -21,5 +21,67 @@ namespace GeneralBusinessSystem.Controllers
         {
             return View();
         }
+
+        #region User²Ù×÷
+        [Route("users")]
+        public ActionResult UserIndex()
+        {
+            return View(_businessRepository.GetUsers());
+        }
+        [Route("queryusers")]
+        public ActionResult QueryUser(string queryName)
+        {
+            return  new JsonResult(_businessRepository.GetUsers(queryName));
+        }
+
+        [HttpPost]
+        [Route("adduser")]
+        public bool UserAdd(string userName, string password, string name)
+        {
+            try
+            {
+                _businessRepository.AddUser(userName, password,name);
+
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+
+        [HttpPost]
+        [Route("modifyuser")]
+        public bool UserModify(int ID, string userName, string password, string name)
+        {
+            try
+            {
+
+                _businessRepository.ModifyUser(ID, userName, password,name);
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        [HttpPost]
+        [Route("deleteuser")]
+        public bool UserDelete(int ID)
+        {
+
+            try
+            {
+                _businessRepository.RemoveUser(ID);
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+        #endregion
     }
 }
