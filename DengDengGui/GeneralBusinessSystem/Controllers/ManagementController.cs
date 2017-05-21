@@ -31,7 +31,7 @@ namespace GeneralBusinessSystem.Controllers
         [Route("queryusers")]
         public ActionResult QueryUser(string queryName)
         {
-            return  new JsonResult(_businessRepository.GetUsers(queryName));
+            return new JsonResult(_businessRepository.GetUsers(queryName));
         }
 
         [HttpPost]
@@ -40,7 +40,7 @@ namespace GeneralBusinessSystem.Controllers
         {
             try
             {
-                _businessRepository.AddUser(userName, password,name);
+                _businessRepository.AddUser(userName, password, name);
 
                 return true;
             }
@@ -58,7 +58,7 @@ namespace GeneralBusinessSystem.Controllers
             try
             {
 
-                _businessRepository.ModifyUser(ID, userName, password,name);
+                _businessRepository.ModifyUser(ID, userName, password, name);
                 return true;
             }
             catch
@@ -81,6 +81,18 @@ namespace GeneralBusinessSystem.Controllers
             {
                 return false;
             }
+        }
+        #endregion
+
+
+        #region Role管理
+        /// <summary>
+        /// 添加角色 
+        /// </summary>
+        /// <returns></returns>
+        public ActionResult AddRole()
+        {
+            return View();
         }
         #endregion
     }
