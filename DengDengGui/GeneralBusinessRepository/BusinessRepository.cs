@@ -173,7 +173,7 @@ FROM    dbo.Users
         /// <returns></returns>
         public List<Dictionary<string, dynamic>> GetRoles()
         {
-            var sql = "select * from roles";
+            var sql = "select id,name from roles";
             return _sqlHelper.QueryList(sql);
         }
         /// <summary>

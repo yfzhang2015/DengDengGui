@@ -37,14 +37,14 @@
                         <tbody>
                             @foreach (var item in Model)
                             {
-                                <tr id='tr_@(item["jsid"])'>
-                                    <td>@item["jsid"]</td>
-                                    <td>@item["jsname"]</td>
+                                <tr id='tr_@(item["id"])'>
+                                    <td>@item["id"]</td>
+                                    <td>@item["name"]</td>
                                     <td>
-                                        <button class="btn btn-sm btn-primary" style="margin-bottom:-5px;margin-top:-5px;" data-toggle="modal" data-target="#ModiyModal" onclick="Modify('@item["jsid"]','@item["jsname"]')">
+                                        <button class="btn btn-sm btn-primary" style="margin-bottom:-5px;margin-top:-5px;" data-toggle="modal" data-target="#ModiyModal" onclick="Modify('@item["id"]','@item["name"]')">
                                             修改
                                         </button>
-                                        <button class="btn btn-sm btn-danger" style="margin-bottom:-5px;margin-top:-5px;" onclick="Delete('@item["jsid"]')">
+                                        <button class="btn btn-sm btn-danger" style="margin-bottom:-5px;margin-top:-5px;" onclick="Delete('@item["id"]')">
                                             删除
                                         </button>
                                     </td>
