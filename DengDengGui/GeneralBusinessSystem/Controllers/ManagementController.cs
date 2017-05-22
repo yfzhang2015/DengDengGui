@@ -94,6 +94,37 @@ namespace GeneralBusinessSystem.Controllers
         {
             return View();
         }
+
+        #region ½ÇÉ«
+        [HttpGet("roles")]
+        public IActionResult Role()
+        {
+            var list =_businessRepository.GetRoles();
+            return View(list);
+        }
+        [HttpPost("roles")]
+        public IActionResult GetRoles()
+        {
+            var list = _businessRepository.GetRoles();
+            return new JsonResult(list, new Newtonsoft.Json.JsonSerializerSettings());
+        }
+
+        [HttpPost("addrole")]
+        public bool AddRole(string rolename)
+        {
+            return _businessRepository.AddRole(rolename) > 0 ? true : false;
+        }
+        [HttpPost("modifyrole")]
+        public bool ModifyRole(int id, string rolename)
+        {
+            return _businessRepository.ModifyRole(id, rolename) > 0 ? true : false;
+        }
+        [HttpPost("deleterole")]
+        public bool DeleteRole(int id)
+        {
+            return _businessRepository.RemoveRole(id) > 0 ? true : false;
+        }
+        #endregion
         #endregion
     }
 }
