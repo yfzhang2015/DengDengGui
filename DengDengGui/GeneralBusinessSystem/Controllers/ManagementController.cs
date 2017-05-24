@@ -91,7 +91,7 @@ namespace GeneralBusinessSystem.Controllers
         /// </summary>
         /// <param name="ID"></param>
         /// <returns></returns>
-        [HttpPost("deleteuser")]       
+        [HttpPost("deleteuser")]
         public bool UserDelete(int ID)
         {
 
@@ -120,7 +120,7 @@ namespace GeneralBusinessSystem.Controllers
         [HttpGet("roles")]
         public IActionResult Role()
         {
-            var list =_businessRepository.GetRoles();
+            var list = _businessRepository.GetRoles();
             return View(list);
         }
         [HttpPost("roles")]
@@ -163,6 +163,13 @@ namespace GeneralBusinessSystem.Controllers
         #endregion
 
 
-   
+
+        #region 菜单模块管理
+
+        public IActionResult MenuModules()
+        {
+            return View();
+        }
+        #endregion
     }
 }
