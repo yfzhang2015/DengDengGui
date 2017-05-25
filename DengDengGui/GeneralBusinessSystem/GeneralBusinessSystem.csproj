@@ -169,5 +169,8 @@
     <ProjectReference Include="..\GeneralBusinessData\GeneralBusinessData.csproj" />
     <ProjectReference Include="..\GeneralBusinessRepository\GeneralBusinessRepository.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Model\新文件夹\" />
+  </ItemGroup>
 
 </Project>

@@ -19,16 +19,16 @@ namespace GeneralBusinessSystem.Controllers
         }
         public IActionResult Index()
         {
-            return View();
+            return View(); 
         }
 
-        #region User操作
+        #region User 用户操作
         /// <summary>
         /// 用户页面
         /// </summary>
         /// <returns></returns>
-        [Route("users")]
-        public ActionResult User()
+        [HttpGet("users")]
+        public ActionResult Users()
         {
             return View(_businessRepository.GetUsers());
         }
@@ -37,7 +37,7 @@ namespace GeneralBusinessSystem.Controllers
         /// </summary>
         /// <param name="queryName"></param>
         /// <returns></returns>
-        [Route("queryusers")]
+        [HttpGet("queryusers")]
         public ActionResult QueryUser(string queryName)
         {
             return new JsonResult(_businessRepository.GetUsers(queryName));
@@ -107,7 +107,7 @@ namespace GeneralBusinessSystem.Controllers
         }
         #endregion
 
-        #region Role管理
+        #region Role 角色管理
         /// <summary>
         /// 添加角色 
         /// </summary>
@@ -118,7 +118,7 @@ namespace GeneralBusinessSystem.Controllers
         }
 
         [HttpGet("roles")]
-        public IActionResult Role()
+        public IActionResult Roles()
         {
             var list = _businessRepository.GetRoles();
             return View(list);
@@ -162,7 +162,13 @@ namespace GeneralBusinessSystem.Controllers
         }
         #endregion
 
-
+        #region Permission权限管理
+        [HttpGet("permissions")]
+        public IActionResult Permissions()
+        {
+            return View();
+        }
+        #endregion
 
         #region 菜单模块管理
 
