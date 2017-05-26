@@ -166,6 +166,7 @@
     <DotNetCliToolReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Tools" Version="1.0.0" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Common\Common.csproj" />
     <ProjectReference Include="..\GeneralBusinessData\GeneralBusinessData.csproj" />
     <ProjectReference Include="..\GeneralBusinessRepository\GeneralBusinessRepository.csproj" />
   </ItemGroup>

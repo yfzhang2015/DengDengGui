@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using GeneralBusinessRepository;
+using System.Reflection;
 
 namespace GeneralBusinessSystem.Controllers
 {
@@ -19,7 +20,7 @@ namespace GeneralBusinessSystem.Controllers
         }
         public IActionResult Index()
         {
-            return View(); 
+            return View();
         }
 
         #region User 用户操作
@@ -172,8 +173,11 @@ namespace GeneralBusinessSystem.Controllers
 
         #region 菜单模块管理
 
+        [HttpGet("menumodules")]
         public IActionResult MenuModules()
         {
+
+            var actions = Common.ActionHandle.GetActions(Assembly.GetEntryAssembly());
             return View();
         }
         #endregion
