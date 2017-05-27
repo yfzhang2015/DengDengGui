@@ -10,6 +10,11 @@ namespace Common
     public class ActionMessage
     {
         /// <summary>
+        /// 所属controller
+        /// </summary>
+        public string ControllerName
+        { get; set; }
+        /// <summary>
         /// action名称
         /// </summary>
         public string ActionName

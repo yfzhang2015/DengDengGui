@@ -46,58 +46,58 @@ namespace Common
                     //todo 这里有bug
                     if (att is RouteAttribute && (att as RouteAttribute).Template != null)
                     {
-                        list.Add(new ActionMessage() { ActionName = (att as RouteAttribute).Template, Predicate = Predicate.Get });
+                        list.Add(new ActionMessage() { ControllerName=type.Name, ActionName = (att as RouteAttribute).Template, Predicate = Predicate.Get });
                     }
 
                     if (att is HttpGetAttribute)
                     {
                         if ((att as HttpGetAttribute).Template != null)
                         {
-                            list.Add(new ActionMessage() { ActionName = $"/{(att as HttpGetAttribute).Template}", Predicate = Predicate.Get });
+                            list.Add(new ActionMessage() { ControllerName = type.Name, ActionName = $"/{(att as HttpGetAttribute).Template}", Predicate = Predicate.Get });
                         }
                         else
                         {
-                            list.Add(new ActionMessage() { ActionName = $"/{type.Name}/{method.Name}", Predicate = Predicate.Get });
+                            list.Add(new ActionMessage() { ControllerName = type.Name, ActionName = $"/{type.Name}/{method.Name}", Predicate = Predicate.Get });
                         }
                     }
                     if (att is HttpPostAttribute)
                     {
                         if ((att as HttpPostAttribute).Template != null)
                         {
-                            list.Add(new ActionMessage() {  ActionName = $"/(att as HttpPostAttribute).Template}", Predicate = Predicate.Post });
+                            list.Add(new ActionMessage() { ControllerName = type.Name, ActionName = $"/{(att as HttpPostAttribute).Template}", Predicate = Predicate.Post });
                         }
                         else
                         {
-                            list.Add(new ActionMessage() { ActionName = $"/{type.Name}/{method.Name}", Predicate = Predicate.Post });
+                            list.Add(new ActionMessage() { ControllerName = type.Name, ActionName = $"/{type.Name}/{method.Name}", Predicate = Predicate.Post });
                         }
                     }
                     if (att is HttpDeleteAttribute)
                     {
                         if ((att as HttpDeleteAttribute).Template != null)
                         {
-                            list.Add(new ActionMessage() { ActionName = $"/(att as HttpDeleteAttribute).Template}", Predicate = Predicate.Delete });
+                            list.Add(new ActionMessage() { ControllerName = type.Name, ActionName = $"/{(att as HttpDeleteAttribute).Template}", Predicate = Predicate.Delete });
                         }
                         else
                         {
-                            list.Add(new ActionMessage() { ActionName = $"/{type.Name}/{method.Name}", Predicate = Predicate.Delete });
+                            list.Add(new ActionMessage() { ControllerName = type.Name, ActionName = $"/{type.Name}/{method.Name}", Predicate = Predicate.Delete });
                         }
                     }
                     if (att is HttpPutAttribute)
                     {
                         if ((att as HttpPutAttribute).Template != null)
                         {
-                            list.Add(new ActionMessage() { ActionName = $"/(att as HttpPutAttribute).Template}", Predicate = Predicate.Put });
+                            list.Add(new ActionMessage() { ControllerName = type.Name, ActionName = $"/{(att as HttpPutAttribute).Template}", Predicate = Predicate.Put });
                         }
                         else
                         {
-                            list.Add(new ActionMessage() { ActionName = $"/{type.Name}/{method.Name}", Predicate = Predicate.Put });
+                            list.Add(new ActionMessage() { ControllerName = type.Name, ActionName = $"/{type.Name}/{method.Name}", Predicate = Predicate.Put });
                         }
                     }
                 }
                 //当没有Route特性时用controller名称和action名称
                 if (count == list.Count)
                 {
-                    list.Add(new ActionMessage() { ActionName = $"/{type.Name}/{method.Name}", Predicate = Predicate.Get });
+                    list.Add(new ActionMessage() { ControllerName = type.Name, ActionName = $"/{type.Name}/{method.Name}", Predicate = Predicate.Get });
                 }
             }
             return list.ToArray();

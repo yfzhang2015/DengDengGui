@@ -5,7 +5,8 @@
     "jquery": "3.2.1",
     "jquery-validation": "1.16.0",
     "jquery-validation-unobtrusive": "3.2.6",
-    "bootstrap": "v3.3.7"
+    "bootstrap": "v3.3.7",
+	"Jquery.ZTree":"3.5.19"
   },
   "resolutions": {
     "jquery-validation": "1.16.0",

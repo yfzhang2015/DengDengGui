@@ -1,0 +1,44 @@
+﻿@model System.Collections.Generic.List<System.Collections.Generic.Dictionary<string, dynamic>>
+
+@{
+    ViewData["Title"] = "权限管理";
+    Layout = "_ManageLayout";
+}
+@section css{
+    <link href="~/lib/zTree_v3-master/css/zTreeStyle/zTreeStyle.css" rel="stylesheet" />
+}
+<div>
+    <ul id="tree" class="ztree"></ul>
+</div>
+<button onclick="aaa()">确定</button>
+@section scripts {
+    <script src="~/lib/zTree_v3-master/js/jquery.ztree.core.js"></script>
+    <script src="~/lib/zTree_v3-master/js/jquery.ztree.excheck.js"></script>
+    <script>
+        function aaa()
+        {           
+            var nodes = zTreeObj.getCheckedNodes(true);
+            $(nodes).each(function (index, ele) {
+                if (ele.isParent == false)
+                {
+                    console.log(ele.getParentNode().name+"-"+ ele.name);
+                }
+            })
+            console.log(nodes);
+        }
+        var zTreeObj;      
+        var setting = {
+            check: {
+                enable: true,
+                chkStyle: "checkbox",
+                chkboxType: { "Y": "ps", "N": "ps" }
+            }
+        }; 
+        $(document).ready(function () {           
+            $.get("/Management/GetActions", {}, function (result) {
+                console.log(result)
+                zTreeObj = $.fn.zTree.init($("#tree"), setting, result);
+            })
+        });       
+    </script>
+}

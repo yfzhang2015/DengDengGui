@@ -188,7 +188,24 @@ namespace GeneralBusinessSystem.Controllers
         public IActionResult GetActions()
         {
             var actions = Common.ActionHandle.GetActions();
-            return new JsonResult(actions);
+            //{
+            //    name: "Home", open: true, children: [
+            //         { name: "login[get]" }, { name: "login[post]" }]
+            //}
+            var list = new List<dynamic>();
+            foreach (var groupItem in actions.GroupBy(s => s.ControllerName))
+            {
+                var node = new { name = groupItem.Key, open = true, children = new List<dynamic>() };
+                foreach (var action in actions)
+                {
+                    if (groupItem.Key == action.ControllerName)
+                    {
+                        node.children.Add(new { name = $"{action.ActionName}[{action.Predicate}]" });
+                    }
+                }
+                list.Add(node);
+            }
+            return new JsonResult(list);
         }
         #endregion
     }
