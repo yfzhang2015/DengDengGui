@@ -14,8 +14,9 @@ namespace Common
         /// </summary>
         /// <param name="assembly">程序集</param>
         /// <returns></returns>
-        public static ActionMessage[] GetActions(System.Reflection.Assembly assembly)
+        public static ActionMessage[] GetActions()
         {
+            var assembly = Assembly.GetEntryAssembly();
             var actions = new List<ActionMessage>();
             foreach (var type in assembly.GetTypes())
             {
@@ -52,7 +53,7 @@ namespace Common
                     {
                         if ((att as HttpGetAttribute).Template != null)
                         {
-                            list.Add(new ActionMessage() { ActionName = (att as HttpGetAttribute).Template, Predicate = Predicate.Get });
+                            list.Add(new ActionMessage() { ActionName = $"/{(att as HttpGetAttribute).Template}", Predicate = Predicate.Get });
                         }
                         else
                         {
@@ -63,7 +64,7 @@ namespace Common
                     {
                         if ((att as HttpPostAttribute).Template != null)
                         {
-                            list.Add(new ActionMessage() { ActionName = (att as HttpPostAttribute).Template, Predicate = Predicate.Post });
+                            list.Add(new ActionMessage() {  ActionName = $"/(att as HttpPostAttribute).Template}", Predicate = Predicate.Post });
                         }
                         else
                         {
@@ -74,7 +75,7 @@ namespace Common
                     {
                         if ((att as HttpDeleteAttribute).Template != null)
                         {
-                            list.Add(new ActionMessage() { ActionName = (att as HttpDeleteAttribute).Template, Predicate = Predicate.Delete });
+                            list.Add(new ActionMessage() { ActionName = $"/(att as HttpDeleteAttribute).Template}", Predicate = Predicate.Delete });
                         }
                         else
                         {
@@ -85,7 +86,7 @@ namespace Common
                     {
                         if ((att as HttpPutAttribute).Template != null)
                         {
-                            list.Add(new ActionMessage() { ActionName = (att as HttpPutAttribute).Template, Predicate = Predicate.Put });
+                            list.Add(new ActionMessage() { ActionName = $"/(att as HttpPutAttribute).Template}", Predicate = Predicate.Put });
                         }
                         else
                         {

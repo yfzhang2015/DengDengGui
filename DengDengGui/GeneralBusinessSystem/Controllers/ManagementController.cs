@@ -172,13 +172,23 @@ namespace GeneralBusinessSystem.Controllers
         #endregion
 
         #region 菜单模块管理
-
+        /// <summary>
+        /// 菜单模块管理
+        /// </summary>
+        /// <returns></returns>
         [HttpGet("menumodules")]
         public IActionResult MenuModules()
         {
-
-            var actions = Common.ActionHandle.GetActions(Assembly.GetEntryAssembly());
             return View();
+        }
+        /// <summary>
+        /// 获取所有action
+        /// </summary>
+        /// <returns></returns>
+        public IActionResult GetActions()
+        {
+            var actions = Common.ActionHandle.GetActions();
+            return new JsonResult(actions);
         }
         #endregion
     }
