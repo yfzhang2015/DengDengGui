@@ -143,7 +143,7 @@ namespace GeneralBusinessRepository
         /// </summary>
         /// <param name="rolePermissons">角色权限</param>
         /// <returns></returns>
-        bool SavaRolePermissions(List<dynamic> rolePermissons);
+        bool SavaRolePermissions(int roleID,List<dynamic> rolePermissons);
         #endregion
 
     }

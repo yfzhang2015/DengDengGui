@@ -305,13 +305,13 @@ namespace GeneralBusinessSystem.Controllers
         /// <param name="rolePermissions">╫ги╚х╗оч</param>
         /// <returns></returns>
         [HttpPost("savarolepermissons")]
-        public dynamic SavaRolePermissions(List<Model.ViewModel.RolePermission> rolepermissions)
+        public dynamic SavaRolePermissions(int roleid,List<Model.ViewModel.RolePermission> rolepermissions)
         {
             try
             {
                 var list = new List<dynamic>();
                 list.AddRange(rolepermissions);
-                var result = _permissionRepository.SavaRolePermissions(list);
+                var result = _permissionRepository.SavaRolePermissions(roleid,list);
                 return new { result = result };
             }
             catch (Exception exc)

@@ -280,20 +280,17 @@ FROM    dbo.Users
         /// </summary>
         /// <param name="rolePermissons">角色权权</param>
         /// <returns></returns>
-        public bool SavaRolePermissions(List<dynamic> rolePermissons)
+        public bool SavaRolePermissions(int roleID, List<dynamic> rolePermissons)
         {
             var sqlOperations = new List<SqlOperation>();
             //删除原来的
-            if (rolePermissons.Count > 0)
+            sqlOperations.Add(new SqlOperation()
             {
-                var roleid = rolePermissons[0].roleid;
-                sqlOperations.Add(new SqlOperation()
-                {
-                    Sql = "delete rolepermissions where roleid=@roleid",
-                    parmeters = new System.Data.Common.DbParameter[]{
-                    new SqlParameter(){ ParameterName="@roleid", Value=roleid}}
-                });
-            }
+                Sql = "delete rolepermissions where roleid=@roleid",
+                parmeters = new System.Data.Common.DbParameter[]{
+                    new SqlParameter(){ ParameterName="@roleid", Value=roleID}}
+            });
+
             //添加新的
             foreach (var rolePermisson in rolePermissons)
             {

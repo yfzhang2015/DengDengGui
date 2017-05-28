@@ -77,36 +77,43 @@
             $('input[type=radio]').on('ifChecked', function (event) {
                 $("#sava_but").removeAttr("disabled");
                 $("input[type=checkbox]").iCheck('uncheck');
-                //按角色ID查询权限
-                $.get("/getpermission/" + $(this).val(), {}, function (result) {
-                    $(result).each(function (index, ele) {
-                        $("input[type=checkbox][value=" + ele.permissionid + "]").iCheck('check')//.attr("checked", "checked");
-                    })
-                })
+                QueryPermissionByRoleID($(this).val());
             });
+        }
+        //按角色ID查询权限
+        function QueryPermissionByRoleID(roleid) {
+            $.get("/getpermission/" + roleid, {}, function (result) {
+                $(result).each(function (index, ele) {
+                    $("input[type=checkbox][value=" + ele.permissionid + "]").iCheck('check')//.attr("checked", "checked");
+                })
+            })
         }
         //保存角色权限
         function sava() {
+            var roleid = $(".iradio_square-blue.checked input").val();
             if ($(".icheckbox_square-blue.checked input").length == 0) {
-                alert("请给选择的角色添加权限！");
+                if (!confirm("本角色没有选权限，是否删除原有权限？")) {
+                    //按角色ID查询权限
+                    QueryPermissionByRoleID(roleid);
+                    return;
+                }
             }
-            else {
-                var roleid = $(".iradio_square-blue.checked input").val();
-                var rolePermissionArr = [];
-                $(".icheckbox_square-blue.checked input").each(function (index, ele) {
-                    var rolePermission = { roleid: roleid, permissionid: parseInt($(ele).val()) }
-                    rolePermissionArr.push(rolePermission);
-                })
-                console.log(rolePermissionArr);
-                $.post("/savarolepermissons", { rolepermissions: rolePermissionArr }, function (result) {
-                    if (result.result == false) {
-                        alert(result.message);
-                    }
-                    else {
-                        alert("保存成功!")
-                    }
-                })
-            }
+
+            var rolePermissionArr = [];
+            $(".icheckbox_square-blue.checked input").each(function (index, ele) {
+                var rolePermission = { roleid: roleid, permissionid: parseInt($(ele).val()) }
+                rolePermissionArr.push(rolePermission);
+            })
+            console.log(rolePermissionArr);
+            $.post("/savarolepermissons", { roleid: roleid, rolepermissions: rolePermissionArr }, function (result) {
+                if (result.result == false) {
+                    alert(result.message);
+                }
+                else {
+                    alert("保存成功!")
+                }
+            })
+
         }
         //查询权限
         function loadPermissions() {
