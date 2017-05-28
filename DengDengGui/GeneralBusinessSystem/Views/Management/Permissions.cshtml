@@ -2,43 +2,181 @@
 
 @{
     ViewData["Title"] = "权限管理";
-    Layout = "_ManageLayout";
+    Layout = "_Layout";
 }
 @section css{
     <link href="~/lib/zTree_v3-master/css/zTreeStyle/zTreeStyle.css" rel="stylesheet" />
 }
-<div>
-    <ul id="tree" class="ztree"></ul>
+
+<div class="row">
+    <div class="col-md-4">
+        <div class="panel panel-default">
+            <div class="panel-heading"><b style="font-size:1.3em">系统现有action</b></div>
+            <div class="panel-body" style="padding:1px;">
+                <ul id="tree" class="ztree"></ul>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-1" style="padding:0;margin:0;">
+        <div class="panel panel-default stickup" style="margin:0;padding:0">
+            <div class="panel-heading" >
+                <b style="font-size:1.3em">添加</b>
+            </div>
+            <div class="panel-body"  style="margin:0;padding:0">
+                <div class="" style="width:95px;">
+                    <textarea id="actiondescription" type="text" placeholder="权限描述" class="form-control" style="width:100%;" rows="8" ></textarea>
+                    <button class="btn btn-success" onclick="selectOne()" style="width:100%;margin-top:5px">单项添加</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-7">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+
+                <b style="font-size:1.3em">权限表action</b>
+            </div>
+            <div class="panel-body" style="padding:1px;">
+                <table class="table table-bordered table-hover  table-condensed table-striped">
+                    <thead>
+                        <tr>
+                            <th style="width:40px">编号</th>
+                            <th>controller</th>
+                            <th>action</th>
+                            <th>描述</th>
+                            <th style="width:50px">谓词</th>
+                            <th style="width:50px">操作</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tbody"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
 </div>
-<button onclick="aaa()">确定</button>
+
 @section scripts {
     <script src="~/lib/zTree_v3-master/js/jquery.ztree.core.js"></script>
     <script src="~/lib/zTree_v3-master/js/jquery.ztree.excheck.js"></script>
+    <script src="~/js/stickUp.js"></script>
     <script>
-        function aaa()
-        {           
+        function selectOne() {
             var nodes = zTreeObj.getCheckedNodes(true);
-            $(nodes).each(function (index, ele) {
-                if (ele.isParent == false)
-                {
-                    console.log(ele.getParentNode().name+"-"+ ele.name);
+            if (nodes.length == 0) {
+                alert("请选择一个action")
+
+            } else {
+                if (nodes.length > 2) {
+                    alert("你选择的action过多，请只选择一人子项！");
+                } else {
+                    $(nodes).each(function (index, ele) {
+                        if (ele.isParent == false) {
+                            console.log(ele.getParentNode().name + "-" + ele.name);
+                            var controllername = ele.getParentNode().name;
+                            var arr = ele.name.split('【');
+                            var action = arr[0];
+                            var predicate = arr[1].split('】')[0];
+                            var actiondescription = $("#actiondescription").val();
+                            addPermission(action, actiondescription, controllername, predicate)
+                        }
+                    })
+
                 }
-            })
-            console.log(nodes);
+            }
         }
-        var zTreeObj;      
+
+        //查询权限
+        function loadPermissions() {
+            $.get("/getpermissions", {}, function (result) {
+                $("#tbody").html("");
+                $(result).each(function (index, ele) {
+                    var trhtml = "<tr>";
+                    trhtml += "<td>" + ele.id + "</td>";
+                    trhtml += "<td>" + ele.controllername + "</td>";
+                    trhtml += "<td>" + ele.action + "</td>";
+                    trhtml += "<td>" + ele.actiondescription + "</td>";
+                    trhtml += "<td>" + ele.predicate + "</td>";
+                    trhtml += "<td><button onclick=\"deletePermission(" + ele.id + ")\" class=\"btn btn-danger btn-xs\">删除</button></td>";
+                    trhtml += "</tr>";
+                    $("#tbody").append(trhtml);
+                });
+            });
+        }
+        //删除权限
+        function deletePermission(id) {
+            $.ajax({
+                type: 'DELETE',
+                url: '/removepermission',
+                data: { id: id },
+                success: function (result) {
+                    if (result.result == false) {
+                        alert(result.message);
+                    } else {
+                        //查询权限
+                        loadPage();
+                    }
+                },
+                error: function (data) {
+                    alert(data);
+                }
+            });
+
+        }
+        //添加权限
+        function addPermission(action, actiondescription, controllername, predicate) {
+            $.ajax({
+                type: 'POST',
+                url: '/addpermission',
+                data: {
+                    action: action,
+                    actiondescription: actiondescription,
+                    controllername: controllername,
+                    predicate: predicate
+                },
+                success: function (result) {
+                    if (result.result == false) {
+                        alert(result.message);
+                    } else {
+
+                        //查询权限
+                        loadPage();
+                        $("#actiondescription").val("");
+                    }
+                },
+                error: function (data) {
+                    alert(data);
+                }
+            });
+
+        }
+
+
+        //树形菜单初始化
+        var zTreeObj;
         var setting = {
             check: {
                 enable: true,
                 chkStyle: "checkbox",
                 chkboxType: { "Y": "ps", "N": "ps" }
             }
-        }; 
-        $(document).ready(function () {           
+        };
+        $(document).ready(function () {
+            loadPage();
+        });
+
+        function loadPage() {
             $.get("/Management/GetActions", {}, function (result) {
-                console.log(result)
                 zTreeObj = $.fn.zTree.init($("#tree"), setting, result);
+                //全部选中
+                //zTreeObj.checkAllNodes(true);
             })
-        });       
+            loadPermissions();
+        }
+        //添加按钮浮动
+        jQuery(function ($) {
+            $(document).ready(function () {
+                $('.stickup').stickUp();
+            });
+        });
     </script>
 }

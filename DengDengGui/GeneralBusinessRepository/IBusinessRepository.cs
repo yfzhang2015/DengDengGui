@@ -27,7 +27,7 @@ namespace GeneralBusinessRepository
         /// <param name="userName">用户名</param>
         /// <param name="password">密码</param>
         /// <returns></returns>
-        int AddUser(string userName, string password,string name);
+        int AddUser(string userName, string password, string name);
 
         /// <summary>
         /// 修改用户
@@ -36,7 +36,7 @@ namespace GeneralBusinessRepository
         /// <param name="userName">用户名</param>
         /// <param name="password">密码</param>
         /// <returns></returns>
-        int ModifyUser(int id, string userName, string password,string name);
+        int ModifyUser(int id, string userName, string password, string name);
 
         /// <summary>
         /// 删除用户
@@ -100,9 +100,34 @@ namespace GeneralBusinessRepository
         /// <returns></returns>
         int RemoveRole(int id);
 
-  
 
 
+
+        #endregion
+
+        #region 权限管理
+        /// <summary>
+        /// 查询全部权限
+        /// </summary>
+        /// <returns></returns>
+        List<Dictionary<string, dynamic>> GetPermissions();
+
+        /// <summary>
+        /// 移除权限
+        /// </summary>
+        /// <param name="id">ID</param>
+        /// <returns></returns>
+        int RemovePermission(int id);
+
+        /// <summary>
+        /// 添加权限
+        /// </summary>
+        /// <param name="action">action</param>
+        /// <param name="actiondescription">action描述</param>
+        /// <param name="controllername">controller</param>
+        /// <param name="predicate">谓词</param>
+        /// <returns></returns>
+        int AddPermission(string action, string actiondescription, string controllername, string predicate);
         #endregion
 
         #region 菜单管理

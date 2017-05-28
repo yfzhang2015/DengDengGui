@@ -5,6 +5,9 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using GeneralBusinessRepository;
 using System.Reflection;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
+using Common;
 
 namespace GeneralBusinessSystem.Controllers
 {
@@ -169,6 +172,59 @@ namespace GeneralBusinessSystem.Controllers
         {
             return View();
         }
+        /// <summary>
+        /// 获取全部权限
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("getpermissions")]
+        public IActionResult GetPermissions()
+        {
+            var permissions = _businessRepository.GetPermissions();
+            return new JsonResult(permissions, new JsonSerializerSettings()
+            {
+                ContractResolver = new LowercaseContractResolver()
+            });
+        }
+        /// <summary>
+        /// 删除权限
+        /// </summary>
+        /// <param name="id">权限ID</param>
+        /// <returns></returns>
+        [HttpDelete("removepermission")]
+        public dynamic RemovePermission(int id)
+        {
+            try
+            {
+                var result = _businessRepository.RemovePermission(id);
+                return new { result = result > 0 ? true : false };
+            }
+            catch (Exception exc)
+            {
+                return new { result = false, message = exc.Message };
+            }
+        }
+
+        /// <summary>
+        /// 添加权限
+        /// </summary>
+        /// <param name="action">action</param>
+        /// <param name="actiondescription">action描述</param>
+        /// <param name="controllername">controller</param>
+        /// <param name="predicate">谓词</param>
+        /// <returns></returns>
+        [HttpPost("addpermission")]
+        public dynamic AddPermission(string action, string actiondescription, string controllername, string predicate)
+        {
+            try
+            {
+                var result = _businessRepository.AddPermission(action, actiondescription, controllername, predicate);
+                return new { result = result > 0 ? true : false };
+            }
+            catch (Exception exc)
+            {
+                return new { result = false, message = exc.Message };
+            }
+        }
         #endregion
 
         #region 菜单模块管理
@@ -187,11 +243,8 @@ namespace GeneralBusinessSystem.Controllers
         /// <returns></returns>
         public IActionResult GetActions()
         {
+            var permissions = _businessRepository.GetPermissions();
             var actions = Common.ActionHandle.GetActions();
-            //{
-            //    name: "Home", open: true, children: [
-            //         { name: "login[get]" }, { name: "login[post]" }]
-            //}
             var list = new List<dynamic>();
             foreach (var groupItem in actions.GroupBy(s => s.ControllerName))
             {
@@ -200,7 +253,15 @@ namespace GeneralBusinessSystem.Controllers
                 {
                     if (groupItem.Key == action.ControllerName)
                     {
-                        node.children.Add(new { name = $"{action.ActionName}[{action.Predicate}]" });
+                        var permission = permissions.SingleOrDefault(s => s["Action"] == action.ActionName && s["ControllerName"] == action.ControllerName && s["Predicate"] == action.Predicate.ToString());
+                        if (permission == null)
+                        {
+                            node.children.Add(new { name = $"{action.ActionName}【{action.Predicate}】" });
+                        }
+                        else
+                        {
+                            node.children.Add(new { name = $"{action.ActionName}【{action.Predicate}】", chkDisabled = true });
+                        }
                     }
                 }
                 list.Add(node);

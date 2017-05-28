@@ -41,10 +41,10 @@ namespace GeneralBusinessRepository.SqlServer
         public List<Dictionary<string, dynamic>> GetUsers(string queryName)
         {
             var sql = "select * from users where username like @queryname or name like @queryname";
-            var nameParameter = new SqlParameter() { Value ="%"+ queryName+"%", ParameterName = "@queryname" };
+            var nameParameter = new SqlParameter() { Value = "%" + queryName + "%", ParameterName = "@queryname" };
             return _sqlHelper.QueryList(sql);
         }
-        
+
         /// <summary>
         /// 添加用户
         /// </summary>
@@ -52,13 +52,13 @@ namespace GeneralBusinessRepository.SqlServer
         /// <param name="password">密码</param>
         /// <param name="name">名称</param>
         /// <returns></returns>
-        public int AddUser(string userName, string password,string name)
+        public int AddUser(string userName, string password, string name)
         {
             var sql = $@"insert into users(username,password) values(@username,@password)";
             var userNameParameter = new SqlParameter() { Value = userName, ParameterName = "@username" };
             var passwordParameter = new SqlParameter() { Value = password, ParameterName = "@password" };
             var nameParameter = new SqlParameter() { Value = name, ParameterName = "@name" };
-            return _sqlHelper.ChangeData(sql, userNameParameter, passwordParameter,nameParameter);
+            return _sqlHelper.ChangeData(sql, userNameParameter, passwordParameter, nameParameter);
         }
 
         /// <summary>
@@ -69,7 +69,7 @@ namespace GeneralBusinessRepository.SqlServer
         /// <param name="password">密码</param>
         /// <param name="name">名称</param>
         /// <returns></returns>
-        public int ModifyUser(int id, string userName, string password,string name)
+        public int ModifyUser(int id, string userName, string password, string name)
         {
             var sql = $@"update  users set username=@username,password) =@password,[name]=@name where id=@id";
             var userNameParameter = new SqlParameter() { Value = userName, ParameterName = "@username" };
@@ -153,7 +153,7 @@ WHERE   Users.UserName = @username";
         /// 获取全部用户和全部权限
         /// </summary>
         /// <returns></returns>
-        public List<Dictionary<string,dynamic>> GetUserPermissions()
+        public List<Dictionary<string, dynamic>> GetUserPermissions()
         {
             var sql = @"SELECT  [Permissions].[Action],[Users].[UserName],[Users].[ID] AS UserID
 FROM    dbo.Users
@@ -215,6 +215,53 @@ FROM    dbo.Users
         }
         #endregion
 
+        #region 权限管理
+        /// <summary>
+        /// 查询全部权限
+        /// </summary>
+        /// <returns></returns>
+        public List<Dictionary<string, dynamic>> GetPermissions()
+        {
+            var sql = "select * from permissions";
+            return _sqlHelper.QueryList(sql);
+        }
+        /// <summary>
+        /// 移除权限
+        /// </summary>
+        /// <param name="id">ID</param>
+        /// <returns></returns>
+        public int RemovePermission(int id)
+        {
+            var sql = $@"delete permissions where id=@id";
+            var idParameter = new SqlParameter() { Value = id, ParameterName = "@id" };
+            return _sqlHelper.ChangeData(sql, idParameter);
+        }
+        /// <summary>
+        /// 添加权限
+        /// </summary>
+        /// <param name="action">action</param>
+        /// <param name="actiondescription">action描述</param>
+        /// <param name="controllername">controller</param>
+        /// <param name="predicate">谓词</param>
+        /// <returns></returns>
+        public int AddPermission(string action, string actiondescription, string controllername, string predicate)
+        {
+            var sql = $@"insert into permissions(action,actiondescription,controllername,predicate) values(@action,@actiondescription,@controllername,@predicate)";
+            var actionParameter = new SqlParameter() { Value = action, ParameterName = "@action" };
+            var actionDescriptionParameter = new SqlParameter() { ParameterName = "@actiondescription" };
+            if (string.IsNullOrEmpty(actiondescription))
+            {
+                actionDescriptionParameter.Value ="";
+            }
+            else
+            {
+                actionDescriptionParameter.Value = actiondescription;
+            }
+            var controllerNameParameter = new SqlParameter() { Value = controllername, ParameterName = "@controllername" };
+            var predicateParameter = new SqlParameter() { Value = predicate, ParameterName = "@predicate" };
+            return _sqlHelper.ChangeData(sql, actionParameter, actionDescriptionParameter, controllerNameParameter, predicateParameter);
+        }
+        #endregion
         #region 菜单管理
         /// <summary>
         /// 按用户名查询菜单
