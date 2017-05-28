@@ -73,7 +73,23 @@ namespace GeneralBusinessSystem.Controllers
         [HttpGet("users")]
         public ActionResult Users()
         {
-            return View(_permissionRepository.GetUsers());
+            var result = _permissionRepository.GetUsers();
+            return View(result);
+        }
+
+        /// <summary>
+        /// 获取全部用户
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("getusers")]
+        public ActionResult GetUsers()
+        {
+            var result = _permissionRepository.GetUsers();
+            return new JsonResult(result, new JsonSerializerSettings()
+            {
+
+                ContractResolver = new LowercaseContractResolver()
+            });
         }
         /// <summary>
         /// 查询用户
@@ -83,7 +99,11 @@ namespace GeneralBusinessSystem.Controllers
         [HttpGet("queryusers")]
         public ActionResult QueryUser(string queryName)
         {
-            return new JsonResult(_permissionRepository.GetUsers(queryName));
+            var list = _permissionRepository.GetUsers(queryName);
+            return new JsonResult(list,new JsonSerializerSettings() {
+
+                ContractResolver = new LowercaseContractResolver()
+            });
         }
         /// <summary>
         /// 添加用户
@@ -177,7 +197,9 @@ namespace GeneralBusinessSystem.Controllers
         public IActionResult GetRoles()
         {
             var list = _permissionRepository.GetRoles();
-            return new JsonResult(list, new Newtonsoft.Json.JsonSerializerSettings());
+            return new JsonResult(list, new Newtonsoft.Json.JsonSerializerSettings() {
+                ContractResolver = new LowercaseContractResolver()
+            });
         }
 
         /// <summary>
@@ -302,25 +324,73 @@ namespace GeneralBusinessSystem.Controllers
         /// <summary>
         /// 批量保存角色权限
         /// </summary>
+        /// <param name="roleID">角色ID</param>
         /// <param name="rolePermissions">角色权限</param>
         /// <returns></returns>
         [HttpPost("savarolepermissons")]
-        public dynamic SavaRolePermissions(int roleid,List<Model.ViewModel.RolePermission> rolepermissions)
+        public dynamic SavaRolePermissions(int roleid, List<Model.ViewModel.RolePermission> rolepermissions)
         {
             try
             {
                 var list = new List<dynamic>();
                 list.AddRange(rolepermissions);
-                var result = _permissionRepository.SavaRolePermissions(roleid,list);
+                var result = _permissionRepository.SavaRolePermissions(roleid, list);
                 return new { result = result };
             }
             catch (Exception exc)
             {
                 return new { result = false, message = exc.Message };
             }
-        }   
+        }
         #endregion
 
+        #region 用户角色管理
+        /// <summary>
+        /// 用户角色设置
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("userrole")]
+        public IActionResult UserRole()
+        {
+            return View();
+        }
+        /// <summary>
+        /// 按用户ID查询角色
+        /// </summary>
+        /// <param name="userID">用户ID</param>
+        /// <returns></returns>
+        [HttpGet("/getrole/{userid}")]
+        public IActionResult GetRoleByUserID(int userID)
+        {
+            var list = _permissionRepository.GetRoleByUserID(userID);
+            return new JsonResult(list, new JsonSerializerSettings()
+            {
+
+                ContractResolver = new LowercaseContractResolver()
+            });
+        }
+        /// <summary>
+        /// 批量保存用户角色
+        /// </summary>
+        /// <param name="userID">用户ID</param>
+        /// <param name="userroles">用户角色</param>
+        /// <returns></returns>
+        [HttpPost("savauserroles")]
+        public dynamic SavaUserRoles(int userid, List<Model.ViewModel.UserRole> userroles)
+        {
+            try
+            {
+                var list = new List<dynamic>();
+                list.AddRange(userroles);
+                var result = _permissionRepository.SavaUserRoles(userid, list);
+                return new { result = result };
+            }
+            catch (Exception exc)
+            {
+                return new { result = false, message = exc.Message };
+            }
+        }
+        #endregion
 
     }
 }

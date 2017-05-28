@@ -146,5 +146,21 @@ namespace GeneralBusinessRepository
         bool SavaRolePermissions(int roleID,List<dynamic> rolePermissons);
         #endregion
 
+        #region 用户角色管理
+        /// <summary>
+        /// 按用户ID查询角色
+        /// </summary>
+        /// <param name="roleID">用户ID</param>
+        /// <returns></returns>
+        List<Dictionary<string, dynamic>> GetRoleByUserID(int userID);
+        /// <summary>
+        /// 批量保存用户角色
+        /// </summary>
+        /// <param name="rolePermissons">用户角色</param>
+        /// <returns></returns>
+        bool SavaUserRoles(int userID, List<dynamic> userRoles);
+
+        #endregion
+
     }
 }

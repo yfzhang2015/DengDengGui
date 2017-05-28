@@ -278,7 +278,7 @@ FROM    dbo.Users
         /// <summary>
         /// 批量保存角色权限
         /// </summary>
-        /// <param name="rolePermissons">角色权权</param>
+        /// <param name="rolePermissons">角色权限</param>
         /// <returns></returns>
         public bool SavaRolePermissions(int roleID, List<dynamic> rolePermissons)
         {
@@ -304,6 +304,49 @@ FROM    dbo.Users
             }
             return _sqlHelper.ExecuteTransactionSql(sqlOperations);
         }
+        #endregion
+        #region 用户角色管理
+        /// <summary>
+        /// 按用户ID查询角色
+        /// </summary>
+        /// <param name="roleID">用户ID</param>
+        /// <returns></returns>
+        public List<Dictionary<string, dynamic>> GetRoleByUserID(int userID)
+        {
+            var sql = "select * from userroles where userid=@userid";
+            var userIDParameter = new SqlParameter() { Value = userID, ParameterName = "@userid" };
+            return _sqlHelper.QueryList(sql, userIDParameter);
+        }
+        /// <summary>
+        /// 批量保存用户角色
+        /// </summary>
+        /// <param name="rolePermissons">用户角色</param>
+        /// <returns></returns>
+        public bool SavaUserRoles(int userID, List<dynamic> userRoles)
+        {
+            var sqlOperations = new List<SqlOperation>();
+            //删除原来的
+            sqlOperations.Add(new SqlOperation()
+            {
+                Sql = "delete userroles where userid=@userID",
+                parmeters = new System.Data.Common.DbParameter[]{
+                    new SqlParameter(){ ParameterName="@userID", Value=userID}}
+            });
+
+            //添加新的
+            foreach (var userRole in userRoles)
+            {
+                sqlOperations.Add(new SqlOperation()
+                {
+                    Sql = "insert into userroles(userid,roleid) values(@userid,@roleid)",
+                    parmeters = new System.Data.Common.DbParameter[]{
+                    new SqlParameter(){ ParameterName="@roleid", Value=userRole.roleid},
+                    new SqlParameter(){ ParameterName="@userid", Value=userRole.userid}}
+                });
+            }
+            return _sqlHelper.ExecuteTransactionSql(sqlOperations);
+        }
+     
         #endregion
     }
 }
