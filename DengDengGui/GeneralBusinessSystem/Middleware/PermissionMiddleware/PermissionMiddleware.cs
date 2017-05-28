@@ -23,12 +23,10 @@ namespace GeneralBusinessSystem.Middleware
         /// 权限中间件的配置选项
         /// </summary>
         private readonly PermissionMiddlewareOption _option;
-
         /// <summary>
         /// 权限仓储对象
         /// </summary>
-        IBusinessRepository _businessRepository;
-
+        IPermissionRepository _permissionRepository;
         /// <summary>
         /// 用户权限集合
         /// </summary>
@@ -40,10 +38,10 @@ namespace GeneralBusinessSystem.Middleware
         /// <param name="next">管道代理对象</param>
         /// <param name="permissionResitory">权限仓储对象</param>
         /// <param name="option">权限中间件配置选项</param>
-        public PermissionMiddleware(RequestDelegate next, IBusinessRepository businessRepository, PermissionMiddlewareOption option)
+        public PermissionMiddleware(RequestDelegate next, IPermissionRepository permissionRepository, PermissionMiddlewareOption option)
         {
             _option = option;
-            _businessRepository = businessRepository;
+            _permissionRepository = permissionRepository;
             _next = next;
             LoadUserPermissions();
         }
@@ -55,7 +53,7 @@ namespace GeneralBusinessSystem.Middleware
             if (_userPermissions == null)
             {
                 _userPermissions = new List<dynamic>();
-                foreach (var dic in _businessRepository.GetUserPermissions())
+                foreach (var dic in _permissionRepository.GetUserPermissions())
                 {
                     _userPermissions.Add(new { UserName = dic["UserName"], Action = dic["Action"] });
                 }
@@ -83,7 +81,7 @@ namespace GeneralBusinessSystem.Middleware
                             var userName = context.Request.Form["username"];
                             var password = context.Request.Form["password"];
                             //验证用户名密码
-                            var userDic = _businessRepository.Login(userName, password);
+                            var userDic = _permissionRepository.Login(userName, password);
 
                             if (userDic != null && userDic.Count > 0)
                             {

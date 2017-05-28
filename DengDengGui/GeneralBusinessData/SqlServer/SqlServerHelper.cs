@@ -153,7 +153,7 @@ namespace GeneralBusinessData.SqlServer
 
 
         /// <summary>
-        /// 批量保存单据数据
+        /// 批量保存单据数据,两表对考
         /// </summary>
         /// <param name="tableName">表名</param>
         /// <param name="sql">SQL语句</param>

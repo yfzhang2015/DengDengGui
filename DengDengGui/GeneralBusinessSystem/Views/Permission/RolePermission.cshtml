@@ -1,0 +1,149 @@
+﻿@model System.Collections.Generic.List<System.Collections.Generic.Dictionary<string, dynamic>>
+
+@{
+    ViewData["Title"] = "角色权限管理";
+    Layout = "_Layout";
+}
+@section css{
+    @*<link href="~/lib/icheck-1.x/skins/all.css" rel="stylesheet" />*@
+    <link href="~/lib/icheck-1.x/skins/square/blue.css" rel="stylesheet" />
+}
+
+<div class="row">
+    <div class="col-md-5">
+        <div class="panel panel-default">
+            <div class="panel-heading"><b style="font-size:1.3em">角色</b></div>
+            <div class="panel-body" style="padding:1px;">
+                <table class="table table-bordered table-hover  table-condensed table-striped">
+                    <thead>
+                        <tr>
+                            <th style="width:40px">编号</th>
+                            <th>角色名称</th>
+                            <th style="width:40px">选择</th>
+                        </tr>
+                    </thead>
+                    <tbody id="role_tbody"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-7">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+
+                <b style="font-size:1.3em">权限</b>
+            </div>
+            <div class="panel-body" style="padding:1px;">
+                <table class="table table-bordered table-hover  table-condensed table-striped">
+                    <thead>
+                        <tr>
+                            <th style="width:40px">选择</th>
+                            <th style="width:40px">编号</th>
+                            <th>controller</th>
+                            <th>action</th>
+                            <th>描述</th>
+                            <th style="width:50px">谓词</th>
+                        </tr>
+                    </thead>
+                    <tbody id="permission_tbody"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12" style="text-align:right">
+        <button id="sava_but" class="btn btn-primary" disabled onclick="sava()" style="width:150px">保存</button>
+    </div>
+</div>
+@section scripts {
+    <script src="~/lib/icheck-1.x/icheck.js"></script>
+    <script src="~/js/stickUp.js"></script>
+    <script>
+
+        $(function () {
+            loadPermissions();
+            loadRoles();
+        })
+        //加载icheck
+        function loadICheck() {
+            $('input').iCheck({
+                checkboxClass: 'icheckbox_square-blue',
+                radioClass: 'iradio_square-blue',
+                increaseArea: '20%' // optional
+            });
+            //绑定单选框选中时事件
+            $('input[type=radio]').on('ifChecked', function (event) {
+                $("#sava_but").removeAttr("disabled");
+                $("input[type=checkbox]").iCheck('uncheck');
+                //按角色ID查询权限
+                $.get("/getpermission/" + $(this).val(), {}, function (result) {
+                    $(result).each(function (index, ele) {
+                        $("input[type=checkbox][value=" + ele.permissionid + "]").iCheck('check')//.attr("checked", "checked");
+                    })
+                })
+            });
+        }
+        //保存角色权限
+        function sava() {
+            if ($(".icheckbox_square-blue.checked input").length == 0) {
+                alert("请给选择的角色添加权限！");
+            }
+            else {
+                var roleid = $(".iradio_square-blue.checked input").val();
+                var rolePermissionArr = [];
+                $(".icheckbox_square-blue.checked input").each(function (index, ele) {
+                    var rolePermission = { roleid: roleid, permissionid: parseInt($(ele).val()) }
+                    rolePermissionArr.push(rolePermission);
+                })
+                console.log(rolePermissionArr);
+                $.post("/savarolepermissons", { rolepermissions: rolePermissionArr }, function (result) {
+                    if (result.result == false) {
+                        alert(result.message);
+                    }
+                    else {
+                        alert("保存成功!")
+                    }
+                })
+            }
+        }
+        //查询权限
+        function loadPermissions() {
+            $.get("/getpermissions", {}, function (result) {
+                $("#permission_tbody").html("");
+                $(result).each(function (index, ele) {
+                    var trhtml = "<tr>";
+                    trhtml += "<td style=\"text-align:center\"><input type=\"checkbox\" class=\"permissionCheckbox\" value=\"" + ele.id + "\"/></td>";
+                    trhtml += "<td>" + ele.id + "</td>";
+                    trhtml += "<td>" + ele.controllername + "</td>";
+                    trhtml += "<td>" + ele.action + "</td>";
+                    trhtml += "<td>" + ele.actiondescription + "</td>";
+                    trhtml += "<td>" + ele.predicate + "</td>";
+                    trhtml += "</tr>";
+                    $("#permission_tbody").append(trhtml);
+                    loadICheck()
+
+                });
+            });
+        }
+        //查询角色
+        function loadRoles() {
+            $.get("/getroles", {}, function (result) {
+                $("#role_tbody").html("");
+                $(result).each(function (index, ele) {
+                    var trhtml = "<tr>";
+                    trhtml += "<td>" + ele.id + "</td>";
+                    trhtml += "<td>" + ele.name + "</td>";
+                    trhtml += "<td style=\"text-align:center\"><input type=\"radio\" name=\"roleRadio\" value=\"" + ele.id + "\"/></td>";
+                    trhtml += "</tr>";
+                    $("#role_tbody").append(trhtml);
+                    loadICheck()
+                });
+            });
+        }
+
+
+
+    </script>
+}

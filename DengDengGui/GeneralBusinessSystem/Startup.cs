@@ -38,7 +38,7 @@ namespace GeneralBusinessSystem
         /// <param name="services"></param>
         public void ConfigureServices(IServiceCollection services)
         {
-          
+
             //配置文件
             services.AddOptions();
             services.Configure<AppSettings>(Configuration.GetSection("AppSettings"));
@@ -56,16 +56,26 @@ namespace GeneralBusinessSystem
             });
             #endregion
 
-            //注释业务处理模块，for sql server
-            services.AddSingleton<IBusinessRepository>(new GeneralBusinessRepository.SqlServer.BusinessRepository(CreateSqlHelper()));
+            //注入仓储对象
+            DIRepository(services);
 
             services.AddMvc();
         }
-
+        /// <summary>
+        /// 注入仓储对象
+        /// </summary>
+        /// <param name="services">服务</param>
+        void DIRepository(IServiceCollection services)
+        {
+            //注入权限模块，for sql server
+            services.AddSingleton<IPermissionRepository>(new GeneralBusinessRepository.SqlServer.PermissionRepository(CreateSqlHelper()));
+            //注入业务处理模块，for sql server
+            services.AddSingleton<IBusinessRepository>(new GeneralBusinessRepository.SqlServer.BusinessRepository(CreateSqlHelper()));
+        }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
-        
+
 
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
@@ -88,7 +98,7 @@ namespace GeneralBusinessSystem
             {
                 app.UseExceptionHandler("/Home/Error");
             }
-         
+
 
             app.UseStaticFiles();
             //添加权限中间件
@@ -114,7 +124,7 @@ namespace GeneralBusinessSystem
         /// <param name="connectionStrings">数据库连接字符串</param>
         /// <returns></returns>
         ISqlHelper CreateSqlHelper()
-        {           
+        {
             ISqlHelper sqlHelper = null;
             var dataBase = Configuration.GetSection("AppSettings")["DataBase"];
             var defaultConnection = Configuration.GetSection("ConnectionStrings")["DefaultConnection"];

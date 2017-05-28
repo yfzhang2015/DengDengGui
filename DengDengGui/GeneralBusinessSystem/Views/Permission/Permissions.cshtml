@@ -18,11 +18,11 @@
         </div>
     </div>
     <div class="col-md-1" style="padding:0;margin:0;">
-        <div class="panel panel-default stickup" style="margin:0;padding:0">
-            <div class="panel-heading" >
+        <div class="panel panel-default stickup" style="margin:0">
+            <div class="panel-heading">
                 <b style="font-size:1.3em">添加</b>
             </div>
-            <div class="panel-body"  style="margin:0;padding:0">
+            <div class="panel-body" style="padding:0px;">
                 <div class="" style="width:95px;">
                     <textarea id="actiondescription" type="text" placeholder="权限描述" class="form-control" style="width:100%;" rows="8" ></textarea>
                     <button class="btn btn-success" onclick="selectOne()" style="width:100%;margin-top:5px">单项添加</button>
@@ -165,7 +165,7 @@
         });
 
         function loadPage() {
-            $.get("/Management/GetActions", {}, function (result) {
+            $.get("/allaction", {}, function (result) {
                 zTreeObj = $.fn.zTree.init($("#tree"), setting, result);
                 //全部选中
                 //zTreeObj.checkAllNodes(true);

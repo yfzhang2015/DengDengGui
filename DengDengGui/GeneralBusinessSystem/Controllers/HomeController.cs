@@ -11,14 +11,15 @@ namespace GeneralBusinessSystem.Controllers
 {
     public class HomeController : GBController
     {
+        IPermissionRepository _permissionRepository;
 
         /// <summary>
         /// 实例化homecontroller
         /// </summary>
         /// <param name="businessRepository">业务仓储类</param>
-        public HomeController(IBusinessRepository businessRepository) : base(businessRepository)
+        public HomeController(IPermissionRepository permissionRepository)
         {
-
+            _permissionRepository = permissionRepository;
         }
         public IActionResult Index()
         {
@@ -67,7 +68,7 @@ namespace GeneralBusinessSystem.Controllers
         public IActionResult Login(string username,string password)
         {
             _log.Info($"{username}登录");
-            var user = _businessRepository.Login(username, password);
+            var user = _permissionRepository.Login(username, password);
             if (user != null && user.Count > 0)
             {
                 var claims = new Claim[]
