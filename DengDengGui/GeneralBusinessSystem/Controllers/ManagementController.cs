@@ -28,6 +28,63 @@ namespace GeneralBusinessSystem.Controllers
 
 
         #region 菜单模块管理
+
+        /// <summary>
+        /// 菜单管理
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("menus")]
+        public IActionResult Menus()
+        {
+            return View();
+        }
+
+        /// <summary>
+        /// 查询全部菜单
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("getmenus")]
+        public IActionResult GetMenus()
+        {
+            var list = _businessRepository.GetMenus();
+            return new JsonResult(list, new Newtonsoft.Json.JsonSerializerSettings()
+            {
+                ContractResolver = new LowercaseContractResolver()
+            });
+        }
+
+        /// <summary>
+        /// 添加菜单
+        /// </summary>
+        /// <param name="rolename">名称</param>
+        /// <returns></returns>
+        [HttpPost("addmenu")]
+        public bool AddMenu(string name)
+        {
+            return _businessRepository.AddMenu(name) > 0 ? true : false;
+        }
+        /// <summary>
+        /// 修改菜单 
+        /// </summary>
+        /// <param name="id">ID</param>
+        /// <param name="name">名称</param>
+        /// <returns></returns>
+        [HttpPost("modifymenu")]
+        public bool ModifyMenu(int id, string name)
+        {
+            return _businessRepository.ModifyMenu(id, name) > 0 ? true : false;
+        }
+        /// <summary>
+        /// 删除菜单
+        /// </summary>
+        /// <param name="id">ID</param>
+        /// <returns></returns>
+        [HttpPost("deletemenu")]
+        public bool DeleteRole(int id)
+        {
+            return _businessRepository.RemoveMenu(id) > 0 ? true : false;
+        }
+
         /// <summary>
         /// 菜单模块管理
         /// </summary>

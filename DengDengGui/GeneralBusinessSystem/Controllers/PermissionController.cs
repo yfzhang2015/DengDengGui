@@ -168,15 +168,7 @@ namespace GeneralBusinessSystem.Controllers
         }
         #endregion
 
-        #region Role 角色管理
-        /// <summary>
-        /// 添加角色 
-        /// </summary>
-        /// <returns></returns>
-        public ActionResult AddRole()
-        {
-            return View();
-        }
+        #region Role 角色管理    
         /// <summary>
         /// 角色管理
         /// </summary>
@@ -184,11 +176,10 @@ namespace GeneralBusinessSystem.Controllers
         [HttpGet("roles")]
         public IActionResult Roles()
         {
-            var list = _permissionRepository.GetRoles();
-            return View(list);
+            return View();
         }
         /// <summary>
-        /// 查询全部解色
+        /// 查询全部角色
         /// </summary>
         /// <returns></returns>
         [HttpGet("getroles")]

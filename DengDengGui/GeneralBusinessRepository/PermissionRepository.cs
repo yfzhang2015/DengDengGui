@@ -196,10 +196,10 @@ FROM    dbo.Users
         /// <returns></returns>
         public int ModifyRole(int id, string roleName)
         {
-            var sql = $@"update  roles set name=@name,password) =@password where id=@id";
-            var userNameParameter = new SqlParameter() { Value = roleName, ParameterName = "@name" };
+            var sql = $@"update roles set name=@name where id=@id";
+            var nameParameter = new SqlParameter() { Value = roleName, ParameterName = "@name" };
             var idParameter = new SqlParameter() { Value = id, ParameterName = "@id" };
-            return _sqlHelper.ChangeData(sql, userNameParameter, idParameter);
+            return _sqlHelper.ChangeData(sql, nameParameter, idParameter);
         }
 
         /// <summary>

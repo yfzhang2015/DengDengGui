@@ -1,6 +1,6 @@
 ﻿
 @{
-    ViewData["Title"] = "角色管理";
+    ViewData["Title"] = "菜单管理";
     Layout = "_ManageLayout";
 }
 
@@ -8,7 +8,7 @@
     <div class="panel panel-default" style="margin-bottom:-10px;">
         <div class="panel-heading">
 
-            <h3 class="panel-title">角色管理</h3>
+            <h3 class="panel-title">菜单管理</h3>
         </div>
         <div class="panel-body">
 
@@ -29,7 +29,7 @@
                         <thead>
                             <tr>
                                 <th>编号</th>
-                                <th>角色</th>
+                                <th>菜单</th>
                                 <th style="width:94px">操作</th>
                             </tr>
                         </thead>
@@ -48,7 +48,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">关闭</span></button>
-                <h4 class="modal-title" id="modeltitle">修改角色</h4>
+                <h4 class="modal-title" id="modeltitle">修改菜单</h4>
             </div>
             <div class="modal-body" id="modelbody">
                 <div class="row" style="margin-top:10px;">
@@ -57,7 +57,7 @@
                     </div>
 
                     <div class="col-md-6">
-                        <input type="text" class="form-control" id="oldrolename" name="oldrolename" placeholder="角色">
+                        <input type="text" class="form-control" id="oldname" name="oldname" placeholder="菜单">
                     </div>
                 </div>
             </div>
@@ -76,12 +76,12 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">关闭</span></button>
-                <h4 class="modal-title" id="modeltitle">添加角色</h4>
+                <h4 class="modal-title" id="modeltitle">添加菜单</h4>
             </div>
             <div class="modal-body" id="modelbody">
                 <div class="row" style="margin-top:10px;">                   
                     <div class="col-md-12">
-                        <input type="text" class="form-control" id="rolename" name="rolename" placeholder="角色">
+                        <input type="text" class="form-control" id="name" name="name" placeholder="菜单">
                     </div>
                 </div>
             </div>
@@ -101,23 +101,23 @@
     <script>
         $(function () {
 
-            getRoles();
+            getMenus();
         })
-        function getRoles() {
+        function getMenus() {
             $("#tbdata").html('');
-            $.get('/getroles', {
+            $.get('/getmenus', {
             }, function (result) {
                 var tbhtml = '';
-                console.log(result)
+               
                 $(result).each(function (index, ele) {
                     tbhtml += '<tr id="tr_' + ele.id + '" > \
                          <td>'+ ele.id + '</td> \
                           <td>'+ ele.name + '</td> \
                           <td> \
-                          <button class="btn btn-xs btn-primary" style="margin-bottom:-5px;margin-top:-5px;" data-toggle="modal" data-target="#ModiyModal" onclick="modifyRole('+ ele.id + ',\'' + ele.name + '\')"> \
+                          <button class="btn btn-xs btn-primary" style="margin-bottom:-5px;margin-top:-5px;" data-toggle="modal" data-target="#ModiyModal" onclick="modifyMenu('+ ele.id + ',\'' + ele.name + '\')"> \
                            修改 \
                            </button> \
-                           <button class="btn btn-xs btn-danger" style="margin-bottom:-5px;margin-top:-5px;" onclick="deleteRole('+ ele.id + ')"> \
+                           <button class="btn btn-xs btn-danger" style="margin-bottom:-5px;margin-top:-5px;" onclick="deleteMenu('+ ele.id + ')"> \
                               删除 \
                              </button>\
                             </td>\
@@ -129,9 +129,9 @@
 
         }
         //删除角色
-        function deleteRole(id) {
+        function deleteMenu(id) {
             if (confirm("你确定要删除ID为：" + id + "的记录吗？")) {
-                $.post("/deleterole", {
+                $.post("/deletemenu", {
                     id: id
                 }, function (result) {
 
@@ -145,34 +145,34 @@
             }
         }
         //修改角色
-        function modifyRole(id, oldrolename) {
+        function modifyMenu(id, oldname) {
             $("#oldid").val(id);
-            $("#oldrolename").val(oldrolename);
+            $("#oldname").val(oldname);
 
         }
         //保存修改
         function savaModify() {
-            $.post("/modifyrole", {
+            $.post("/modifymenu", {
                 id: $("#oldid").val(),
-                rolename: $("#oldrolename").val()
+                name: $("#oldname").val()
             }, function (result) {
                 if (!result) {
                     alert("修改失败，请确认与服务器连接！");
                 }
-                var str = "/roles";
+                var str = "/menus";
                 window.location.href = str;
             });
         }
         //添加
         function sava() {
-            $.post("/addrole", {
-                rolename: $("#rolename").val(),
+            $.post("/addmenu", {
+                name: $("#name").val(),
                 id: $("#id").val()
             }, function (result) {
                 if (!result) {
                     alert("添加失败，请确认与服务器连接！");
                 }
-                var str = "/roles";
+                var str = "/menus";
                 window.location.href = str;
             });
         }

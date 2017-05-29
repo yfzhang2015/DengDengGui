@@ -21,9 +21,56 @@ namespace GeneralBusinessRepository.SqlServer
         public BusinessRepository(ISqlHelper sqlHelper)
         {
             _sqlHelper = sqlHelper;
-        } 
+        }
 
         #region 菜单管理
+        /// <summary>
+        /// 查询全部菜单
+        /// </summary>
+        /// <returns></returns>
+        public List<Dictionary<string, dynamic>> GetMenus()
+        {
+            var sql = "select id,name from menus";
+            return _sqlHelper.QueryList(sql);
+        }
+        /// <summary>
+        /// 添加菜单
+        /// </summary>
+        /// <param name="name">名称</param>
+        /// <returns></returns>
+        public int AddMenu(string name)
+        {
+            var sql = "insert into menus(name) values(@name)";
+            var nameParameter = new SqlParameter() { Value = name, ParameterName = "@name" };
+            return _sqlHelper.ChangeData(sql, nameParameter);
+        }
+
+        /// <summary>
+        /// 修改菜单
+        /// </summary>
+        /// <param name="id">编号</param>
+        /// <param name="name">名称</param>
+        /// <returns></returns>
+        public int ModifyMenu(int id, string name)
+        {
+            var sql = "update menus set name=@name where id=@id";
+            var nameParameter = new SqlParameter() { Value = name, ParameterName = "@name" };
+            var idParameter = new SqlParameter() { Value = id, ParameterName = "@id" };
+            return _sqlHelper.ChangeData(sql, nameParameter, idParameter);
+        }
+
+        /// <summary>
+        /// 删除菜单
+        /// </summary>
+        /// <param name="id">编号</param>
+        /// <returns></returns>
+        public int RemoveMenu(int id)
+        {
+            var sql ="delete menus where id=@id";
+            var idParameter = new SqlParameter() { Value = id, ParameterName = "@id" };
+            return _sqlHelper.ChangeData(sql, idParameter);
+        }
+
         /// <summary>
         /// 按用户名查询菜单
         /// </summary>
