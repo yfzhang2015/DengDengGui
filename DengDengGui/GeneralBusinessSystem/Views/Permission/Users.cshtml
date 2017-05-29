@@ -1,5 +1,4 @@
-﻿@model System.Collections.Generic.List<System.Collections.Generic.Dictionary<string, dynamic>>
-
+﻿
 @{
     ViewData["Title"] = "用户管理";
     Layout = "_ManageLayout";
@@ -17,7 +16,7 @@
                 </div>
 
                 <div class="col-md-3">
-                    <input type="text" class="form-control" id="queryname" name="queryname" placeholder="登录名">
+                    <input type="text" class="form-control" id="queryname" name="queryname" placeholder="用户名、姓名">
                 </div>
                 <div class="col-md-1" style="text-align:right">
                     <button type="button" style="width:80px" class="btn btn-primary" onclick="queryUser()">
@@ -30,40 +29,19 @@
                     </button>
                 </div>
             </div>
-
-
             <div class="row" style="margin-bottom:-10px;">
                 <div class="col-md-12">
                     <table class="table table-bordered table-hover  table-condensed table-striped">
                         <thead>
                             <tr>
-                                <th>编号</th>
+                                <th style="width:80px">编号</th>
                                 <th>用户名</th>
-                                <th>登录名</th>
                                 <th>密码</th>
-                                <th>操作</th>
+                                <th>姓名</th>
+                                <th style="width:94px">操作</th>
                             </tr>
                         </thead>
-                        <tbody id="tbdata">
-                            @foreach (var item in Model)
-                            {
-                                <tr id='tr_@(item["id"])'>
-                                    <td>@item["username"]</td>
-                                    <td>@item["password"]</td>
-                                    <td>@item["name"]</td>
-                                    <td>******</td>
-                                    <td>
-                                        <button class="btn btn-sm btn-primary" style="margin-bottom:-5px;margin-top:-5px;"  data-toggle="modal" data-target="#ModiyModal" onclick="Modify('@item["id"]','@item["username"]','@item["password"]','@item["name"]')">
-                                            修改
-                                        </button>
-                                        <button class="btn btn-sm btn-danger" style="margin-bottom:-5px;margin-top:-5px;" onclick="Delete('@item["id"]')">
->
-                                            删除
-                                        </button>
-                                    </td>
-                                </tr>
-                            }
-                        </tbody>
+                        <tbody id="tbdata"></tbody>
                     </table>
                 </div>
             </div>
@@ -100,7 +78,7 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button class="btn btn-success" onclick="SavaModify()">
+                <button class="btn btn-success" onclick="savaModify()">
                     保存
                 </button>
                 <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
@@ -138,7 +116,7 @@
 
 
             <div class="modal-footer">
-                <button class="btn btn-success" onclick="SavaAdd()">
+                <button class="btn btn-success" onclick="sava()">
                     保存
                 </button>
                 <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
@@ -151,24 +129,28 @@
 @section scripts {
 
     <script>
-        function queryUser() {
+
+        $(function () {
+
+            getUsers();
+        })
+        function getUsers() {
             $("#tbdata").html('');
-            $.post('/queryusers', {
-                queryName: $('#queryname').val()
+            $.get('/getusers', {
             }, function (result) {
                 var tbhtml = '';
+                console.log(result)
                 $(result).each(function (index, ele) {
-              
                     tbhtml += '<tr id="tr_' + ele.id + '" > \
+                         <td>'+ ele.id + '</td> \
                             <td>'+ ele.username + '</td> \
-                            <td>'+ ele.password + '</td > \
-                            <td>'+ ele.name + '</td> \
                             <td>******</td> \
+                            <td>'+ ele.name + '</td> \
                             <td> \
-                                <button class="btn btn-sm btn-primary" style="margin-bottom:-5px;margin-top:-5px;" data-toggle="modal" data-target="#ModiyModal" onclick="Modify('+ ele.id + ',' + ele.username + ',' + ele.password + ',' + ele.name + ')"> \
+                                <button class="btn btn-xs btn-primary" style="margin-bottom:-5px;margin-top:-5px;" data-toggle="modal" data-target="#ModiyModal" onclick="modifyUser('+ ele.id + ',\'' + ele.username + '\',\'' + ele.password + '\',\'' + ele.name + '\')"> \
                                     修改 \
                                         </button> \
-                                <button class="btn btn-sm btn-danger" style="margin-bottom:-5px;margin-top:-5px;" onclick="Delete('+ ele.id + ')"> \
+                                <button class="btn btn-xs btn-danger" style="margin-bottom:-5px;margin-top:-5px;" onclick="deleteUser('+ ele.id + ')"> \
                                     删除 \
                                         </button>\
                             </td>\
@@ -176,11 +158,37 @@
 
                 })
                 $("#tbdata").html(tbhtml);
-            }
-            )
+            })
 
         }
-        function Delete(id) {
+        function queryUser() {
+            $("#tbdata").html('');
+            $.get('/queryusers', {
+                queryName: $('#queryname').val()
+            }, function (result) {
+                var tbhtml = '';
+                $(result).each(function (index, ele) {
+                    tbhtml += '<tr id="tr_' + ele.id + '" > \
+                         <td>'+ ele.id + '</td> \
+                            <td>'+ ele.username + '</td> \
+                            <td>******</td> \
+                            <td>'+ ele.name + '</td> \
+                            <td> \
+                                <button class="btn btn-xs btn-primary" style="margin-bottom:-5px;margin-top:-5px;" data-toggle="modal" data-target="#ModiyModal" onclick="modifyUser('+ ele.id + ',\'' + ele.username + '\',\'' + ele.password + '\',\'' + ele.name + '\')"> \
+                                    修改 \
+                                        </button> \
+                                <button class="btn btn-xs btn-danger" style="margin-bottom:-5px;margin-top:-5px;" onclick="deleteUser('+ ele.id + ')"> \
+                                    删除 \
+                                        </button>\
+                            </td>\
+                                </tr >'
+
+                })
+                $("#tbdata").html(tbhtml);
+            })
+
+        }
+        function deleteUser(id) {
             if (confirm("你确定要删除ID为：" + id + "的记录吗？")) {
                 $.post("/deleteuser", {
                     id: id
@@ -198,14 +206,15 @@
             }
         }
 
-        function Modify(id, username, password, name) {
+        function modifyUser(id, username, password, name) {
+            console.log(id)
             $("#oldid").val(id);
             $("#oldusername").val(username);
             $("#oldpassword").val(password);
             $("#oldname").val(name);
         }
 
-        function SavaModify() {
+        function savaModify() {
             $.post("/modifyuser", {
                 ID: $("#oldid").val(),
                 UserName: $("#oldusername").val(),
@@ -221,7 +230,7 @@
             });
         }
 
-        function SavaAdd() {
+        function sava() {
             $.post("/adduser", {
                 ID: $("#id").val(),
                 UserName: $("#username").val(),

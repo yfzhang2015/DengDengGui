@@ -41,8 +41,8 @@ namespace GeneralBusinessRepository.SqlServer
         public List<Dictionary<string, dynamic>> GetUsers(string queryName)
         {
             var sql = "select * from users where username like @queryname or name like @queryname";
-            var nameParameter = new SqlParameter() { Value = "%" + queryName + "%", ParameterName = "@queryname" };
-            return _sqlHelper.QueryList(sql);
+            var queryNameParameter = new SqlParameter() { Value = "%" + queryName + "%", ParameterName = "@queryname" };
+            return _sqlHelper.QueryList(sql,queryNameParameter);
         }
 
         /// <summary>
@@ -54,7 +54,7 @@ namespace GeneralBusinessRepository.SqlServer
         /// <returns></returns>
         public int AddUser(string userName, string password, string name)
         {
-            var sql = $@"insert into users(username,password) values(@username,@password)";
+            var sql = $@"insert into users(username,password,name) values(@username,@password,@name)";
             var userNameParameter = new SqlParameter() { Value = userName, ParameterName = "@username" };
             var passwordParameter = new SqlParameter() { Value = password, ParameterName = "@password" };
             var nameParameter = new SqlParameter() { Value = name, ParameterName = "@name" };
@@ -71,7 +71,7 @@ namespace GeneralBusinessRepository.SqlServer
         /// <returns></returns>
         public int ModifyUser(int id, string userName, string password, string name)
         {
-            var sql = $@"update  users set username=@username,password) =@password,[name]=@name where id=@id";
+            var sql = "update  users set [username]=@username,[password] =@password,[name]=@name where id=@id";
             var userNameParameter = new SqlParameter() { Value = userName, ParameterName = "@username" };
             var passwordParameter = new SqlParameter() { Value = password, ParameterName = "@password" };
             var idParameter = new SqlParameter() { Value = id, ParameterName = "@id" };
@@ -86,7 +86,7 @@ namespace GeneralBusinessRepository.SqlServer
         /// <returns></returns>
         public int RemoveUser(int id)
         {
-            var sql = $@"delete  users s where id=@id";
+            var sql = "delete  users  where id=@id";
             var idParameter = new SqlParameter() { Value = id, ParameterName = "@id" };
             return _sqlHelper.ChangeData(sql, idParameter);
         }

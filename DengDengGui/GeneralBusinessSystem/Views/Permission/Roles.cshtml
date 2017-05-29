@@ -31,7 +31,7 @@
                             <tr>
                                 <th>编号</th>
                                 <th>角色</th>
-                                <th></th>
+                                <th style="width:94px">操作</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -41,10 +41,10 @@
                                     <td>@item["id"]</td>
                                     <td>@item["name"]</td>
                                     <td>
-                                        <button class="btn btn-sm btn-primary" style="margin-bottom:-5px;margin-top:-5px;" data-toggle="modal" data-target="#ModiyModal" onclick="Modify('@item["id"]','@item["name"]')">
+                                        <button class="btn btn-xs btn-primary" style="margin-bottom:-5px;margin-top:-5px;" data-toggle="modal" data-target="#ModiyModal" onclick="modifyRole('@item["id"]','@item["name"]')">
                                             修改
                                         </button>
-                                        <button class="btn btn-sm btn-danger" style="margin-bottom:-5px;margin-top:-5px;" onclick="Delete('@item["id"]')">
+                                        <button class="btn btn-xs btn-danger" style="margin-bottom:-5px;margin-top:-5px;" onclick="deleteRole('@item["id"]')">
                                             删除
                                         </button>
                                     </td>
@@ -79,7 +79,7 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button class="btn btn-success" onclick="SavaModify()">
+                <button class="btn btn-success" onclick="savaModify()">
                     保存
                 </button>
                 <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
@@ -106,7 +106,7 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button class="btn btn-success" onclick="SavaAdd()">
+                <button class="btn btn-success" onclick="sava()">
                     保存
                 </button>
                 <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
@@ -121,7 +121,7 @@
     <script>
 
         //查询销售数据
-        function Delete(id) {
+        function deleteRole(id) {
             if (confirm("你确定要删除ID为：" + id + "的记录吗？")) {
                 $.post("/deleterole", {
                     id: id
@@ -137,13 +137,13 @@
             }
         }
 
-        function Modify(id, oldrolename) {
+        function modifyRole(id, oldrolename) {
             $("#oldid").val(id);
             $("#oldrolename").val(oldrolename);
      
         }
 
-        function SavaModify() {
+        function savaModify() {
             $.post("/modifyrole", {
                 ID: $("#oldid").val(),
                 RoleName: $("#oldrolename").val()
@@ -157,7 +157,7 @@
             });
         }
 
-        function SavaAdd() {
+        function sava() {
             $.post("/addrole", {
                 rolename: $("#rolename").val(),
                 id: $("#id").val()

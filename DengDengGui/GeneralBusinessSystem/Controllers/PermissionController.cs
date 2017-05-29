@@ -73,8 +73,7 @@ namespace GeneralBusinessSystem.Controllers
         [HttpGet("users")]
         public ActionResult Users()
         {
-            var result = _permissionRepository.GetUsers();
-            return View(result);
+            return View();
         }
 
         /// <summary>
@@ -87,14 +86,13 @@ namespace GeneralBusinessSystem.Controllers
             var result = _permissionRepository.GetUsers();
             return new JsonResult(result, new JsonSerializerSettings()
             {
-
                 ContractResolver = new LowercaseContractResolver()
             });
         }
         /// <summary>
         /// 查询用户
         /// </summary>
-        /// <param name="queryName"></param>
+        /// <param name="queryName">查询名称</param>
         /// <returns></returns>
         [HttpGet("queryusers")]
         public ActionResult QueryUser(string queryName)

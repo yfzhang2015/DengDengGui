@@ -1,0 +1,211 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+
+
+    <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+
+    <title>@ViewData["Title"] - 通用业务平台管理</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" />
+
+    @RenderSection("css", required: false)
+</head>
+<body>
+
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a asp-area="" asp-controller="Home" asp-action="Index" class="navbar-brand">通用业务平台</a>
+            </div>
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                    <li class="dropdown">
+                        <a class="dropdown-toggle" id="drop1" aria-expanded="false" aria-haspopup="true" href="#" data-toggle="dropdown">
+                            基础维护
+                            <span class="caret"></span>
+                        </a>
+                        <ul class="dropdown-menu" role="menu" aria-labelledby="drop1">
+
+                            <li role="presentation">
+                                <a asp-area="" asp-controller="Manage" asp-action="GNS">功能管理</a>
+                            </li>
+                            <li role="separator" class="divider"></li>
+                            <li role="presentation">
+                                <a asp-area="" asp-controller="Manage" asp-action="Roles">角色管理</a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="dropdown">
+                        <a class="dropdown-toggle" id="drop1" aria-expanded="false" aria-haspopup="true" href="#" data-toggle="dropdown">
+                            平台设计
+                            <span class="caret"></span>
+                        </a>
+                        <ul class="dropdown-menu" role="menu" aria-labelledby="drop1">
+
+                            <li role="presentation">
+                                <a asp-area="" asp-controller="Manage" asp-action="Filters">报表条件管理</a>
+                            </li>
+                            <li role="presentation">
+                                <a asp-area="" asp-controller="Manage" asp-action="GNFilter">报表设计</a>
+                            </li>
+                            <li role="separator" class="divider"></li>
+                            <li role="presentation">
+                                <a asp-area="" asp-controller="Manage" asp-action="Fields">单据条件管理</a>
+                            </li>
+                            <li role="presentation">
+                                <a asp-area="" asp-controller="Manage" asp-action="GNField">单据设计</a>
+                            </li>
+                            <li role="separator" class="divider"></li>
+                            <li role="presentation">
+                                <a asp-area="" asp-controller="Manage" asp-action="DataEdit">存储过程管理</a>
+                            </li>
+
+                        </ul>
+                    </li>
+                    <li class="dropdown">
+                        <a class="dropdown-toggle" id="drop1" aria-expanded="false" aria-haspopup="true" href="#" data-toggle="dropdown">
+                            权限管理
+                            <span class="caret"></span>
+                        </a>
+                        <ul class="dropdown-menu" role="menu" aria-labelledby="drop1">
+                            <li role="presentation">
+                                <a asp-area="" asp-controller="Manage" asp-action="JSGN">角色权限管理</a>
+                            </li>
+                            <li role="presentation">
+                                <a asp-area="" asp-controller="Manage" asp-action="JSZY">角色人员管理</a>
+                            </li>
+                        </ul>
+                    <li role="presentation">
+                        <a asp-area="" asp-controller="Manage" asp-action="UserIndex">用户管理</a>
+                    </li>
+                    @*
+                <li class="dropdown">
+                    <a class="dropdown-toggle" id="drop1" aria-expanded="false" aria-haspopup="true" href="#" data-toggle="dropdown">
+                        用户管理
+                        <span class="caret"></span>
+                    </a>
+                    <ul class="dropdown-menu" role="menu" aria-labelledby="drop1">
+
+                        <li role="presentation">
+                            <a asp-area="" asp-controller="Manage" asp-action="UserIndex">用户管理</a>
+                        </li>
+
+                    </ul>
+                </li>*@
+                </ul>
+
+                <ul class="nav navbar-nav navbar-right">
+                    <li role="presentation"><a href="/ModifyPassword">当前用户：@User.Identity.Name</a></li>
+                    <li role="presentation"><a href="/login">注销</a></li>
+                </ul>
+
+            </div>
+        </div>
+    </nav>
+    <div class="container body-content" style="min-height:600px;background-color:#efefef;">
+
+
+
+        <div class="row">
+            <div class="col-md-2">
+                <div class="panel-group table-responsive" role="tablist">
+                    <div class="panel panel-primary leftMenu">
+                        <!-- 利用data-target指定要折叠的分组列表 -->
+                        <div class="panel-heading" id="collapseListGroupHeading1" data-toggle="collapse" data-target="#collapseListGroup1" role="tab">
+                            <h4 class="panel-title">
+                                分组1
+                                @*<span class="glyphicon glyphicon-chevron-up right"></span>*@
+                            </h4>
+                        </div>
+                        <!-- .panel-collapse和.collapse标明折叠元素 .in表示要显示出来 -->
+                        <div id="collapseListGroup1" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="collapseListGroupHeading1">
+                            <ul class="list-group">
+                                <li class="list-group-item">
+                                    <!-- 利用data-target指定URL -->
+                                    <button class="menu-item-left" data-target="test2.html">
+                                        <span class="glyphicon glyphicon-triangle-right"></span>分组项1-1
+                                    </button>
+                                </li>
+                                <li class="list-group-item">
+                                    <button class="menu-item-left">
+                                        <span class="glyphicon glyphicon-triangle-right"></span>分组项1-2
+                                    </button>
+                                </li>
+                            </ul>
+                        </div>
+                    </div><!--panel end-->
+                    <div class="panel panel-primary leftMenu">
+                        <div class="panel-heading" id="collapseListGroupHeading2" data-toggle="collapse" data-target="#collapseListGroup2" role="tab">
+                            <h4 class="panel-title">
+                                分组2
+                                @*<span class="glyphicon glyphicon-chevron-down right"></span>*@
+                            </h4>
+                        </div>
+                        <div id="collapseListGroup2" class="panel-collapse collapse" role="tabpanel" aria-labelledby="collapseListGroupHeading2">
+                            <ul class="list-group">
+                                <li class="list-group-item">
+                                    <button class="menu-item-left">
+                                        <span class="glyphicon glyphicon-triangle-right"></span>分组项2-1
+                                    </button>
+                                </li>
+                                <li class="list-group-item">
+                                    <button class="menu-item-left">
+                                        <span class="glyphicon glyphicon-triangle-right"></span>分组项2-2
+                                    </button>
+                                </li>
+
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-10">
+                @RenderBody()
+            </div>
+        </div>
+
+
+
+
+
+
+
+    </div>
+    <hr />
+    <footer style="text-align:center">
+        <p>&copy; 2017 - 通用业务平台</p>
+    </footer>
+    <script src="~/lib/jquery/dist/jquery.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script>
+            $(function () {
+                $(".panel-heading").click(function (e) {
+                    /*切换折叠指示图标*/
+                   // $(this).find("span").toggleClass("glyphicon-chevron-down");
+                   // $(this).find("span").toggleClass("glyphicon-chevron-up");
+
+                    //排它图标
+                    $(".panel-heading").addClass("collapsed");
+                    $(this).removeClass("collapsed");
+                    $(".panel-collapse").removeClass("in");
+                    $(this).find(".panel-collapse").removeClass("in");
+
+                    console.log($(this).attr("data-target"));
+                });
+            });
+    </script>
+    @RenderSection("Scripts", required: false)
+</body>
+</html>
