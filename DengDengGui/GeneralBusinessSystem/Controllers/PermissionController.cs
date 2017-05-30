@@ -300,7 +300,7 @@ namespace GeneralBusinessSystem.Controllers
         /// </summary>
         /// <param name="roleID">½ÇÉ«ID</param>
         /// <returns></returns>
-        [HttpGet("/getpermission/{roleid}")]
+        [HttpGet("getpermission/{roleid}")]
         public IActionResult GetPermissionByRoleID(int roleID)
         {
             var list = _permissionRepository.GetPermissionsByRoleID(roleID);
@@ -348,7 +348,7 @@ namespace GeneralBusinessSystem.Controllers
         /// </summary>
         /// <param name="userID">ÓÃ»§ID</param>
         /// <returns></returns>
-        [HttpGet("/getrole/{userid}")]
+        [HttpGet("getrole/{userid}")]
         public IActionResult GetRoleByUserID(int userID)
         {
             var list = _permissionRepository.GetRoleByUserID(userID);
