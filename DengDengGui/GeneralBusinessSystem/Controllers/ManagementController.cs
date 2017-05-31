@@ -11,6 +11,9 @@ using Common;
 
 namespace GeneralBusinessSystem.Controllers
 {
+    /// <summary>
+    /// 后台管理controller
+    /// </summary>
     public class ManagementController : GBController
     {
         /// <summary>
@@ -21,6 +24,10 @@ namespace GeneralBusinessSystem.Controllers
         {
 
         }
+        /// <summary>
+        /// 后台首页
+        /// </summary>
+        /// <returns></returns>
         public IActionResult Index()
         {
             return View();
@@ -29,7 +36,7 @@ namespace GeneralBusinessSystem.Controllers
 
         #region 菜单模块管理
 
-        /// <summary>
+        /// <summary>-
         /// 菜单管理
         /// </summary>
         /// <returns></returns>
