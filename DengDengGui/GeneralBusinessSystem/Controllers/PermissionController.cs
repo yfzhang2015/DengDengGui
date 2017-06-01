@@ -8,6 +8,7 @@ using System.Reflection;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using Common;
+using Microsoft.AspNetCore.Http;
 
 namespace GeneralBusinessSystem.Controllers
 {
@@ -98,7 +99,8 @@ namespace GeneralBusinessSystem.Controllers
         public ActionResult QueryUser(string queryName)
         {
             var list = _permissionRepository.GetUsers(queryName);
-            return new JsonResult(list,new JsonSerializerSettings() {
+            return new JsonResult(list, new JsonSerializerSettings()
+            {
 
                 ContractResolver = new LowercaseContractResolver()
             });
@@ -115,7 +117,7 @@ namespace GeneralBusinessSystem.Controllers
         {
             try
             {
-                _permissionRepository.AddUser(userName, password, name);
+                _permissionRepository.AddUser(userName, password, name, CompanyID);
 
                 return true;
             }
@@ -186,7 +188,8 @@ namespace GeneralBusinessSystem.Controllers
         public IActionResult GetRoles()
         {
             var list = _permissionRepository.GetRoles();
-            return new JsonResult(list, new Newtonsoft.Json.JsonSerializerSettings() {
+            return new JsonResult(list, new Newtonsoft.Json.JsonSerializerSettings()
+            {
                 ContractResolver = new LowercaseContractResolver()
             });
         }

@@ -165,6 +165,7 @@
 
         function loadPage() {
             $.get("/allaction", {}, function (result) {
+                console.log(result)
                 zTreeObj = $.fn.zTree.init($("#tree"), setting, result);
                 //全部选中
                 //zTreeObj.checkAllNodes(true);

@@ -27,7 +27,7 @@ namespace GeneralBusinessRepository
         /// <param name="userName">用户名</param>
         /// <param name="password">密码</param>
         /// <returns></returns>
-        int AddUser(string userName, string password, string name);
+        int AddUser(string userName, string password, string name, int companyID);
 
         /// <summary>
         /// 修改用户

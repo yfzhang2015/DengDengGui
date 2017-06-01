@@ -52,13 +52,14 @@ namespace GeneralBusinessRepository.SqlServer
         /// <param name="password">密码</param>
         /// <param name="name">名称</param>
         /// <returns></returns>
-        public int AddUser(string userName, string password, string name)
+        public int AddUser(string userName, string password, string name,int companyID)
         {
-            var sql = $@"insert into users(username,password,name) values(@username,@password,@name)";
+            var sql = $@"insert into users(username,password,name,companyid) values(@username,@password,@name,@companyid)";
             var userNameParameter = new SqlParameter() { Value = userName, ParameterName = "@username" };
             var passwordParameter = new SqlParameter() { Value = password, ParameterName = "@password" };
             var nameParameter = new SqlParameter() { Value = name, ParameterName = "@name" };
-            return _sqlHelper.ChangeData(sql, userNameParameter, passwordParameter, nameParameter);
+            var companyIDParameter = new SqlParameter() { Value = companyID, ParameterName = "@companyID" };
+            return _sqlHelper.ChangeData(sql, userNameParameter, passwordParameter, nameParameter, companyIDParameter);
         }
 
         /// <summary>

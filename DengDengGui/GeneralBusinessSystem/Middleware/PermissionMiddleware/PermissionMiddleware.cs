@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
@@ -88,7 +89,16 @@ namespace GeneralBusinessSystem.Middleware
                                 //添加cookie
                                 var guid = Guid.NewGuid().ToString("N");
                                 context.Response.Cookies.Append("browseweb", guid, new CookieOptions() { Path = "/", HttpOnly = true });
-                                context.Session.SetString(guid + context.Connection.RemoteIpAddress.ToString(), userName);
+                                //组织session保存信息
+                                var userJson = Newtonsoft.Json.JsonConvert.SerializeObject(
+                                    new
+                                    {
+                                        username = userName,
+                                        name = userDic["Name"],
+                                        companyid = Convert.ToInt32(userDic["CompanyID"])
+                                    });
+
+                                context.Session.SetString(guid + context.Connection.RemoteIpAddress.ToString(), userJson);
                             }
                             else
                             {
@@ -104,17 +114,19 @@ namespace GeneralBusinessSystem.Middleware
                 else
                 {
                     //验证权限
-                    var username = context.Session.GetString(cookie + context.Connection.RemoteIpAddress.ToString());
-                    if (string.IsNullOrEmpty(username))
+                    var userJson = context.Session.GetString(cookie + context.Connection.RemoteIpAddress.ToString());
+                    if (string.IsNullOrEmpty(userJson))
                     {
                         context.Response.Cookies.Delete("browseweb");
                         context.Response.Redirect(_option.LoginAction);
                     }
                     else
-                    { 
-                        var actionCount = _userPermissions.Where(w => w.UserName == username&&w.Action== context.Request.Path.Value).Count();
+                    {
+                        var userObj= Newtonsoft.Json.JsonConvert.DeserializeObject(userJson);
+                        var username = (userObj as Newtonsoft.Json.Linq.JObject).GetValue("username").First.ToString() ;
+                        var actionCount = _userPermissions.Where(w => w.UserName == username && w.Action == context.Request.Path.Value).Count();
 
-                        if (actionCount<1)
+                        if (actionCount < 1)
                         {
                             context.Response.Redirect(_option.NoPermissionAction);
                         }
@@ -123,5 +135,6 @@ namespace GeneralBusinessSystem.Middleware
             }
             return this._next(context);
         }
+
     }
 }

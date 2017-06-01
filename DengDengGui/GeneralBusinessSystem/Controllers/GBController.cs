@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using GeneralBusinessRepository;
 using Microsoft.Extensions.Logging;
 using NLog;
+using Microsoft.AspNetCore.Http;
 
 namespace GeneralBusinessSystem.Controllers
 {
@@ -35,9 +36,23 @@ namespace GeneralBusinessSystem.Controllers
         /// <summary>
         /// 通用项目平台控制层实例
         /// </summary>
-        public GBController( )
+        public GBController()
         {
             _log = LogManager.GetCurrentClassLogger();
+        }
+        /// <summary>
+        /// 公司ID
+        /// </summary>
+        public int CompanyID
+        {
+            get
+            {
+                var cookie = Request.Cookies["browseweb"];
+                var userJson = HttpContext.Session.GetString(cookie + HttpContext.Connection.RemoteIpAddress.ToString());
+                var userObj = Newtonsoft.Json.JsonConvert.DeserializeObject(userJson);
+                var companyID = (userObj as Newtonsoft.Json.Linq.JObject).GetValue("companyid").First.ToString();
+                return Convert.ToInt32(companyID);
+            }
         }
     }
 }
