@@ -58,7 +58,6 @@ namespace GeneralBusinessRepository.SqlServer
             var idParameter = new SqlParameter() { Value = id, ParameterName = "@id" };
             return _sqlHelper.ChangeData(sql, nameParameter, idParameter);
         }
-
         /// <summary>
         /// 删除菜单
         /// </summary>
@@ -70,7 +69,6 @@ namespace GeneralBusinessRepository.SqlServer
             var idParameter = new SqlParameter() { Value = id, ParameterName = "@id" };
             return _sqlHelper.ChangeData(sql, idParameter);
         }
-
         /// <summary>
         /// 按用户名查询菜单
         /// </summary>
@@ -105,11 +103,15 @@ FROM    users
             return _sqlHelper.QueryList(sql, userNameParameter);
 
         }
-
-
-
         #endregion
 
+        #region 单据模块管理
+        public List<Dictionary<string, dynamic>> GetBillModules()
+        {
+            var sql = "delete menus where id=@id";     
+            return _sqlHelper.QueryList(sql);
+        }
+        #endregion
 
     }
 }

@@ -1,243 +1,102 @@
-﻿@model System.Collections.Generic.List<System.Collections.Generic.Dictionary<string, dynamic>>
-
+﻿
 @{
-    ViewData["Title"] = "用户管理";
+    ViewData["Title"] = "模块菜单管理";
     Layout = "_ManageLayout";
 }
+<div class="row">
+    <div class="col-md-6">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+
+                <b style="font-size:1.3em">菜单</b>
+            </div>
+            <div class="panel-body" style="padding:1px;">
+                <table class="table table-bordered table-hover  table-condensed table-striped">
+                    <thead>
+                        <tr>
+                            <th style="width:40px">编号</th>
+                            <th>名称</th>
+                            <th style="width:40px">选择</th>
+                        </tr>
+                    </thead>
+                    <tbody id="menu_tbody"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="panel panel-default">
+            <div class="panel-heading"><b style="font-size:1.3em">单据模块</b></div>
+            <div class="panel-body" style="padding:1px;">
+                <table class="table table-bordered table-hover  table-condensed table-striped">
+                    <thead>
+                        <tr>
+                            <th style="width:40px">选择</th>
+                            <th style="width:40px">编号</th>
+                            <th>模块名称</th>
+                        </tr>
+                    </thead>
+                    <tbody id="bill_module_tbody"></tbody>
+                </table>
+            </div>
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-heading"><b style="font-size:1.3em">查询模块</b></div>
+            <div class="panel-body" style="padding:1px;">
+                <table class="table table-bordered table-hover  table-condensed table-striped">
+                    <thead>
+                        <tr>
+                            <th style="width:40px">选择</th>
+                            <th style="width:40px">编号</th>
+                            <th>模块名称</th>
+                        </tr>
+                    </thead>
+                    <tbody id="query_module_tbody"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="panel panel-default">
+            <div class="panel-heading"><b style="font-size:1.3em">图表模块</b></div>
+            <div class="panel-body" style="padding:1px;">
+                <table class="table table-bordered table-hover  table-condensed table-striped">
+                    <thead>
+                        <tr>
+                            <th style="width:40px">选择</th>
+                            <th style="width:40px">编号</th>
+                            <th>模块名称</th>
+                        </tr>
+                    </thead>
+                    <tbody id="chart_module_tbody"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
 
 <div class="row">
-    <div class="panel panel-default" style="margin-bottom:-10px;">
-        <div class="panel-heading">
-            <h3 class="panel-title">用户管理</h3>
-        </div>
-        <div class="panel-body">
-
-            <div class="row" style="margin-bottom:10px;">
-                <div class="col-md-7">
-                </div>
-
-                <div class="col-md-3">
-                    <input type="text" class="form-control" id="queryname" name="queryname" placeholder="登录名">
-                </div>
-                <div class="col-md-1" style="text-align:right">
-                    <button type="button" style="width:80px" class="btn btn-primary" onclick="queryUser()">
-                        查找
-                    </button>
-                </div>
-                <div class="col-md-1" style="text-align:right">
-                    <button type="button" style="width:80px" class="btn btn-primary" data-toggle="modal" data-target="#AddModal">
-                        添加
-                    </button>
-                </div>
-            </div>
-
-
-            <div class="row" style="margin-bottom:-10px;">
-                <div class="col-md-12">
-                    <table class="table table-bordered table-hover  table-condensed table-striped">
-                        <thead>
-                            <tr>
-                                <th>编号</th>
-                                <th>用户名</th>
-                                <th>登录名</th>
-                                <th>密码</th>
-                                <th>操作</th>
-                            </tr>
-                        </thead>
-                        <tbody id="tbdata">
-                            @foreach (var item in Model)
-                            {
-                                <tr id='tr_@(item["id"])'>
-                                    <td>@item["username"]</td>
-                                    <td>@item["password"]</td>
-                                    <td>@item["name"]</td>
-                                    <td>******</td>
-                                    <td>
-                                        <button class="btn btn-sm btn-primary" style="margin-bottom:-5px;margin-top:-5px;"  data-toggle="modal" data-target="#ModiyModal" onclick="Modify('@item["id"]','@item["username"]','@item["password"]','@item["name"]')">
-                                            修改
-                                        </button>
-                                        <button class="btn btn-sm btn-danger" style="margin-bottom:-5px;margin-top:-5px;" onclick="Delete('@item["id"]')">
->
-                                            删除
-                                        </button>
-                                    </td>
-                                </tr>
-                            }
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-
-        </div>
+    <div class="col-md-12" style="text-align:right">
+        <button id="sava_but" class="btn btn-primary" disabled onclick="sava()" style="width:150px">保存</button>
     </div>
 </div>
-
-<div class="modal fade" id="ModiyModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        bzsm
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">关闭</span></button>
-                <h4 class="modal-title" id="modeltitle">修改子类型</h4>
-            </div>
-            <div class="modal-body" id="modelbody">
-                <div class="row" style="margin-top:10px;">
-                    <div class="col-md-6">
-                        <input type="text" readonly class="form-control" id="oldid" name="oldid" placeholder="编号">
-                    </div>
-
-                    <div class="col-md-6">
-                        <input type="text" class="form-control" id="oldname" name="oldname" placeholder="名称">
-                    </div>
-                </div>
-                <div class="row" style="margin-top:10px;">
-                    <div class="col-md-6">
-                        <input type="text" class="form-control" id="oldusername" name="oldusername" placeholder="用户名">
-                    </div>
-                    <div class="col-md-6">
-                        <input type="text" class="form-control" id="oldpassword" name="oldpassword" placeholder="密码">
-                    </div>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button class="btn btn-success" onclick="SavaModify()">
-                    保存
-                </button>
-                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div class="modal fade" id="AddModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">关闭</span></button>
-                <h4 class="modal-title" id="modeltitle">添加用户</h4>
-            </div>
-            <div class="modal-body" id="modelbody">
-                <div class="row" style="margin-top:10px;">
-                    <div class="col-md-6">
-                        <input type="text" class="form-control" id="username" name="username" placeholder="用户名">
-                    </div>
-                    <div class="col-md-6">
-                        <input type="password" class="form-control" id="password" name="password" placeholder="密码">
-                    </div>
-                </div>
-                <div class="row" style="margin-top:10px;">
-                    <div class="col-md-6">
-
-                        <input type="text" class="form-control" id="name" name="name" placeholder="名称">
-                    </div>
-
-                </div>
-
-
-            </div>
-
-
-            <div class="modal-footer">
-                <button class="btn btn-success" onclick="SavaAdd()">
-                    保存
-                </button>
-                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-            </div>
-        </div>
-    </div>
-</div>
-
 
 @section scripts {
-
+    <script src="~/lib/icheck-1.x/icheck.js"></script>
     <script>
-        function queryUser() {
-            $("#tbdata").html('');
-            $.post('/queryusers', {
-                queryName: $('#queryname').val()
-            }, function (result) {
-                var tbhtml = '';
-                $(result).each(function (index, ele) {
-              
-                    tbhtml += '<tr id="tr_' + ele.id + '" > \
-                            <td>'+ ele.username + '</td> \
-                            <td>'+ ele.password + '</td > \
-                            <td>'+ ele.name + '</td> \
-                            <td>******</td> \
-                            <td> \
-                                <button class="btn btn-sm btn-primary" style="margin-bottom:-5px;margin-top:-5px;" data-toggle="modal" data-target="#ModiyModal" onclick="Modify('+ ele.id + ',' + ele.username + ',' + ele.password + ',' + ele.name + ')"> \
-                                    修改 \
-                                        </button> \
-                                <button class="btn btn-sm btn-danger" style="margin-bottom:-5px;margin-top:-5px;" onclick="Delete('+ ele.id + ')"> \
-                                    删除 \
-                                        </button>\
-                            </td>\
-                                </tr >'
-
-                })
-                $("#tbdata").html(tbhtml);
-            }
-            )
-
-        }
-        function Delete(id) {
-            if (confirm("你确定要删除ID为：" + id + "的记录吗？")) {
-                $.post("/deleteuser", {
-                    id: id
-                }, function (result) {
-
-                    if (result) {
-                        $("#tr_" + id).remove();
-                    }
-                    else {
-                        alert("删除失败！");
-                    }
-                    var str = "/Users";
-                    window.location.href = str;
-                });
-            }
-        }
-
-        function Modify(id, username, password, name) {
-            $("#oldid").val(id);
-            $("#oldusername").val(username);
-            $("#oldpassword").val(password);
-            $("#oldname").val(name);
-        }
-
-        function SavaModify() {
-            $.post("/modifyuser", {
-                ID: $("#oldid").val(),
-                UserName: $("#oldusername").val(),
-                Password: $("#oldpassword").val(),
-                Name: $("#oldname").val(),
-
-            }, function (result) {
-                if (!result) {
-                    alert("修改失败，请确认与服务器连接！");
-                }
-                var str = "/Users";
-                window.location.href = str;
+        //加载icheck
+        function loadICheck() {
+            $('input').iCheck({
+                checkboxClass: 'icheckbox_square-blue',
+                radioClass: 'iradio_square-blue',
+                increaseArea: '20%' // optional
+            });
+            //绑定单选框选中时事件
+            $('input[type=radio]').on('ifChecked', function (event) {
+                $("#sava_but").removeAttr("disabled");
+                $("input[type=checkbox]").iCheck('uncheck');
+                QueryRoleByUserID($(this).val());
             });
         }
-
-        function SavaAdd() {
-            $.post("/adduser", {
-                ID: $("#id").val(),
-                UserName: $("#username").val(),
-                Password: $("#password").val(),
-                Name: $("#name").val(),
-
-
-            }, function (result) {
-                if (!result) {
-                    alert("添加失败，请确认与服务器连接！");
-                }
-                var str = "/Users";
-                window.location.href = str;
-            });
-        }
-
-
     </script>
+
 }
