@@ -33,9 +33,7 @@ namespace GeneralBusinessSystem.Controllers
             return View();
         }
 
-
-        #region 菜单模块管理
-
+        #region 菜单管理
         /// <summary>-
         /// 菜单管理
         /// </summary>
@@ -54,7 +52,7 @@ namespace GeneralBusinessSystem.Controllers
         public IActionResult GetMenus()
         {
             var list = _businessRepository.GetMenus();
-            return new JsonResult(list, new Newtonsoft.Json.JsonSerializerSettings()
+            return new JsonResult(list, new JsonSerializerSettings()
             {
                 ContractResolver = new LowercaseContractResolver()
             });
@@ -91,6 +89,9 @@ namespace GeneralBusinessSystem.Controllers
         {
             return _businessRepository.RemoveMenu(id) > 0 ? true : false;
         }
+        #endregion
+        #region 菜单模块管理
+
 
         /// <summary>
         /// 菜单模块管理
@@ -101,7 +102,24 @@ namespace GeneralBusinessSystem.Controllers
         {
             return View();
         }
+        /// <summary>
+        /// 获取菜单模块中的菜单列表，单据，查询，图表模块列表
+        /// </summary>
+        /// <returns></returns>
+        public IActionResult GetMenuModules()
+        {
+            var menus = _businessRepository.GetMenus();
+            var billModules = _businessRepository.GetBillModules();
+            var queryModules = _businessRepository.GetQueryModules();
+            var chartModules = _businessRepository.GetChartModules();
+            return new JsonResult(new { menus = menus, bills = billModules, queries = queryModules, charts = chartModules }, new JsonSerializerSettings()
+            {
+                ContractResolver = new LowercaseContractResolver()
+            });
+        }
 
         #endregion
+
+
     }
 }

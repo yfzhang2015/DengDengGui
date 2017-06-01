@@ -108,10 +108,24 @@ FROM    users
         #region 单据模块管理
         public List<Dictionary<string, dynamic>> GetBillModules()
         {
-            var sql = "delete menus where id=@id";     
+            var sql = "select * from billmodules";     
             return _sqlHelper.QueryList(sql);
         }
         #endregion
 
+        #region 查询模块管理
+        public List<Dictionary<string, dynamic>> GetQueryModules()
+        {
+            var sql = "select * from querymodules";
+            return _sqlHelper.QueryList(sql);
+        }
+        #endregion
+        #region 图表模块管理
+        public List<Dictionary<string, dynamic>> GetChartModules()
+        {
+            var sql = "select * from chartmodules";
+            return _sqlHelper.QueryList(sql);
+        }
+        #endregion
     }
 }
