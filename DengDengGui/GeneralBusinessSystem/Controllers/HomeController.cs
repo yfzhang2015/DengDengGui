@@ -21,6 +21,7 @@ namespace GeneralBusinessSystem.Controllers
         {
             _permissionRepository = permissionRepository;
         }
+        [HttpGet("")]
         public IActionResult Index()
         {
             return View();

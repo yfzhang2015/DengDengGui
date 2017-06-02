@@ -137,8 +137,7 @@
         function getUsers() {
             $("#tbdata").html('');
             $.get('/getusers', {
-            }, function (result) {
-                console.log(result)
+            }, function (result) {         
                 var tbhtml = '';
                 console.log(result)
                 $(result).each(function (index, ele) {

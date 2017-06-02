@@ -76,7 +76,7 @@
         }
         //按角色ID查询权限
         function QueryRoleByUserID(userid) {
-            $.get("/getrole/" + userid, {}, function (result) {
+            $.get("/getrole" + , { userid: userid}, function (result) {
                 $(result).each(function (index, ele) {
                     $("input[type=checkbox][value=" + ele.roleid + "]").iCheck('check');
                 })

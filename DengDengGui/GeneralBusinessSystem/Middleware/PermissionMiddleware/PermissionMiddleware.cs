@@ -31,7 +31,7 @@ namespace GeneralBusinessSystem.Middleware
         /// <summary>
         /// 用户权限集合
         /// </summary>
-        static List<dynamic> _userPermissions;
+        internal static List<dynamic> _userPermissions;
 
         /// <summary>
         /// 权限中间件构造
@@ -122,13 +122,20 @@ namespace GeneralBusinessSystem.Middleware
                     }
                     else
                     {
-                        var userObj= Newtonsoft.Json.JsonConvert.DeserializeObject(userJson);
-                        var username = (userObj as Newtonsoft.Json.Linq.JObject).GetValue("username").First.ToString() ;
+                        var userObj = Newtonsoft.Json.JsonConvert.DeserializeObject(userJson);
+                        var username = (userObj as Newtonsoft.Json.Linq.JObject).GetValue("username").First.ToString();
                         var actionCount = _userPermissions.Where(w => w.UserName == username && w.Action == context.Request.Path.Value).Count();
 
                         if (actionCount < 1)
                         {
-                            context.Response.Redirect(_option.NoPermissionAction);
+                            if (context.Request.Headers.Keys.Contains("X-Requested-With"))
+                            {
+                                context.Response.StatusCode = 401;                
+                            }
+                            else
+                            {
+                                context.Response.Redirect(_option.NoPermissionAction);
+                            }                           
                         }
                     }
                 }

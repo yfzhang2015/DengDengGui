@@ -9,6 +9,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using Common;
 using Microsoft.AspNetCore.Http;
+using GeneralBusinessSystem.Middleware;
 
 namespace GeneralBusinessSystem.Controllers
 {
@@ -252,16 +253,16 @@ namespace GeneralBusinessSystem.Controllers
         /// <param name="id">权限ID</param>
         /// <returns></returns>
         [HttpDelete("removepermission")]
-        public dynamic RemovePermission(int id)
+        public IActionResult RemovePermission(int id)
         {
             try
             {
                 var result = _permissionRepository.RemovePermission(id);
-                return new { result = result > 0 ? true : false };
+                return new JsonResult(new { result = result > 0 ? true : false });
             }
             catch (Exception exc)
             {
-                return new { result = false, message = exc.Message };
+                return new JsonResult(new { result = false, message = exc.Message });
             }
         }
 
@@ -278,7 +279,7 @@ namespace GeneralBusinessSystem.Controllers
         {
             try
             {
-                var result = _permissionRepository.AddPermission(action, actiondescription, controllername, predicate);
+                var result = _permissionRepository.AddPermission(action, actiondescription, controllername, predicate);    
                 return new { result = result > 0 ? true : false };
             }
             catch (Exception exc)
@@ -286,6 +287,10 @@ namespace GeneralBusinessSystem.Controllers
                 return new { result = false, message = exc.Message };
             }
         }
+
+
+
+
         #endregion
 
         #region 角色权限管理
@@ -303,7 +308,7 @@ namespace GeneralBusinessSystem.Controllers
         /// </summary>
         /// <param name="roleID">角色ID</param>
         /// <returns></returns>
-        [HttpGet("getpermission/{roleid}")]
+        [HttpGet("getpermission")]
         public IActionResult GetPermissionByRoleID(int roleID)
         {
             var list = _permissionRepository.GetPermissionsByRoleID(roleID);
@@ -327,11 +332,28 @@ namespace GeneralBusinessSystem.Controllers
                 var list = new List<dynamic>();
                 list.AddRange(rolepermissions);
                 var result = _permissionRepository.SavaRolePermissions(roleid, list);
+                ReLoadPermissions();
                 return new { result = result };
             }
             catch (Exception exc)
             {
                 return new { result = false, message = exc.Message };
+            }
+        }
+        /// <summary>
+        /// 重新加载权限
+        /// </summary>
+        void ReLoadPermissions()
+        {
+            PermissionMiddleware._userPermissions.Clear();
+            PermissionMiddleware._userPermissions = new List<dynamic>();
+            foreach (var dic in _permissionRepository.GetUserPermissions())
+            {
+                PermissionMiddleware._userPermissions.Add(new
+                {
+                    UserName = dic["UserName"],
+                    Action = dic["Action"]
+                });
             }
         }
         #endregion
@@ -351,7 +373,7 @@ namespace GeneralBusinessSystem.Controllers
         /// </summary>
         /// <param name="userID">用户ID</param>
         /// <returns></returns>
-        [HttpGet("getrole/{userid}")]
+        [HttpGet("getrole")]
         public IActionResult GetRoleByUserID(int userID)
         {
             var list = _permissionRepository.GetRoleByUserID(userID);

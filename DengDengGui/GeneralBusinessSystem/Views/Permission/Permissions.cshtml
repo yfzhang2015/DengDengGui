@@ -23,7 +23,7 @@
             </div>
             <div class="panel-body" style="padding:0px;">
                 <div class="" style="width:95px;">
-                    <textarea id="actiondescription" type="text" placeholder="权限描述" class="form-control" style="width:100%;" rows="8" ></textarea>
+                    <textarea id="actiondescription" type="text" placeholder="权限描述" class="form-control" style="width:100%;" rows="8"></textarea>
                     <button class="btn btn-success" onclick="selectOne()" style="width:100%;margin-top:5px">单项添加</button>
                 </div>
             </div>
@@ -108,6 +108,7 @@
                 url: '/removepermission',
                 data: { id: id },
                 success: function (result) {
+                    console.log(result);
                     if (result.result == false) {
                         alert(result.message);
                     } else {
@@ -164,12 +165,21 @@
         });
 
         function loadPage() {
-            $.get("/allaction", {}, function (result) {
-                console.log(result)
-                zTreeObj = $.fn.zTree.init($("#tree"), setting, result);
-                //全部选中
-                //zTreeObj.checkAllNodes(true);
-            })
+            $.ajax(
+                {
+                    url: "/allaction",
+                    type: "Get",
+                    data: {},
+                    success: function (result) {
+                        console.log(result)
+                        zTreeObj = $.fn.zTree.init($("#tree"), setting, result);
+                        //全部选中
+                        //zTreeObj.checkAllNodes(true);
+                    },
+                    error: function (error) {                      
+                        alert(error.status == 401 ? "无权限" : error.statusText);
+                    }
+                })
             loadPermissions();
         }
         //添加按钮浮动

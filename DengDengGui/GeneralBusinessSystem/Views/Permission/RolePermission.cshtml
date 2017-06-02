@@ -59,7 +59,6 @@
 </div>
 @section scripts {
     <script src="~/lib/icheck-1.x/icheck.js"></script>
-    <script src="~/js/stickUp.js"></script>
     <script>
 
         $(function () {
@@ -82,7 +81,7 @@
         }
         //按角色ID查询权限
         function QueryPermissionByRoleID(roleid) {
-            $.get("/getpermission/" + roleid, {}, function (result) {
+            $.get("/getpermission", { roleid: roleid}, function (result) {
                 $(result).each(function (index, ele) {
                     $("input[type=checkbox][value=" + ele.permissionid + "]").iCheck('check')//.attr("checked", "checked");
                 })
