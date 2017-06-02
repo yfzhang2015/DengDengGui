@@ -137,14 +137,13 @@
                     if (result.result == false) {
                         alert(result.message);
                     } else {
-
                         //查询权限
                         loadPage();
                         $("#actiondescription").val("");
                     }
                 },
-                error: function (data) {
-                    alert(data);
+                error: function (error) {
+                    alert(error.status + error.statusText);
                 }
             });
 
@@ -176,7 +175,7 @@
                         //全部选中
                         //zTreeObj.checkAllNodes(true);
                     },
-                    error: function (error) {                      
+                    error: function (error) {
                         alert(error.status == 401 ? "无权限" : error.statusText);
                     }
                 })

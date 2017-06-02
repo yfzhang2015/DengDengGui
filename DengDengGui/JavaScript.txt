@@ -4,3 +4,21 @@
 4、对象：帕斯卡命名法
 5、对象内公共属性和方法：驼峰命名，前缀应当是名词
 6、对象内私有属性和方法：前缀为_(下划线)，后面跟公共属性和方法一样的命名方式。
+
+
+要求：
+ajax提交使用
+
+    $.ajax({
+                type: 'POST',
+                url: '/addpermission',
+                data: {
+                   par1:value1
+                },
+                success: function (result) {
+                   
+                },
+                error: function (error) {
+                    alert(error.status + error.statusText);
+                }
+            });
