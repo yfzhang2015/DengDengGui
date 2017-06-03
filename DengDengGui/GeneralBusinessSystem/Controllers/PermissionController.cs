@@ -203,7 +203,7 @@ namespace GeneralBusinessSystem.Controllers
         [HttpPost("addrole")]
         public bool AddRole(string rolename)
         {
-            return _permissionRepository.AddRole(rolename) > 0 ? true : false;
+            return _permissionRepository.AddRole(rolename,CompanyID) > 0 ? true : false;
         }
         /// <summary>
         /// ÐÞ¸Ä½ÇÉ« 
@@ -279,7 +279,7 @@ namespace GeneralBusinessSystem.Controllers
         {
             try
             {
-                var result = _permissionRepository.AddPermission(action, actiondescription, controllername, predicate);    
+                var result = _permissionRepository.AddPermission(action, actiondescription, controllername, predicate,CompanyID);    
                 return new { result = result > 0 ? true : false };
             }
             catch (Exception exc)

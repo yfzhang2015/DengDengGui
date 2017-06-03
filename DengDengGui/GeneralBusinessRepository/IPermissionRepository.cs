@@ -83,7 +83,7 @@ namespace GeneralBusinessRepository
         /// </summary>
         /// <param name="roleName">角色名</param>
         /// <returns></returns>
-        int AddRole(string roleName);
+        int AddRole(string roleName, int companyID);
 
         /// <summary>
         /// 修改角色
@@ -127,7 +127,7 @@ namespace GeneralBusinessRepository
         /// <param name="controllername">controller</param>
         /// <param name="predicate">谓词</param>
         /// <returns></returns>
-        int AddPermission(string action, string actiondescription, string controllername, string predicate);
+        int AddPermission(string action, string actiondescription, string controllername, string predicate, int companyID);
         #endregion
 
         #region 角色权限管理

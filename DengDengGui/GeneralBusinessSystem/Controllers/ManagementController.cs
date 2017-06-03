@@ -66,7 +66,7 @@ namespace GeneralBusinessSystem.Controllers
         [HttpPost("addmenu")]
         public bool AddMenu(string name)
         {
-            return _businessRepository.AddMenu(name) > 0 ? true : false;
+            return _businessRepository.AddMenu(name,CompanyID) > 0 ? true : false;
         }
         /// <summary>
         /// ÐÞ¸Ä²Ëµ¥ 

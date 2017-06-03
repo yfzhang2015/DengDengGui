@@ -21,7 +21,7 @@ namespace GeneralBusinessRepository
         /// </summary>
         /// <param name="name">名称</param>
         /// <returns></returns>
-        int AddMenu(string name);
+        int AddMenu(string name,int companyid);
 
         /// <summary>
         /// 修改菜单

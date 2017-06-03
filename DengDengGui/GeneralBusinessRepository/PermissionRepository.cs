@@ -182,11 +182,12 @@ FROM    dbo.Users
         /// </summary>
         /// <param name="roleName">角色名</param>
         /// <returns></returns>
-        public int AddRole(string roleName)
+        public int AddRole(string roleName,int companyID)
         {
-            var sql = $@"insert into roles(name) values(@name)";
+            var sql = $@"insert into roles(name,cpmpanyid) values(@name,@cpmpanyid)";
             var roleNameParameter = new SqlParameter() { Value = roleName, ParameterName = "@name" };
-            return _sqlHelper.ChangeData(sql, roleNameParameter);
+            var companyIDParameter = new SqlParameter() { Value = companyID, ParameterName = "@companyID" };
+            return _sqlHelper.ChangeData(sql, roleNameParameter, companyIDParameter);
         }
 
         /// <summary>
@@ -245,9 +246,9 @@ FROM    dbo.Users
         /// <param name="controllername">controller</param>
         /// <param name="predicate">谓词</param>
         /// <returns></returns>
-        public int AddPermission(string action, string actiondescription, string controllername, string predicate)
+        public int AddPermission(string action, string actiondescription, string controllername, string predicate, int companyID)
         {
-            var sql = $@"insert into permissions(action,actiondescription,controllername,predicate) values(@action,@actiondescription,@controllername,@predicate)";
+            var sql = $@"insert into permissions(action,actiondescription,controllername,predicate,companyid) values(@action,@actiondescription,@controllername,@predicate,@companyid)";
             var actionParameter = new SqlParameter() { Value = action, ParameterName = "@action" };
             var actionDescriptionParameter = new SqlParameter() { ParameterName = "@actiondescription" };
             if (string.IsNullOrEmpty(actiondescription))
@@ -260,7 +261,8 @@ FROM    dbo.Users
             }
             var controllerNameParameter = new SqlParameter() { Value = controllername, ParameterName = "@controllername" };
             var predicateParameter = new SqlParameter() { Value = predicate, ParameterName = "@predicate" };
-            return _sqlHelper.ChangeData(sql, actionParameter, actionDescriptionParameter, controllerNameParameter, predicateParameter);
+            var companyIDParameter = new SqlParameter() { Value = companyID, ParameterName = "@companyID" };
+            return _sqlHelper.ChangeData(sql, actionParameter, actionDescriptionParameter, controllerNameParameter, predicateParameter, companyIDParameter);
         }
         #endregion
 

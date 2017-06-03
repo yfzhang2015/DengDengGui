@@ -38,11 +38,12 @@ namespace GeneralBusinessRepository.SqlServer
         /// </summary>
         /// <param name="name">名称</param>
         /// <returns></returns>
-        public int AddMenu(string name)
+        public int AddMenu(string name, int companyID)
         {
             var sql = "insert into menus(name) values(@name)";
             var nameParameter = new SqlParameter() { Value = name, ParameterName = "@name" };
-            return _sqlHelper.ChangeData(sql, nameParameter);
+            var companyIDParameter = new SqlParameter() { Value = companyID, ParameterName = "@companyID" };
+            return _sqlHelper.ChangeData(sql, nameParameter, companyIDParameter);
         }
 
         /// <summary>
