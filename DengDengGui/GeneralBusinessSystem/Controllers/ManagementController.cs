@@ -16,13 +16,16 @@ namespace GeneralBusinessSystem.Controllers
     /// </summary>
     public class ManagementController : GBController
     {
+
+        IBillModuleRepository _billModuleRepository;
+
         /// <summary>
         /// 实例化ManagementController
         /// </summary>
         /// <param name="businessRepository">业务仓储类</param>
-        public ManagementController(IBusinessRepository businessRepository) : base(businessRepository)
+        public ManagementController(IBusinessRepository businessRepository,IBillModuleRepository billModuleRepository) : base(businessRepository)
         {
-
+            _billModuleRepository = billModuleRepository;
         }
         /// <summary>
         /// 后台首页
@@ -109,7 +112,7 @@ namespace GeneralBusinessSystem.Controllers
         public IActionResult GetMenuModules()
         {
             var menus = _businessRepository.GetMenus();
-            var billModules = _businessRepository.GetBillModules();
+            var billModules = _billModuleRepository.GetBillModules();
             var queryModules = _businessRepository.GetQueryModules();
             var chartModules = _businessRepository.GetChartModules();
             return new JsonResult(new { menus = menus, bills = billModules, queries = queryModules, charts = chartModules }, new JsonSerializerSettings()

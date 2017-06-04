@@ -106,13 +106,7 @@ FROM    users
         }
         #endregion
 
-        #region 单据模块管理
-        public List<Dictionary<string, dynamic>> GetBillModules()
-        {
-            var sql = "select * from billmodules";     
-            return _sqlHelper.QueryList(sql);
-        }
-        #endregion
+  
 
         #region 查询模块管理
         public List<Dictionary<string, dynamic>> GetQueryModules()
