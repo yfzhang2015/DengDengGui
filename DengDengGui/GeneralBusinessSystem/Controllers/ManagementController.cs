@@ -16,16 +16,27 @@ namespace GeneralBusinessSystem.Controllers
     /// </summary>
     public class ManagementController : GBController
     {
-
-        IBillModuleRepository _billModuleRepository;
-
+        /// <summary>
+        /// 单据模块
+        /// </summary>
+        IBillModuleRepository _billModule;
+        /// <summary>
+        /// 查询模块
+        /// </summary>
+        IQueryModuleRepository _queryModule;
+        /// <summary>
+        /// 图表模块
+        /// </summary>
+        IChartModuleRepository _chartModule;
         /// <summary>
         /// 实例化ManagementController
         /// </summary>
         /// <param name="businessRepository">业务仓储类</param>
-        public ManagementController(IBusinessRepository businessRepository,IBillModuleRepository billModuleRepository) : base(businessRepository)
+        public ManagementController(IBusinessRepository business, IBillModuleRepository billModule, IQueryModuleRepository queryModule, IChartModuleRepository chartModule) : base(business)
         {
-            _billModuleRepository = billModuleRepository;
+            _billModule = billModule;
+            _queryModule = queryModule;
+            _chartModule = chartModule;
         }
         /// <summary>
         /// 后台首页
@@ -69,7 +80,7 @@ namespace GeneralBusinessSystem.Controllers
         [HttpPost("addmenu")]
         public bool AddMenu(string name)
         {
-            return _businessRepository.AddMenu(name,CompanyID) > 0 ? true : false;
+            return _businessRepository.AddMenu(name, CompanyID) > 0 ? true : false;
         }
         /// <summary>
         /// 修改菜单 
@@ -112,9 +123,9 @@ namespace GeneralBusinessSystem.Controllers
         public IActionResult GetMenuModules()
         {
             var menus = _businessRepository.GetMenus();
-            var billModules = _billModuleRepository.GetBillModules();
-            var queryModules = _businessRepository.GetQueryModules();
-            var chartModules = _businessRepository.GetChartModules();
+            var billModules = _billModule.GetBillModules();
+            var queryModules = _queryModule.GetQueryModules();
+            var chartModules = _chartModule.GetChartModules();
             return new JsonResult(new { menus = menus, bills = billModules, queries = queryModules, charts = chartModules }, new JsonSerializerSettings()
             {
                 ContractResolver = new LowercaseContractResolver()

@@ -71,9 +71,12 @@ namespace GeneralBusinessSystem
             services.AddSingleton<IPermissionRepository>(new GeneralBusinessRepository.SqlServer.PermissionRepository(CreateSqlHelper()));
             //注入业务处理模块，for sql server
             services.AddSingleton<IBusinessRepository>(new GeneralBusinessRepository.SqlServer.BusinessRepository(CreateSqlHelper()));
-
             //注入单据模块，for sql server
             services.AddSingleton<IBillModuleRepository>(new GeneralBusinessRepository.SqlServer.BillModuleRepository(CreateSqlHelper()));
+            //注入查询模块，for sql server
+            services.AddSingleton<IQueryModuleRepository>(new GeneralBusinessRepository.SqlServer.QueryModuleRepository(CreateSqlHelper()));
+            //注入图表模块，for sql server
+            services.AddSingleton<IChartModuleRepository>(new GeneralBusinessRepository.SqlServer.ChartModuleRepository(CreateSqlHelper()));
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
