@@ -86,19 +86,23 @@
 
         //查询权限
         function loadPermissions() {
-            $.get("/getpermissions", {}, function (result) {
-                $("#tbody").html("");
-                $(result).each(function (index, ele) {
-                    var trhtml = "<tr>";
-                    trhtml += "<td>" + ele.id + "</td>";
-                    trhtml += "<td>" + ele.controllername + "</td>";
-                    trhtml += "<td>" + ele.action + "</td>";
-                    trhtml += "<td>" + ele.actiondescription + "</td>";
-                    trhtml += "<td>" + ele.predicate + "</td>";
-                    trhtml += "<td><button onclick=\"deletePermission(" + ele.id + ")\" class=\"btn btn-danger btn-xs\">删除</button></td>";
-                    trhtml += "</tr>";
-                    $("#tbody").append(trhtml);
-                });
+            $.get("/getpermissions", {}, function (dataBack) {
+                if (dataBack.result == 1) {
+                    $("#tbody").html("");
+                    $(dataBack.data).each(function (index, ele) {
+                        var trhtml = "<tr>";
+                        trhtml += "<td>" + ele.id + "</td>";
+                        trhtml += "<td>" + ele.controllername + "</td>";
+                        trhtml += "<td>" + ele.action + "</td>";
+                        trhtml += "<td>" + ele.actiondescription + "</td>";
+                        trhtml += "<td>" + ele.predicate + "</td>";
+                        trhtml += "<td><button onclick=\"deletePermission(" + ele.id + ")\" class=\"btn btn-danger btn-xs\">删除</button></td>";
+                        trhtml += "</tr>";
+                        $("#tbody").append(trhtml);
+                    });
+                } else {
+                    alert(dataBack.message);
+                }
             });
         }
         //删除权限
@@ -107,10 +111,9 @@
                 type: 'DELETE',
                 url: '/removepermission',
                 data: { id: id },
-                success: function (result) {
-                    console.log(result);
-                    if (result.result == false) {
-                        alert(result.message);
+                success: function (dataBack) {
+                    if (dataBack.result == false) {
+                        alert(dataBack.message);
                     } else {
                         //查询权限
                         loadPage();
@@ -133,9 +136,9 @@
                     controllername: controllername,
                     predicate: predicate
                 },
-                success: function (result) {
-                    if (result.result == false) {
-                        alert(result.message);
+                success: function (dataBack) {
+                    if (dataBack.result == false) {
+                        alert(dataBack.message);
                     } else {
                         //查询权限
                         loadPage();
@@ -169,11 +172,16 @@
                     url: "/allaction",
                     type: "Get",
                     data: {},
-                    success: function (result) {
-                        console.log(result)
-                        zTreeObj = $.fn.zTree.init($("#tree"), setting, result);
-                        //全部选中
-                        //zTreeObj.checkAllNodes(true);
+                    success: function (dataBack) {
+
+                        if (dataBack.result == 1) {
+                            zTreeObj = $.fn.zTree.init($("#tree"), setting, dataBack.data);
+                            //全部选中
+                            //zTreeObj.checkAllNodes(true);
+                        }
+                        else {
+                            alert(dataBack.message);
+                        }
                     },
                     error: function (error) {
                         alert(error.status == 401 ? "无权限" : error.statusText);

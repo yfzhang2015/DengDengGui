@@ -81,10 +81,14 @@
         }
         //按角色ID查询权限
         function QueryPermissionByRoleID(roleid) {
-            $.get("/getpermission", { roleid: roleid}, function (result) {
-                $(result).each(function (index, ele) {
-                    $("input[type=checkbox][value=" + ele.permissionid + "]").iCheck('check')//.attr("checked", "checked");
-                })
+            $.get("/getpermission", { roleid: roleid }, function (dataBack) {
+                if (dataBack.result == 1) {
+                    $(dataBack.data).each(function (index, ele) {
+                        $("input[type=checkbox][value=" + ele.permissionid + "]").iCheck('check')//.attr("checked", "checked");
+                    })
+                } else {
+                    alert(dataBack.message)
+                }
             })
         }
         //保存角色权限
@@ -103,53 +107,58 @@
                 var rolePermission = { roleid: roleid, permissionid: parseInt($(ele).val()) }
                 rolePermissionArr.push(rolePermission);
             })
-        
-            $.post("/savarolepermissons", { roleid: roleid, rolepermissions: rolePermissionArr }, function (result) {
-                if (result.result == false) {
-                    alert(result.message);
+
+            $.post("/savarolepermissons", { roleid: roleid, rolepermissions: rolePermissionArr }, function (dataBack) {
+                if (dataBack.result == 1) {
+                    alert("保存成功!")
                 }
                 else {
-                    alert("保存成功!")
+                    alert(dataBack.message);
                 }
             })
 
         }
         //查询权限
         function loadPermissions() {
-            $.get("/getpermissions", {}, function (result) {
-                $("#permission_tbody").html("");
-                $(result).each(function (index, ele) {
-                    var trhtml = "<tr>";
-                    trhtml += "<td style=\"text-align:center\"><input type=\"checkbox\" class=\"permissionCheckbox\" value=\"" + ele.id + "\"/></td>";
-                    trhtml += "<td>" + ele.id + "</td>";
-                    trhtml += "<td>" + ele.controllername + "</td>";
-                    trhtml += "<td>" + ele.action + "</td>";
-                    trhtml += "<td>" + ele.actiondescription + "</td>";
-                    trhtml += "<td>" + ele.predicate + "</td>";
-                    trhtml += "</tr>";
-                    $("#permission_tbody").append(trhtml);
-                    loadICheck()
-
-                });
+            $.get("/getpermissions", {}, function (dataBack) {
+                if (dataBack.result == 1) {
+                    $("#permission_tbody").html("");
+                    $(dataBack.data).each(function (index, ele) {
+                        var trhtml = "<tr>";
+                        trhtml += "<td style=\"text-align:center\"><input type=\"checkbox\" class=\"permissionCheckbox\" value=\"" + ele.id + "\"/></td>";
+                        trhtml += "<td>" + ele.id + "</td>";
+                        trhtml += "<td>" + ele.controllername + "</td>";
+                        trhtml += "<td>" + ele.action + "</td>";
+                        trhtml += "<td>" + ele.actiondescription + "</td>";
+                        trhtml += "<td>" + ele.predicate + "</td>";
+                        trhtml += "</tr>";
+                        $("#permission_tbody").append(trhtml);
+                        loadICheck()
+                    });
+                } else {
+                    alert(dataBack.message);
+                }
             });
         }
         //查询角色
         function loadRoles() {
-            $.get("/getroles", {}, function (result) {
-                $("#role_tbody").html("");
-                $(result).each(function (index, ele) {
-                    var trhtml = "<tr>";
-                    trhtml += "<td>" + ele.id + "</td>";
-                    trhtml += "<td>" + ele.name + "</td>";
-                    trhtml += "<td style=\"text-align:center\"><input type=\"radio\" name=\"roleRadio\" value=\"" + ele.id + "\"/></td>";
-                    trhtml += "</tr>";
-                    $("#role_tbody").append(trhtml);
-                    loadICheck()
-                });
+            $.get("/getroles", {}, function (dataBack) {
+                if (dataBack.result == 1) {
+                    $("#role_tbody").html("");
+                    $(dataBack.data).each(function (index, ele) {
+                        var trhtml = "<tr>";
+                        trhtml += "<td>" + ele.id + "</td>";
+                        trhtml += "<td>" + ele.name + "</td>";
+                        trhtml += "<td style=\"text-align:center\"><input type=\"radio\" name=\"roleRadio\" value=\"" + ele.id + "\"/></td>";
+                        trhtml += "</tr>";
+                        $("#role_tbody").append(trhtml);
+                        loadICheck()
+                    });
+                } else {
+                    alert(dataBack.message);
+                }
             });
         }
-
-
 
     </script>
 }

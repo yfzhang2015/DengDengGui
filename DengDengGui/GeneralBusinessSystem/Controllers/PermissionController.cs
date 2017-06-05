@@ -41,30 +41,41 @@ namespace GeneralBusinessSystem.Controllers
         [HttpGet("allaction")]
         public IActionResult GetActions()
         {
-            var permissions = _permissionRepository.GetPermissions();
-            var actions = Common.ActionHandle.GetActions();
-            var list = new List<dynamic>();
-            foreach (var groupItem in actions.GroupBy(s => s.ControllerName))
+            try
             {
-                var node = new { name = groupItem.Key, open = true, children = new List<dynamic>() };
-                foreach (var action in actions)
+                var permissions = _permissionRepository.GetPermissions();
+                var actions = Common.ActionHandle.GetActions();
+                var list = new List<dynamic>();
+                foreach (var groupItem in actions.GroupBy(s => s.ControllerName))
                 {
-                    if (groupItem.Key == action.ControllerName)
+                    var node = new { name = groupItem.Key, open = true, children = new List<dynamic>() };
+                    foreach (var action in actions)
                     {
-                        var permission = permissions.SingleOrDefault(s => s["Action"] == action.ActionName && s["ControllerName"] == action.ControllerName && s["Predicate"] == action.Predicate.ToString());
-                        if (permission == null)
+                        if (groupItem.Key == action.ControllerName)
                         {
-                            node.children.Add(new { name = $"{action.ActionName}【{action.Predicate}】" });
-                        }
-                        else
-                        {
-                            node.children.Add(new { name = $"{action.ActionName}【{action.Predicate}】", chkDisabled = true });
+                            var permission = permissions.SingleOrDefault(s => s["Action"] == action.ActionName && s["ControllerName"] == action.ControllerName && s["Predicate"] == action.Predicate.ToString());
+                            if (permission == null)
+                            {
+                                node.children.Add(new { name = $"{action.ActionName}【{action.Predicate}】" });
+                            }
+                            else
+                            {
+                                node.children.Add(new { name = $"{action.ActionName}【{action.Predicate}】", chkDisabled = true });
+                            }
                         }
                     }
+                    list.Add(node);
                 }
-                list.Add(node);
+                return new JsonResult(new { result = 1, message = "获取所有action成功", data = list }, new JsonSerializerSettings()
+                {
+                    ContractResolver = new LowercaseContractResolver()
+                });
             }
-            return new JsonResult(list);
+            catch (Exception exc)
+            {
+                _log.Log(NLog.LogLevel.Error, $"获取所有action：{exc.Message}");
+                return new JsonResult(new { result = 0, message = $"获取所有action：{exc.Message}" });
+            }
         }
 
         #region User 用户操作
@@ -84,7 +95,7 @@ namespace GeneralBusinessSystem.Controllers
         /// <returns></returns>
         [HttpGet("getusers")]
         public ActionResult GetUsers()
-        {           
+        {
             try
             {
                 var list = _permissionRepository.GetUsers();
@@ -108,14 +119,14 @@ namespace GeneralBusinessSystem.Controllers
         public ActionResult QueryUser(string queryName)
         {
             try
-            {               
-                var list = _permissionRepository.GetUsers(queryName);               
-                return new JsonResult(new { result = 1, message = $"按{queryName}查询用户成功", data= list }, new JsonSerializerSettings()
+            {
+                var list = _permissionRepository.GetUsers(queryName);
+                return new JsonResult(new { result = 1, message = $"按{queryName}查询用户成功", data = list }, new JsonSerializerSettings()
                 {
                     ContractResolver = new LowercaseContractResolver()
                 });
             }
-            catch(Exception exc)
+            catch (Exception exc)
             {
                 _log.Log(NLog.LogLevel.Error, $"按{queryName}查询用户：{exc.Message}");
                 return new JsonResult(new { result = 0, message = $"按{queryName}查询用户：{exc.Message}" });
@@ -138,8 +149,8 @@ namespace GeneralBusinessSystem.Controllers
             }
             catch (Exception exc)
             {
-                _log.Log(NLog.LogLevel.Error, $"添加用户异常：{exc.Message}");
-                return new JsonResult(new { result = 0, message = $"添加用户：{exc.Message}" }); 
+                _log.Log(NLog.LogLevel.Error, $"添加用户：{exc.Message}");
+                return new JsonResult(new { result = 0, message = $"添加用户：{exc.Message}" });
             }
         }
 
@@ -161,7 +172,7 @@ namespace GeneralBusinessSystem.Controllers
             }
             catch (Exception exc)
             {
-                _log.Log(NLog.LogLevel.Error, $"修改用户异常：{exc.Message}");
+                _log.Log(NLog.LogLevel.Error, $"修改用户：{exc.Message}");
                 return new JsonResult(new { result = 0, message = $"修改用户：{exc.Message}" });
             }
         }
@@ -179,9 +190,9 @@ namespace GeneralBusinessSystem.Controllers
                 _permissionRepository.RemoveUser(ID);
                 return new JsonResult(new { result = 1, message = "删除用户成功" });
             }
-            catch(Exception exc)
+            catch (Exception exc)
             {
-                _log.Log(NLog.LogLevel.Error, $"删除用户异常：{exc.Message}");
+                _log.Log(NLog.LogLevel.Error, $"删除用户：{exc.Message}");
                 return new JsonResult(new { result = 0, message = $"删除用户：{exc.Message}" });
             }
         }
@@ -204,11 +215,19 @@ namespace GeneralBusinessSystem.Controllers
         [HttpGet("getroles")]
         public IActionResult GetRoles()
         {
-            var list = _permissionRepository.GetRoles();
-            return new JsonResult(list, new Newtonsoft.Json.JsonSerializerSettings()
+            try
             {
-                ContractResolver = new LowercaseContractResolver()
-            });
+                var list = _permissionRepository.GetRoles();
+                return new JsonResult(new { result = 1, message = $"查询全部角色", data = list }, new JsonSerializerSettings()
+                {
+                    ContractResolver = new LowercaseContractResolver()
+                });
+            }
+            catch (Exception exc)
+            {
+                _log.Log(NLog.LogLevel.Error, $"查询全部角色：{exc.Message}");
+                return new JsonResult(new { result = 0, message = $"查询全部角色：{exc.Message}" });
+            }
         }
 
         /// <summary>
@@ -217,9 +236,18 @@ namespace GeneralBusinessSystem.Controllers
         /// <param name="rolename">角色名称</param>
         /// <returns></returns>
         [HttpPost("addrole")]
-        public bool AddRole(string rolename)
+        public IActionResult AddRole(string rolename)
         {
-            return _permissionRepository.AddRole(rolename, CompanyID) > 0 ? true : false;
+            try
+            {
+                _permissionRepository.AddRole(rolename, CompanyID);
+                return new JsonResult(new { result = 1, message = "添加角色成功" });
+            }
+            catch (Exception exc)
+            {
+                _log.Log(NLog.LogLevel.Error, $"添加角色：{exc.Message}");
+                return new JsonResult(new { result = 0, message = $"添加角色：{exc.Message}" });
+            }
         }
         /// <summary>
         /// 修改角色 
@@ -228,9 +256,18 @@ namespace GeneralBusinessSystem.Controllers
         /// <param name="rolename">角色名称</param>
         /// <returns></returns>
         [HttpPost("modifyrole")]
-        public bool ModifyRole(int id, string rolename)
+        public IActionResult ModifyRole(int id, string rolename)
         {
-            return _permissionRepository.ModifyRole(id, rolename) > 0 ? true : false;
+            try
+            {
+                _permissionRepository.ModifyRole(id, rolename);
+                return new JsonResult(new { result = 1, message = "修改角色成功" });
+            }
+            catch (Exception exc)
+            {
+                _log.Log(NLog.LogLevel.Error, $"修改角色：{exc.Message}");
+                return new JsonResult(new { result = 0, message = $"修改角色：{exc.Message}" });
+            }
         }
         /// <summary>
         /// 删除角色
@@ -238,9 +275,18 @@ namespace GeneralBusinessSystem.Controllers
         /// <param name="id">ID</param>
         /// <returns></returns>
         [HttpPost("deleterole")]
-        public bool DeleteRole(int id)
+        public IActionResult DeleteRole(int id)
         {
-            return _permissionRepository.RemoveRole(id) > 0 ? true : false;
+            try
+            {
+                _permissionRepository.RemoveRole(id);
+                return new JsonResult(new { result = 1, message = "删除角色成功" });
+            }
+            catch (Exception exc)
+            {
+                _log.Log(NLog.LogLevel.Error, $"删除角色：{exc.Message}");
+                return new JsonResult(new { result = 0, message = $"删除角色：{exc.Message}" });
+            }
         }
         #endregion
 
@@ -257,11 +303,19 @@ namespace GeneralBusinessSystem.Controllers
         [HttpGet("getpermissions")]
         public IActionResult GetPermissions()
         {
-            var permissions = _permissionRepository.GetPermissions();
-            return new JsonResult(permissions, new JsonSerializerSettings()
+            try
             {
-                ContractResolver = new LowercaseContractResolver()
-            });
+                var list = _permissionRepository.GetPermissions();
+                return new JsonResult(new { result = 1, message = $"获取全部权限成功", data = list }, new JsonSerializerSettings()
+                {
+                    ContractResolver = new LowercaseContractResolver()
+                });
+            }
+            catch (Exception exc)
+            {
+                _log.Log(NLog.LogLevel.Error, $"获取全部权限：{exc.Message}");
+                return new JsonResult(new { result = 0, message = $"获取全部权限：{exc.Message}" });
+            }
         }
         /// <summary>
         /// 删除权限
@@ -274,11 +328,12 @@ namespace GeneralBusinessSystem.Controllers
             try
             {
                 var result = _permissionRepository.RemovePermission(id);
-                return new JsonResult(new { result = result > 0 ? true : false });
+                return new JsonResult(new { result = 1, message = "删除权限成功" });
             }
             catch (Exception exc)
             {
-                return new JsonResult(new { result = false, message = exc.Message });
+                _log.Log(NLog.LogLevel.Error, $"删除权限：{exc.Message}");
+                return new JsonResult(new { result = 0, message = $"删除权限：{exc.Message}" });
             }
         }
 
@@ -295,12 +350,13 @@ namespace GeneralBusinessSystem.Controllers
         {
             try
             {
-                var result = _permissionRepository.AddPermission(action, actiondescription, controllername, predicate, CompanyID);
-                return new { result = result > 0 ? true : false };
+                _permissionRepository.AddPermission(action, actiondescription, controllername, predicate, CompanyID);
+                return new JsonResult(new { result = 1, message = "添加权限成功" });
             }
             catch (Exception exc)
             {
-                return new { result = false, message = exc.Message };
+                _log.Log(NLog.LogLevel.Error, $"添加权限：{exc.Message}");
+                return new JsonResult(new { result = 0, message = $"添加权限：{exc.Message}" });
             }
         }
 
@@ -327,12 +383,19 @@ namespace GeneralBusinessSystem.Controllers
         [HttpGet("getpermission")]
         public IActionResult GetPermissionByRoleID(int roleID)
         {
-            var list = _permissionRepository.GetPermissionsByRoleID(roleID);
-            return new JsonResult(list, new JsonSerializerSettings()
+            try
             {
-
-                ContractResolver = new LowercaseContractResolver()
-            });
+                var list = _permissionRepository.GetPermissionsByRoleID(roleID);
+                return new JsonResult(new { result = 1, message = $"按角色ID:{roleID}查询权限成功", data = list }, new JsonSerializerSettings()
+                {
+                    ContractResolver = new LowercaseContractResolver()
+                });
+            }
+            catch (Exception exc)
+            {
+                _log.Log(NLog.LogLevel.Error, $"按角色ID:{roleID}查询权限：{ exc.Message}");
+                return new JsonResult(new { result = 0, message = $"按角色ID:{roleID}查询权限：{ exc.Message}" });
+            }
         }
         /// <summary>
         /// 批量保存角色权限
@@ -341,19 +404,20 @@ namespace GeneralBusinessSystem.Controllers
         /// <param name="rolePermissions">角色权限</param>
         /// <returns></returns>
         [HttpPost("savarolepermissons")]
-        public dynamic SavaRolePermissions(int roleid, List<Model.ViewModel.RolePermission> rolepermissions)
+        public IActionResult SavaRolePermissions(int roleid, List<Model.ViewModel.RolePermission> rolepermissions)
         {
             try
             {
                 var list = new List<dynamic>();
                 list.AddRange(rolepermissions);
-                var result = _permissionRepository.SavaRolePermissions(roleid, list);
+                _permissionRepository.SavaRolePermissions(roleid, list);
                 ReLoadPermissions();
-                return new { result = result };
+                return new JsonResult(new { result = 1, message = "批量保存角色权限成功" });
             }
             catch (Exception exc)
             {
-                return new { result = false, message = exc.Message };
+                _log.Log(NLog.LogLevel.Error, $"批量保存角色权限：{exc.Message}");
+                return new JsonResult(new { result = 0, message = $"批量保存角色权限：{exc.Message}" });
             }
         }
         /// <summary>
@@ -392,12 +456,19 @@ namespace GeneralBusinessSystem.Controllers
         [HttpGet("getrole")]
         public IActionResult GetRoleByUserID(int userID)
         {
-            var list = _permissionRepository.GetRoleByUserID(userID);
-            return new JsonResult(list, new JsonSerializerSettings()
+            try
             {
-
-                ContractResolver = new LowercaseContractResolver()
-            });
+                var list = _permissionRepository.GetRoleByUserID(userID);
+                return new JsonResult(new { result = 1, message = $"按用户ID:{userID}查询角色成功", data = list }, new JsonSerializerSettings()
+                {
+                    ContractResolver = new LowercaseContractResolver()
+                });
+            }
+            catch (Exception exc)
+            {
+                _log.Log(NLog.LogLevel.Error, $"按用户ID:{userID}查询角色：{ exc.Message}");
+                return new JsonResult(new { result = 0, message = $"按用户ID:{userID}查询角色：{ exc.Message}" });
+            }
         }
         /// <summary>
         /// 批量保存用户角色
@@ -406,18 +477,19 @@ namespace GeneralBusinessSystem.Controllers
         /// <param name="userroles">用户角色</param>
         /// <returns></returns>
         [HttpPost("savauserroles")]
-        public dynamic SavaUserRoles(int userid, List<Model.ViewModel.UserRole> userroles)
+        public IActionResult SavaUserRoles(int userid, List<Model.ViewModel.UserRole> userroles)
         {
             try
             {
                 var list = new List<dynamic>();
                 list.AddRange(userroles);
-                var result = _permissionRepository.SavaUserRoles(userid, list);
-                return new { result = result };
+                _permissionRepository.SavaUserRoles(userid, list);
+                return new JsonResult(new { result = 1, message = "批量保存用户角色成功" });
             }
             catch (Exception exc)
             {
-                return new { result = false, message = exc.Message };
+                _log.Log(NLog.LogLevel.Error, $"批量保存用户角色：{exc.Message}");
+                return new JsonResult(new { result = 0, message = $"批量保存用户角色：{exc.Message}" });
             }
         }
         #endregion
