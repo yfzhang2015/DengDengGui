@@ -99,10 +99,10 @@ namespace GeneralBusinessSystem.Controllers
         [HttpGet("queryusers")]
         public ActionResult QueryUser(string queryName)
         {
+            _log.Log(NLog.LogLevel.Info, $"按{queryName}查询用户");
             var list = _permissionRepository.GetUsers(queryName);
             return new JsonResult(list, new JsonSerializerSettings()
             {
-
                 ContractResolver = new LowercaseContractResolver()
             });
         }
@@ -114,17 +114,18 @@ namespace GeneralBusinessSystem.Controllers
         /// <param name="name">名称</param>
         /// <returns></returns>
         [HttpPost("adduser")]
-        public bool UserAdd(string userName, string password, string name)
+        public IActionResult UserAdd(string userName, string password, string name)
         {
             try
             {
                 _permissionRepository.AddUser(userName, password, name, CompanyID);
 
-                return true;
+                return new JsonResult(new { result = 1, message = "添加用户成功" });
             }
-            catch
+            catch (Exception exc)
             {
-                return false;
+                _log.Log(NLog.LogLevel.Info, $"添加用户异常：{exc.Message}");
+                return new JsonResult(new { result = 0, message = $"添加用户：{exc.Message}" }); 
             }
         }
 
@@ -137,17 +138,18 @@ namespace GeneralBusinessSystem.Controllers
         /// <param name="name">名称</param>
         /// <returns></returns>
         [HttpPost("modifyuser")]
-        public bool UserModify(int ID, string userName, string password, string name)
+        public IActionResult UserModify(int ID, string userName, string password, string name)
         {
             try
             {
 
                 _permissionRepository.ModifyUser(ID, userName, password, name);
-                return true;
+                return new JsonResult(new { result = 1, message = "修改用户成功" });
             }
-            catch
+            catch (Exception exc)
             {
-                return false;
+                _log.Log(NLog.LogLevel.Info, $"修改用户异常：{exc.Message}");
+                return new JsonResult(new { result = 0, message = $"修改用户：{exc.Message}" });
             }
         }
         /// <summary>
@@ -203,7 +205,7 @@ namespace GeneralBusinessSystem.Controllers
         [HttpPost("addrole")]
         public bool AddRole(string rolename)
         {
-            return _permissionRepository.AddRole(rolename,CompanyID) > 0 ? true : false;
+            return _permissionRepository.AddRole(rolename, CompanyID) > 0 ? true : false;
         }
         /// <summary>
         /// 修改角色 
@@ -279,7 +281,7 @@ namespace GeneralBusinessSystem.Controllers
         {
             try
             {
-                var result = _permissionRepository.AddPermission(action, actiondescription, controllername, predicate,CompanyID);    
+                var result = _permissionRepository.AddPermission(action, actiondescription, controllername, predicate, CompanyID);
                 return new { result = result > 0 ? true : false };
             }
             catch (Exception exc)

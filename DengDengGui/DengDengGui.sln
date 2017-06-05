@@ -1,15 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26430.6
+VisualStudioVersion = 15.0.26430.12
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GeneralBusinessSystem", "GeneralBusinessSystem\GeneralBusinessSystem.csproj", "{896A5701-3335-407C-9DA9-D7B4BCA96207}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "代码规范", "代码规范", "{A9EA6AD1-1A76-4599-AB5D-4CCF7842454B}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "文档", "文档", "{A9EA6AD1-1A76-4599-AB5D-4CCF7842454B}"
 	ProjectSection(SolutionItems) = preProject
-		Css.txt = Css.txt
-		JavaScript.txt = JavaScript.txt
-		SqlServer.txt = SqlServer.txt
+		doc\《通用业务管理系统》开发文档2.0.doc = doc\《通用业务管理系统》开发文档2.0.doc
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GeneralBusinessData", "GeneralBusinessData\GeneralBusinessData.csproj", "{6C53484D-97BD-4974-B1A3-84CA549907C1}"

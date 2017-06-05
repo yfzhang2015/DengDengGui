@@ -40,6 +40,7 @@ namespace GeneralBusinessSystem.Controllers
         {
             _log = LogManager.GetCurrentClassLogger();
         }
+
         /// <summary>
         /// ¹«Ë¾ID
         /// </summary>
