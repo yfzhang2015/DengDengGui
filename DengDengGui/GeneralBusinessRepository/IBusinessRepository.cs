@@ -53,10 +53,7 @@ namespace GeneralBusinessRepository
 
  
 
-        #region 查询模块管理
-        List<Dictionary<string, dynamic>> GetQueryModules();
-
-        #endregion
+     
         #region 图表模块管理
          List<Dictionary<string, dynamic>> GetChartModules();        
         #endregion

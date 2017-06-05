@@ -108,13 +108,7 @@ FROM    users
 
   
 
-        #region 查询模块管理
-        public List<Dictionary<string, dynamic>> GetQueryModules()
-        {
-            var sql = "select * from querymodules";
-            return _sqlHelper.QueryList(sql);
-        }
-        #endregion
+    
         #region 图表模块管理
         public List<Dictionary<string, dynamic>> GetChartModules()
         {
