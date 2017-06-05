@@ -9,7 +9,7 @@ using NLog;
 
 namespace GeneralBusinessSystem.Controllers
 {
-    public class HomeController : GBController
+    public class HomeController : BaseController
     {
         IPermissionRepository _permissionRepository;
 

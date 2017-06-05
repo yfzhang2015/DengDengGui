@@ -13,7 +13,7 @@ using GeneralBusinessSystem.Middleware;
 
 namespace GeneralBusinessSystem.Controllers
 {
-    public class PermissionController : GBController
+    public class PermissionController : BaseController
     {
         /// <summary>
         /// 权限仓储对象

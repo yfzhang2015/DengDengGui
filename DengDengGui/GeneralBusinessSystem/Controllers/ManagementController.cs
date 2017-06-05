@@ -14,7 +14,7 @@ namespace GeneralBusinessSystem.Controllers
     /// <summary>
     /// 后台管理controller
     /// </summary>
-    public class ManagementController : GBController
+    public class ManagementController : BaseController
     {
         /// <summary>
         /// 单据模块
