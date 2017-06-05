@@ -137,10 +137,9 @@
         function getUsers() {
             $("#tbdata").html('');
             $.get('/getusers', {
-            }, function (result) {         
-                var tbhtml = '';
-                console.log(result)
-                $(result).each(function (index, ele) {
+            }, function (dataBack) {         
+                var tbhtml = '';              
+                $(dataBack.data).each(function (index, ele) {
                     tbhtml += '<tr id="tr_' + ele.id + '" > \
                          <td>'+ ele.id + '</td> \
                             <td>'+ ele.username + '</td> \
@@ -165,9 +164,9 @@
             $("#tbdata").html('');
             $.get('/queryusers', {
                 queryName: $('#queryname').val()
-            }, function (result) {
+            }, function (dataBack) {
                 var tbhtml = '';
-                $(result).each(function (index, ele) {
+                $(dataBack.data).each(function (index, ele) {
                     tbhtml += '<tr id="tr_' + ele.id + '" > \
                          <td>'+ ele.id + '</td> \
                             <td>'+ ele.username + '</td> \
@@ -192,13 +191,13 @@
             if (confirm("你确定要删除ID为：" + id + "的记录吗？")) {
                 $.post("/deleteuser", {
                     id: id
-                }, function (result) {
+                }, function (dataBack) {
 
-                    if (result) {
+                    if (dataBack.result==1) {
                         $("#tr_" + id).remove();
                     }
                     else {
-                        alert("删除失败！");
+                        alert(dataBack.message);
                     }
                     var str = "/Users";
                     window.location.href = str;
@@ -221,9 +220,9 @@
                 Password: $("#oldpassword").val(),
                 Name: $("#oldname").val(),
 
-            }, function (result) {
-                if (!result) {
-                    alert("修改失败，请确认与服务器连接！");
+            }, function (dataBack) {
+                if (dataBack.result != 1) {
+                    alert(dataBack.message);
                 }
                 var str = "/Users";
                 window.location.href = str;
@@ -238,9 +237,9 @@
                 Name: $("#name").val(),
 
 
-            }, function (result) {
-                if (!result) {
-                    alert("添加失败，请确认与服务器连接！");
+            }, function (dataBack) {
+                if (dataBack.result!=1) {
+                    alert(dataBack.message);
                 }
                 var str = "/Users";
                 window.location.href = str;

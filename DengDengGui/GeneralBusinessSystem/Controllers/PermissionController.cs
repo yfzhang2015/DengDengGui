@@ -79,17 +79,25 @@ namespace GeneralBusinessSystem.Controllers
         }
 
         /// <summary>
-        /// 获取全部用户
+        /// 查询全部用户
         /// </summary>
         /// <returns></returns>
         [HttpGet("getusers")]
         public ActionResult GetUsers()
-        {
-            var result = _permissionRepository.GetUsers();
-            return new JsonResult(result, new JsonSerializerSettings()
+        {           
+            try
             {
-                ContractResolver = new LowercaseContractResolver()
-            });
+                var list = _permissionRepository.GetUsers();
+                return new JsonResult(new { result = 1, message = "查询全部用户成功", data = list }, new JsonSerializerSettings()
+                {
+                    ContractResolver = new LowercaseContractResolver()
+                });
+            }
+            catch (Exception exc)
+            {
+                _log.Log(NLog.LogLevel.Error, $"查询全部用户：{exc.Message}");
+                return new JsonResult(new { result = 0, message = $"查询全部用户：{exc.Message}" });
+            }
         }
         /// <summary>
         /// 查询用户
@@ -99,12 +107,19 @@ namespace GeneralBusinessSystem.Controllers
         [HttpGet("queryusers")]
         public ActionResult QueryUser(string queryName)
         {
-            _log.Log(NLog.LogLevel.Info, $"按{queryName}查询用户");
-            var list = _permissionRepository.GetUsers(queryName);
-            return new JsonResult(list, new JsonSerializerSettings()
+            try
+            {               
+                var list = _permissionRepository.GetUsers(queryName);               
+                return new JsonResult(new { result = 1, message = $"按{queryName}查询用户成功", data= list }, new JsonSerializerSettings()
+                {
+                    ContractResolver = new LowercaseContractResolver()
+                });
+            }
+            catch(Exception exc)
             {
-                ContractResolver = new LowercaseContractResolver()
-            });
+                _log.Log(NLog.LogLevel.Error, $"按{queryName}查询用户：{exc.Message}");
+                return new JsonResult(new { result = 0, message = $"按{queryName}查询用户：{exc.Message}" });
+            }
         }
         /// <summary>
         /// 添加用户
@@ -119,12 +134,11 @@ namespace GeneralBusinessSystem.Controllers
             try
             {
                 _permissionRepository.AddUser(userName, password, name, CompanyID);
-
                 return new JsonResult(new { result = 1, message = "添加用户成功" });
             }
             catch (Exception exc)
             {
-                _log.Log(NLog.LogLevel.Info, $"添加用户异常：{exc.Message}");
+                _log.Log(NLog.LogLevel.Error, $"添加用户异常：{exc.Message}");
                 return new JsonResult(new { result = 0, message = $"添加用户：{exc.Message}" }); 
             }
         }
@@ -142,13 +156,12 @@ namespace GeneralBusinessSystem.Controllers
         {
             try
             {
-
                 _permissionRepository.ModifyUser(ID, userName, password, name);
                 return new JsonResult(new { result = 1, message = "修改用户成功" });
             }
             catch (Exception exc)
             {
-                _log.Log(NLog.LogLevel.Info, $"修改用户异常：{exc.Message}");
+                _log.Log(NLog.LogLevel.Error, $"修改用户异常：{exc.Message}");
                 return new JsonResult(new { result = 0, message = $"修改用户：{exc.Message}" });
             }
         }
@@ -158,17 +171,18 @@ namespace GeneralBusinessSystem.Controllers
         /// <param name="ID"></param>
         /// <returns></returns>
         [HttpPost("deleteuser")]
-        public bool UserDelete(int ID)
+        public IActionResult UserDelete(int ID)
         {
 
             try
             {
                 _permissionRepository.RemoveUser(ID);
-                return true;
+                return new JsonResult(new { result = 1, message = "删除用户成功" });
             }
-            catch
+            catch(Exception exc)
             {
-                return false;
+                _log.Log(NLog.LogLevel.Error, $"删除用户异常：{exc.Message}");
+                return new JsonResult(new { result = 0, message = $"删除用户：{exc.Message}" });
             }
         }
         #endregion
