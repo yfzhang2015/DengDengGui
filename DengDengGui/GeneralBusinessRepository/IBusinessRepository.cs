@@ -49,13 +49,6 @@ namespace GeneralBusinessRepository
 
 
         #endregion
-
-
- 
-
-     
-        #region 图表模块管理
-         List<Dictionary<string, dynamic>> GetChartModules();        
-        #endregion
+    
     }
 }

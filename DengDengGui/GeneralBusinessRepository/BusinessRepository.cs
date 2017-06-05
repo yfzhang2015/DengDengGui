@@ -105,16 +105,6 @@ FROM    users
 
         }
         #endregion
-
-  
-
-    
-        #region 图表模块管理
-        public List<Dictionary<string, dynamic>> GetChartModules()
-        {
-            var sql = "select * from chartmodules";
-            return _sqlHelper.QueryList(sql);
-        }
-        #endregion
+   
     }
 }
