@@ -7,6 +7,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GeneralBusinessSystem", "Ge
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "文档", "文档", "{A9EA6AD1-1A76-4599-AB5D-4CCF7842454B}"
 	ProjectSection(SolutionItems) = preProject
+		doc\script.sql = doc\script.sql
 		doc\《通用业务管理系统》开发文档2.0.doc = doc\《通用业务管理系统》开发文档2.0.doc
 	EndProjectSection
 EndProject
