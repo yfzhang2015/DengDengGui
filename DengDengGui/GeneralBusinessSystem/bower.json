@@ -6,7 +6,8 @@
     "jquery-validation": "1.16.0",
     "jquery-validation-unobtrusive": "3.2.6",
     "bootstrap": "v3.3.7",
-    "chart.js": "Chart.js#v2.6.0"
+    "chart.js": "Chart.js#v2.6.0",
+    "sweetalert": "v1.1.3"
   },
   "resolutions": {
     "jquery-validation": "1.16.0",

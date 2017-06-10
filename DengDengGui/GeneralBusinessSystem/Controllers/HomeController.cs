@@ -86,5 +86,16 @@ namespace GeneralBusinessSystem.Controllers
             }
         }
 
+        [HttpGet("/autocomplete/countries")]
+        public IActionResult GetCountry(string queryBH)
+        {
+            var list = new List<dynamic>();
+            list.Add(new { value = "United Arab Emirates", data = "AE" });
+            list.Add(new { value = "United Kingdom", data = "UK" });
+            list.Add(new { value = "United States", data = "US" });
+            list.Add(new { value = "Chinese ", data = "CN" });
+            return new JsonResult(new {query= queryBH, suggestions = list });
+        }
+
     }
 }

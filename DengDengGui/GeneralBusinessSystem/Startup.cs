@@ -107,12 +107,12 @@ namespace GeneralBusinessSystem
 
 
             app.UseStaticFiles();
-            //添加权限中间件
-            app.UsePermission(new PermissionMiddlewareOption()
-            {
-                LoginAction = @"/login",
-                NoPermissionAction = @"/nopermission"
-            });
+            ////添加权限中间件
+            //app.UsePermission(new PermissionMiddlewareOption()
+            //{
+            //    LoginAction = @"/login",
+            //    NoPermissionAction = @"/nopermission"
+            //});
 
 
             app.UseMvc(routes =>

@@ -789,8 +789,7 @@
         },
 
         processResponse: function (result, originalQuery, cacheKey) {
-           // console.log(result)
-            var result = eval("(" + result + ")");
+         
             var that = this,
                 options = that.options;
 
