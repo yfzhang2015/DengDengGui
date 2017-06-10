@@ -1,20 +1,77 @@
 ﻿@{
     ViewData["Title"] = "主页";
 }
-
+@section css{
+    <link href="~/lib/bootstrap-datetimepicker-master/css/bootstrap-datetimepicker.css" rel="stylesheet" />
+}
 <div style="background-color:#dbdbdb;min-height:600px">
 
+    <div class="row">
+        <div class="col-md-3">
+            <div class="form-group">
+              
+                <div class="input-group date form_datetime" data-date="" data-date-format="yyyy-MM-dd HH:ii:00" data-link-field="dtp_input1">
+                    <input id="satrt_rq" class="form-control" size="19" type="text" value="" readonly>
+                    <span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
+                </div>
+                <input type="hidden" id="dtp_input1" value="" />
+            </div>
+
+        </div>
+        <div class="col-md-3">
+            <div class="form-group">
+              
+                <div id="end_rq_div" class="input-group date form_date" data-data=""  data-link-format="yyyy-mm-dd"  data-date-format="yyyy MM dd" data-link-field="dtp_input2">
+                    <input id="end_rq" class="form-control" size="16" type="text" value="" readonly>
+                    <span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
+                </div>
+                <input type="hidden" id="dtp_input2" value="" />
+            </div>
+
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <button onclick="">测试</button>
+        </div>
+    </div>
 </div>
-<button onclick="ttt()">测试</button>
+
+
 
 @section Scripts{
+    <script src="~/lib/bootstrap-datetimepicker-master/js/bootstrap-datetimepicker.js"></script>
+    <script src="~/lib/bootstrap-datetimepicker-master/js/locales/bootstrap-datetimepicker.zh-CN.js"></script>
     <script src="~/js/PrototypeExtensions.js"></script>
+    <script type="text/javascript">
+
+        var today = new Date();
+        console.log(today.Format("yyyy-MM-dd"));
+        var todayt = today.Format("yyyy-MM-dd");
+        $(".form_datetime").datetimepicker({
+            format: "yyyy-mm-dd hh:ii:00",
+            autoclose: true,
+            todayBtn: true,
+            pickerPosition: "bottom-left",
+            language: "zh-CN"
+        });
+        $("#satrt_rq").val(today.Format("yyyy-MM-dd hh:mm:00"));
+
+
+        $(".form_date").datetimepicker({
+            format: "yyyy-mm-dd",
+            autoclose: true,
+            todayBtn: true,
+            pickerPosition: "bottom-left",
+            language: "zh-CN",
+            todayHighlight: 1,
+            minView: 2,
+            forceParse: 0
+        });
+        $("#end_rq").val(today.Format("yyyy-MM-dd"));
+    </script>
     <script>
 
-        function ttt() {
-
-            var s = "1234567890";
-            alert(s.contains("4563"))
-        }
+    
     </script>
 }
