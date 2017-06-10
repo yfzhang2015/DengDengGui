@@ -11,6 +11,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Content Include="wwwroot\images\back.png" />
+    <Content Include="wwwroot\js\PrototypeExtensions.js" />
     <Content Include="wwwroot\js\stickUp.js" />
     <Content Include="wwwroot\js\stickUp.min.js" />
     <Content Include="wwwroot\lib\bootstrap\.bower.json" />
