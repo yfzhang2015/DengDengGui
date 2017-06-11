@@ -25,7 +25,7 @@ $.include(['../lib/bootstrap-datetimepicker/js/bootstrap-datetimepicker.js', '..
 
 
 //日期时间创造器
-function CreateDateTime(field) {
+function createDateTime(field) {
     var dateTimeHtml = '\
      <div class="form-group">\
          <div class="input-group date form_datetime" data-date="" data-date-format="yyyy-MM-dd HH:ii:00" data-link-field="dtp_input1">\
@@ -38,7 +38,7 @@ function CreateDateTime(field) {
 }
 
 //日期创造器
-function CreateDate() {
+function createDate() {
     var dateHtml = '\
     <div class="form-group">\
         <div  class="input-group date form_date" data-data="" data-link-format="yyyy-mm-dd" data-date-format="yyyy MM dd" data-link-field="dtp_input2">\
@@ -51,25 +51,25 @@ function CreateDate() {
 }
 
 //文本创造器
-function CreateText() {
+function createText() {
 }
 
 //单选框创造器
-function CreateRadio() {
+function createRadio() {
 }
 
 //复选框创造器
-function CreateCheckbox() {
+function createCheckbox() {
 }
 
 //下拉列表创造器
-function CreateSelect() {
+function createSelect() {
 }
 
 //自动下拉创造器
-function CreateAutoComplete() {
+function createAutoComplete() {
 }
 
 //弹框列表创造器
-function CreateListDialog() {
+function createListDialog() {
 }
