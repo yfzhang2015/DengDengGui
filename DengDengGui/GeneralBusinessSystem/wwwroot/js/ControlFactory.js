@@ -2,6 +2,28 @@
  * 控件创建器
  ************************************/
 
+$.extend({
+    includePath: '',
+    include: function (file) {
+        var files = typeof file == "string" ? [file] : file;
+        for (var i = 0; i < files.length; i++) {          
+            var name = files[i]//.replace(/^s|s$/g, "");
+            console.log(name)
+            var att = name.split('.');         
+            var ext = att[att.length - 1].toLowerCase();         
+            var isCSS = ext == "css";
+            var tag = isCSS ? "link" : "script";
+            var attr = isCSS ? " type='text/css' rel='stylesheet' " : " language='javascript' type='text/javascript' ";
+            var link = (isCSS ? "href" : "src") + "='" + $.includePath + name + "'";
+            if ($(tag + "[" + link + "]").length == 0) {            
+                document.write("<" + tag + attr + link + "></" + tag + ">");
+            }
+        }
+    }
+});
+$.include(['../lib/bootstrap-datetimepicker/js/bootstrap-datetimepicker.js', '../lib/bootstrap-datetimepicker/js/locales/bootstrap-datetimepicker.zh-CN.js','../lib/bootstrap-datetimepicker/css/bootstrap-datetimepicker.css']);
+
+
 //日期时间创造器
 function CreateDateTime(field) {
     var dateTimeHtml = '\

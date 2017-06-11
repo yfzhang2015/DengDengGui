@@ -2,41 +2,45 @@
     ViewData["Title"] = "主页";
 }
 @section css{
-    <link href="~/lib/bootstrap-datetimepicker/css/bootstrap-datetimepicker.css" rel="stylesheet" />
-<link href="~/lib/sweetalert/dist/sweetalert.css" rel="stylesheet" />
-    <style>
-        .autocomplete-suggestions {
-            border: 1px solid #999;
-            background: #FFF;
-            overflow: auto;
-        }
-
-        .autocomplete-suggestion {
-            padding: 2px 5px;
-            white-space: nowrap;
-            overflow: hidden;
-        }
-
-        .autocomplete-selected {
-            background: #F0F0F0;
-        }
-
-        .autocomplete-suggestions strong {
-            font-weight: normal;
-            color: #3399FF;
-        }
-
-        .autocomplete-group {
-            padding: 2px 5px;
-        }
-
-            .autocomplete-group strong {
-                display: block;
-                border-bottom: 1px solid #000;
+    @*<link href="~/lib/bootstrap-datetimepicker/css/bootstrap-datetimepicker.css" rel="stylesheet" />*@
+    @*<link href="~/lib/sweetalert/dist/sweetalert.css" rel="stylesheet" />*@
+    @*<style>
+            .autocomplete-suggestions {
+                border: 1px solid #999;
+                background: #FFF;
+                overflow: auto;
             }
-    </style>
+
+            .autocomplete-suggestion {
+                padding: 2px 5px;
+                white-space: nowrap;
+                overflow: hidden;
+            }
+
+            .autocomplete-selected {
+                background: #F0F0F0;
+            }
+
+            .autocomplete-suggestions strong {
+                font-weight: normal;
+                color: #3399FF;
+            }
+
+            .autocomplete-group {
+                padding: 2px 5px;
+            }
+
+           .autocomplete-group strong {
+                    display: block;
+                    border-bottom: 1px solid #000;
+                }
+        </style>*@
 }
 <div style="background-color:#dbdbdb;min-height:600px">
+    <div class="row">
+        <div class="col-md-3" id="ttt">
+        </div>
+    </div>
 
     <div class="row">
         <div class="col-md-3">
@@ -74,12 +78,14 @@
 
 
 @section Scripts{
-    <script src="~/lib/bootstrap-datetimepicker/js/bootstrap-datetimepicker.js"></script>
-    <script src="~/lib/bootstrap-datetimepicker/js/locales/bootstrap-datetimepicker.zh-CN.js"></script>
-    <script src="~/lib/devbridge-autocomplete/dist/jquery.autocomplete.js"></script>
+    @*<script src="~/lib/bootstrap-datetimepicker/js/bootstrap-datetimepicker.js"></script>
+        <script src="~/lib/bootstrap-datetimepicker/js/locales/bootstrap-datetimepicker.zh-CN.js"></script>*@
     <script src="~/js/PrototypeExtensions.js"></script>
-<script src="~/lib/sweetalert/dist/sweetalert.min.js"></script>
+    <script src="~/js/ControlFactory.js"></script>
+    @*<script src="~/lib/devbridge-autocomplete/dist/jquery.autocomplete.js"></script>
+        <script src="~/lib/sweetalert/dist/sweetalert.min.js"></script>*@
     <script type="text/javascript">
+        $("#ttt").html(CreateDateTime());
 
         /**
          * 日期控件
@@ -113,38 +119,38 @@
         /*
         *自动完成控件
         */
-        $('#autocomplete').autocomplete({
-            serviceUrl: '/autocomplete/countries',
-            onSearchStart: function (query) {
-                query.queryBH = $("#autocomplete").val();
-            },
-            onSelect: function (suggestion) {
-                alert('You selected: ' + suggestion.value + ', ' + suggestion.data);
+        //$('#autocomplete').autocomplete({
+        //    serviceUrl: '/autocomplete/countries',
+        //    onSearchStart: function (query) {
+        //        query.queryBH = $("#autocomplete").val();
+        //    },
+        //    onSelect: function (suggestion) {
+        //        alert('You selected: ' + suggestion.value + ', ' + suggestion.data);
 
-                $("#countryData").val(suggestion.data);
-            }
-        });
+        //        $("#countryData").val(suggestion.data);
+        //    }
+        //});
         /*
         弹框
         */
-        function ShowMessage()
-        {
-            swal({
-                title: "标题",
-                text: "这是一个内容提示!",
-                type: "warning",
-                showCancelButton: true,
-                cancelButtonText: "取消",
-                confirmButtonColor: "#DD6B55",
-                confirmButtonText: "确定",
-                closeOnConfirm: false,
-                html: false
-            }, function () {
-                console.log("确定")
-                swal("Deleted!", "你选了确定", "success");
-            });
+        //function ShowMessage()
+        //{
+        //    swal({
+        //        title: "标题",
+        //        text: "这是一个内容提示!",
+        //        type: "warning",
+        //        showCancelButton: true,
+        //        cancelButtonText: "取消",
+        //        confirmButtonColor: "#DD6B55",
+        //        confirmButtonText: "确定",
+        //        closeOnConfirm: false,
+        //        html: false
+        //    }, function () {
+        //        console.log("确定")
+        //        swal("Deleted!", "你选了确定", "success");
+        //    });
 
-        }
+        //}
     </script>
     <script>
 
