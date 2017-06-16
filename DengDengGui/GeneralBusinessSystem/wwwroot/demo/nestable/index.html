@@ -354,25 +354,35 @@
             height: 35px;
         }
 
-        input, select {
+        input, select, .but-hide {
             display: none;
         }
 
-        .show-div input, .show-div select {
+
+        .show-div input, .show-div select, .show-div .but-hide {
             display: block;
             float: left;
             margin-left: 5px;
+        }
+
+        .but-hide {
+            height: 18px;
+            width: 18px;
+            padding: 0;
+            margin: 0;
+            border-radius: 9px;
+            float: right !important;
         }
     </style>
 </head>
 <body>
     <div class="cf nestable-lists">
         <div class="dd" id="source-fields" style="width:200px">
-            <ol class="dd-list">
+            <ol class="dd-list" id="source_ol">
                 <li class="dd-item" data-id="0" style="">
                     <div class="dd-handle" readonly="true">全部字段列表</div>
                 </li>
-                <li class="dd-item dd3-item" data-id="13">
+                <li class="dd-item dd3-item" data-id="13" id="li13">
                     <div class="dd-handle dd3-handle">Drag</div>
                     <div class="dd3-content">
                         <span style=" float:left;width:100px;">单位编号</span>
@@ -380,12 +390,13 @@
                         <input type="checkbox" value="是" style="width:100px;" />
                         <select style="width:100px;">
                             <option>文本框</option>
-                             <option>时间</option>
+                            <option>时间</option>
                             <option>日期</option>
                         </select>
+                        <button class="btn btn-danger btn-xs but-hide" onclick="RemoveLi('li13')">╳</button>
                     </div>
                 </li>
-                <li class="dd-item dd3-item" data-id="14">
+                <li class="dd-item dd3-item" data-id="14" id="li14">
                     <div class="dd-handle dd3-handle">Drag</div><div class="dd3-content">
                         <span style=" float:left;width:100px;">单位名称</span>
                         <input type="text" style="height:20px;width:100px;" />
@@ -395,9 +406,10 @@
                             <option>时间</option>
                             <option>日期</option>
                         </select>
+                        <button class="btn btn-danger btn-xs but-hide" onclick="RemoveLi('li14')">╳</button>
                     </div>
                 </li>
-                <li class="dd-item dd3-item" data-id="15">
+                <li class="dd-item dd3-item" data-id="15" id="li15">
                     <div class="dd-handle dd3-handle">Drag</div><div class="dd3-content">
                         <span style=" float:left;width:100px;">商品内码</span>
                         <input type="text" style="height:20px;width:100px;" />
@@ -407,9 +419,10 @@
                             <option>时间</option>
                             <option>日期</option>
                         </select>
+                        <button class="btn btn-danger btn-xs but-hide" onclick="RemoveLi('li15')">╳</button>
                     </div>
                 </li>
-                <li class="dd-item dd3-item" data-id="16">
+                <li class="dd-item dd3-item" data-id="16" id="li16">
                     <div class="dd-handle dd3-handle">Drag</div><div class="dd3-content">
 
                         <span style=" float:left;width:100px;">商品编号</span>
@@ -420,9 +433,11 @@
                             <option>时间</option>
                             <option>日期</option>
                         </select>
+
+                        <button class="btn btn-danger btn-xs but-hide" onclick="RemoveLi('li16')">╳</button>
                     </div>
                 </li>
-                <li class="dd-item dd3-item" data-id="17">
+                <li class="dd-item dd3-item" data-id="17" id="li17">
                     <div class="dd-handle dd3-handle">Drag</div><div class="dd3-content">
                         <span style=" float:left;width:100px;">商品名称</span>
                         <input type="text" style="height:20px;width:100px;" />
@@ -432,12 +447,14 @@
                             <option>时间</option>
                             <option>日期</option>
                         </select>
+
+                        <button class="btn btn-danger btn-xs but-hide" onclick="RemoveLi('li17')">╳</button>
                     </div>
                 </li>
             </ol>
         </div>
         <div class="dd" id="target-fields">
-            <ol class="dd-list">
+            <ol class="dd-list" id="target_ol">
                 <li class="dd-item" data-id="0" style="">
                     <div class="dd-handle" readonly="true">
                         <span style="width:30px;display:inline-block;text-align:center;"></span>
@@ -458,12 +475,17 @@
     <script src="../../lib/bootstrap/dist/js/bootstrap.js"></script>
     <script src="jquery.nestable.js"></script>
     <script>
+        function RemoveLi(eleName) {
+            $("#source_ol").append($("#" + eleName));
+            //$("#" + eleName).remove();
+        }
+
 
         $(document).ready(function () {
 
             var updateOutput = function (e) {
                 var list = e.length ? e : $(e.target),
-                    output = list.data('output');              
+                    output = list.data('output');
                 if (window.JSON) {
                     output.val(window.JSON.stringify(list.nestable('serialize')));//, null, 2));
                 } else {
@@ -475,8 +497,6 @@
                 } else {
                     $(e.target).removeClass("show-div");
                 }
-
-
             };
 
             // activate Nestable for list 1
