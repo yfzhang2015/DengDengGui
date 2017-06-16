@@ -374,12 +374,14 @@
                 </li>
                 <li class="dd-item dd3-item" data-id="13">
                     <div class="dd-handle dd3-handle">Drag</div>
-                    <div class="dd3-content">                 
+                    <div class="dd3-content">
                         <span style=" float:left;width:100px;">单位编号</span>
                         <input type="text" style="height:20px;width:100px;" />
-                        <input type="checkbox" style="width:100px;" />
+                        <input type="checkbox" value="是" style="width:100px;" />
                         <select style="width:100px;">
                             <option>文本框</option>
+                             <option>时间</option>
+                            <option>日期</option>
                         </select>
                     </div>
                 </li>
@@ -390,17 +392,47 @@
                         <input type="checkbox" style="width:100px;" />
                         <select style="width:100px;">
                             <option>文本框</option>
+                            <option>时间</option>
+                            <option>日期</option>
                         </select>
                     </div>
                 </li>
                 <li class="dd-item dd3-item" data-id="15">
-                    <div class="dd-handle dd3-handle">Drag</div><div class="dd3-content">商品内码</div>
+                    <div class="dd-handle dd3-handle">Drag</div><div class="dd3-content">
+                        <span style=" float:left;width:100px;">商品内码</span>
+                        <input type="text" style="height:20px;width:100px;" />
+                        <input type="checkbox" style="width:100px;" />
+                        <select style="width:100px;">
+                            <option>文本框</option>
+                            <option>时间</option>
+                            <option>日期</option>
+                        </select>
+                    </div>
                 </li>
                 <li class="dd-item dd3-item" data-id="16">
-                    <div class="dd-handle dd3-handle">Drag</div><div class="dd3-content">商品编号</div>
+                    <div class="dd-handle dd3-handle">Drag</div><div class="dd3-content">
+
+                        <span style=" float:left;width:100px;">商品编号</span>
+                        <input type="text" style="height:20px;width:100px;" />
+                        <input type="checkbox" style="width:100px;" />
+                        <select style="width:100px;">
+                            <option>文本框</option>
+                            <option>时间</option>
+                            <option>日期</option>
+                        </select>
+                    </div>
                 </li>
                 <li class="dd-item dd3-item" data-id="17">
-                    <div class="dd-handle dd3-handle">Drag</div><div class="dd3-content">商品名称</div>
+                    <div class="dd-handle dd3-handle">Drag</div><div class="dd3-content">
+                        <span style=" float:left;width:100px;">商品名称</span>
+                        <input type="text" style="height:20px;width:100px;" />
+                        <input type="checkbox" style="width:100px;" />
+                        <select style="width:100px;">
+                            <option>文本框</option>
+                            <option>时间</option>
+                            <option>日期</option>
+                        </select>
+                    </div>
                 </li>
             </ol>
         </div>
@@ -431,7 +463,7 @@
 
             var updateOutput = function (e) {
                 var list = e.length ? e : $(e.target),
-                    output = list.data('output');
+                    output = list.data('output');              
                 if (window.JSON) {
                     output.val(window.JSON.stringify(list.nestable('serialize')));//, null, 2));
                 } else {
