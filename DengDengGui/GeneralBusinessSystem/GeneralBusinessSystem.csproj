@@ -10,6 +10,8 @@
     <DocumentationFile></DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
+    <Content Include="wwwroot\demo\nestable\index.html" />
+    <Content Include="wwwroot\demo\nestable\jquery.nestable.js" />
     <Content Include="wwwroot\images\back.png" />
     <Content Include="wwwroot\js\ControlFactory.js" />
     <Content Include="wwwroot\js\PrototypeExtensions.js" />
