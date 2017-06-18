@@ -24,7 +24,7 @@
 
 
             <div class="row" style="margin-bottom:-10px;">
-                <div class="col-md-12">
+                <div class="col-md-12" id="menu-div">
                     <table class="table table-bordered table-hover  table-condensed table-striped">
                         <thead>
                             <tr>
@@ -33,7 +33,9 @@
                                 <th style="width:94px">操作</th>
                             </tr>
                         </thead>
-                        <tbody id="tbdata"></tbody>
+                        <tbody id="tbdata">
+                            <tr is="menu-row" v-for="menu in menus" v-bind:menu="menu"></tr>
+                        </tbody>
                     </table>
                 </div>
             </div>
@@ -44,7 +46,7 @@
 
 <div class="modal fade" id="ModiyModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
-        bzsm
+
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">关闭</span></button>
@@ -53,11 +55,11 @@
             <div class="modal-body" id="modelbody">
                 <div class="row" style="margin-top:10px;">
                     <div class="col-md-6">
-                        <input type="text" readonly class="form-control" id="oldid" name="oldid" placeholder="编号">
+                        <input type="text" readonly class="form-control" id="oldid" v-model="oldMenu.id" name="oldid" placeholder="编号">
                     </div>
 
                     <div class="col-md-6">
-                        <input type="text" class="form-control" id="oldname" name="oldname" placeholder="菜单">
+                        <input type="text" class="form-control" id="oldname" name="oldname" v-model="oldMenu.name" placeholder="菜单">
                     </div>
                 </div>
             </div>
@@ -79,7 +81,7 @@
                 <h4 class="modal-title" id="modeltitle">添加菜单</h4>
             </div>
             <div class="modal-body" id="modelbody">
-                <div class="row" style="margin-top:10px;">                   
+                <div class="row" style="margin-top:10px;">
                     <div class="col-md-12">
                         <input type="text" class="form-control" id="name" name="name" placeholder="菜单">
                     </div>
@@ -97,64 +99,54 @@
 
 
 @section scripts {
+    <script type="text/x-template" id="menu-row-template">
+        <tr v-bind:id="'tr_'+menu.id">
+            <td>{{menu.id}}</td>
+            <td>{{menu.name}}</td>
+            <td>
+                <button class="btn btn-xs btn-primary" style="margin-bottom:-5px;margin-top:-5px;" data-toggle="modal" data-target="#ModiyModal" v-on:click="modifyMenu()">
+                    修改
+                </button>
+                <button class="btn btn-xs btn-danger" style="margin-bottom:-5px;margin-top:-5px;" v-on:click="deleteMenu()">
+                    删除
+                </button>
+            </td>
+        </tr>
+    </script>
 
     <script>
-        $(function () {
-
-            getMenus();
-        })
-        function getMenus() {
-            $("#tbdata").html('');
-            $.get('/getmenus', {
-            }, function (result) {
-                var tbhtml = '';
-               
-                $(result).each(function (index, ele) {
-                    tbhtml += '<tr id="tr_' + ele.id + '" > \
-                         <td>'+ ele.id + '</td> \
-                          <td>'+ ele.name + '</td> \
-                          <td> \
-                          <button class="btn btn-xs btn-primary" style="margin-bottom:-5px;margin-top:-5px;" data-toggle="modal" data-target="#ModiyModal" onclick="modifyMenu('+ ele.id + ',\'' + ele.name + '\')"> \
-                           修改 \
-                           </button> \
-                           <button class="btn btn-xs btn-danger" style="margin-bottom:-5px;margin-top:-5px;" onclick="deleteMenu('+ ele.id + ')"> \
-                              删除 \
-                             </button>\
-                            </td>\
-                           </tr >'
-
-                })
-                $("#tbdata").html(tbhtml);
-            })
-
-        }
-        //删除角色
-        function deleteMenu(id) {
-            if (confirm("你确定要删除ID为：" + id + "的记录吗？")) {
-                $.post("/deletemenu", {
-                    id: id
-                }, function (result) {
-
-                    if (result) {
-                        $("#tr_" + id).remove();
-                    }
-                    else {
-                        alert("删除失败！");
-                    }
-                });
+        Vue.component("menu-row", {
+            props: ["menu"],
+            template: '#menu-row-template',
+            methods: {
+                modifyMenu: function () {
+                    showModifyMenu(this.menu)
+                },
+                deleteMenu: function () {
+                    deleteMenu(this.menu.id);
+                }
             }
-        }
-        //修改角色
-        function modifyMenu(id, oldname) {
-            $("#oldid").val(id);
-            $("#oldname").val(oldname);
-
+        })
+        //修改
+        var modiyMenuVue;
+        function showModifyMenu(menu) {
+            if (modiyMenuVue == null) {
+                modiyMenuVue = new Vue({
+                    el: "#modelbody",
+                    data: {
+                        oldMenu: menu
+                    }
+                })
+            }
+            else {
+                modiyMenuVue.oldMenu = menu;
+            }
         }
         //保存修改
         function savaModify() {
             $.post("/modifymenu", {
-                id: $("#oldid").val(),
-                name: $("#oldname").val()
+                id: modiyMenuVue.oldMenu.id,
+                name: modiyMenuVue.oldMenu.name
             }, function (result) {
                 if (!result) {
                     alert("修改失败，请确认与服务器连接！");
@@ -163,6 +155,101 @@
                 window.location.href = str;
             });
         }
+
+
+        $.get('/getmenus', {
+        }, function (result) {
+
+            new Vue({
+                el: "#menu-div",
+                data: { menus: result }
+
+            })
+        })
+
+        //删除角色
+        function deleteMenu(id) {
+            if (confirm("你确定要删除ID为：" + id + "的记录吗？")) {
+                $.post("/deletemenu", {
+                    id: id
+                }, function (dataBack) {
+
+                    if (dataBack.result) {
+                        $("#tr_" + id).remove();
+                    }
+                    else {
+                        alert("删除失败！");
+                    }
+                });
+            }
+        }
+    </script>
+
+    <script>
+        //$(function () {
+
+        //    getMenus();
+        //})
+        //function getMenus() {
+        //    $("#tbdata").html('');
+        //    $.get('/getmenus', {
+        //    }, function (result) {
+        //        var tbhtml = '';
+
+        //        $(result).each(function (index, ele) {
+        //            tbhtml += '<tr id="tr_' + ele.id + '" > \
+        //                 <td>'+ ele.id + '</td> \
+        //                  <td>'+ ele.name + '</td> \
+        //                  <td> \
+        //                  <button class="btn btn-xs btn-primary" style="margin-bottom:-5px;margin-top:-5px;" data-toggle="modal" data-target="#ModiyModal" onclick="modifyMenu('+ ele.id + ',\'' + ele.name + '\')"> \
+        //                   修改 \
+        //                   </button> \
+        //                   <button class="btn btn-xs btn-danger" style="margin-bottom:-5px;margin-top:-5px;" onclick="deleteMenu('+ ele.id + ')"> \
+        //                      删除 \
+        //                     </button>\
+        //                    </td>\
+        //                   </tr >'
+
+        //        })
+        //        $("#tbdata").html(tbhtml);
+        //    })
+
+        //}
+        ////删除角色
+        //function deleteMenu(id) {
+        //    if (confirm("你确定要删除ID为：" + id + "的记录吗？")) {
+        //        $.post("/deletemenu", {
+        //            id: id
+        //        }, function (result) {
+
+        //            if (result) {
+        //                $("#tr_" + id).remove();
+        //            }
+        //            else {
+        //                alert("删除失败！");
+        //            }
+        //        });
+        //    }
+        //}
+        ////修改角色
+        //function modifyMenu(id, oldname) {
+        //    $("#oldid").val(id);
+        //    $("#oldname").val(oldname);
+
+        //}
+        //保存修改
+        //function savaModify() {
+        //    $.post("/modifymenu", {
+        //        id: $("#oldid").val(),
+        //        name: $("#oldname").val()
+        //    }, function (result) {
+        //        if (!result) {
+        //            alert("修改失败，请确认与服务器连接！");
+        //        }
+        //        var str = "/menus";
+        //        window.location.href = str;
+        //    });
+        //}
         //添加
         function sava() {
             $.post("/addmenu", {
