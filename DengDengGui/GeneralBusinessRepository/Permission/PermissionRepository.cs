@@ -184,7 +184,7 @@ FROM    dbo.Users
         /// <returns></returns>
         public int AddRole(string roleName,int companyID)
         {
-            var sql = $@"insert into roles(name,cpmpanyid) values(@name,@cpmpanyid)";
+            var sql = $@"insert into roles(name,companyid) values(@name,@companyid)";
             var roleNameParameter = new SqlParameter() { Value = roleName, ParameterName = "@name" };
             var companyIDParameter = new SqlParameter() { Value = companyID, ParameterName = "@companyID" };
             return _sqlHelper.ChangeData(sql, roleNameParameter, companyIDParameter);

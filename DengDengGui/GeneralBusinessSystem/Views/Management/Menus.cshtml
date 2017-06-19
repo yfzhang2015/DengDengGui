@@ -71,7 +71,7 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button class="btn btn-success" onclick="savaModify()">
+                <button class="btn btn-success" v-on:click="savaModify">
                     保存
                 </button>
                 <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
@@ -143,6 +143,11 @@
                     el: "#modifyMenuDiv",
                     data: {
                         oldMenu: menu
+                    },
+                    methods: {
+                        savaModify: function () {
+                            savaModify(this.oldMenu);
+                        }
                     }
                 })
             }
@@ -152,10 +157,10 @@
         }
         //#endregion
         //#region保存修改
-        function savaModify() {
+        function savaModify(oldMenu) {
             $.post("/modifymenu", {
-                id: modiyMenuVue.oldMenu.id,
-                name: modiyMenuVue.oldMenu.name
+                id: oldMenu.id,
+                name: oldMenu.name
             }, function (dataBack) {
                 if (dataBack.result == 0) {
                     alert(dataBack.message);

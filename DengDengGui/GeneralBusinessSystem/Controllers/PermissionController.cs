@@ -236,11 +236,12 @@ namespace GeneralBusinessSystem.Controllers
         /// <param name="rolename">角色名称</param>
         /// <returns></returns>
         [HttpPost("addrole")]
-        public IActionResult AddRole(string rolename)
+        public IActionResult AddRole(string name)
         {
             try
             {
-                _permissionRepository.AddRole(rolename, CompanyID);
+                _permissionRepository.AddRole(name, CompanyID);
+                //_permissionRepository.AddRole(name, 1);
                 return new JsonResult(new { result = 1, message = "添加角色成功" });
             }
             catch (Exception exc)
@@ -256,11 +257,11 @@ namespace GeneralBusinessSystem.Controllers
         /// <param name="rolename">角色名称</param>
         /// <returns></returns>
         [HttpPost("modifyrole")]
-        public IActionResult ModifyRole(int id, string rolename)
+        public IActionResult ModifyRole(int id, string name)
         {
             try
             {
-                _permissionRepository.ModifyRole(id, rolename);
+                _permissionRepository.ModifyRole(id, name);
                 return new JsonResult(new { result = 1, message = "修改角色成功" });
             }
             catch (Exception exc)
