@@ -65,11 +65,19 @@ namespace GeneralBusinessSystem.Controllers
         [HttpGet("getmenus")]
         public IActionResult GetMenus()
         {
-            var list = _businessRepository.GetMenus();
-            return new JsonResult(list, new JsonSerializerSettings()
+            try
             {
-                ContractResolver = new LowercaseContractResolver()
-            });
+                var list = _businessRepository.GetMenus();
+                return new JsonResult(new { result = 1, message = $"查询全部菜单成功",data= list }, new JsonSerializerSettings()
+                {
+                    ContractResolver = new LowercaseContractResolver()
+                });
+            }
+            catch (Exception exc)
+            {
+                _log.Log(NLog.LogLevel.Error, $"查询全部菜单：{exc.Message}");
+                return new JsonResult(new { result = 0, message = $"查询全部菜单：{exc.Message}" });
+            }
         }
 
         /// <summary>
@@ -78,9 +86,18 @@ namespace GeneralBusinessSystem.Controllers
         /// <param name="rolename">名称</param>
         /// <returns></returns>
         [HttpPost("addmenu")]
-        public bool AddMenu(string name)
+        public IActionResult AddMenu(string name)
         {
-            return _businessRepository.AddMenu(name, CompanyID) > 0 ? true : false;
+            try
+            {
+                _businessRepository.AddMenu(name, CompanyID);   
+                return new JsonResult(new { result = 0, message = $"添加菜单成功" });
+            }
+            catch (Exception exc)
+            {
+                _log.Log(NLog.LogLevel.Error, $"添加菜单：{exc.Message}");
+                return new JsonResult(new { result = 0, message = $"添加菜单：{exc.Message}" });
+            }
         }
         /// <summary>
         /// 修改菜单 
@@ -89,9 +106,18 @@ namespace GeneralBusinessSystem.Controllers
         /// <param name="name">名称</param>
         /// <returns></returns>
         [HttpPost("modifymenu")]
-        public bool ModifyMenu(int id, string name)
+        public IActionResult ModifyMenu(int id, string name)
         {
-            return _businessRepository.ModifyMenu(id, name) > 0 ? true : false;
+            try
+            {
+                _businessRepository.ModifyMenu(id, name);
+                return new JsonResult(new { result = 0, message = $"修改菜单成功" });
+            }
+            catch (Exception exc)
+            {
+                _log.Log(NLog.LogLevel.Error, $"修改菜单：{exc.Message}");
+                return new JsonResult(new { result = 0, message = $"修改菜单：{exc.Message}" });
+            }
         }
         /// <summary>
         /// 删除菜单
@@ -99,9 +125,19 @@ namespace GeneralBusinessSystem.Controllers
         /// <param name="id">ID</param>
         /// <returns></returns>
         [HttpPost("deletemenu")]
-        public bool DeleteRole(int id)
+        public IActionResult DeleteRole(int id)
         {
-            return _businessRepository.RemoveMenu(id) > 0 ? true : false;
+            try
+            {
+                _businessRepository.RemoveMenu(id);
+                return new JsonResult(new { result = 1, message = $"删除菜单成功" });
+            }
+            catch (Exception exc)
+            {
+                _log.Log(NLog.LogLevel.Error, $"删除菜单：{exc.Message}");
+                return new JsonResult(new { result = 0, message = $"删除菜单：{exc.Message}" });
+
+            }
         }
         #endregion
         #region 菜单模块管理

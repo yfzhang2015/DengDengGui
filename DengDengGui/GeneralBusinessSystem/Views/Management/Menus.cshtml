@@ -75,20 +75,20 @@
 
 <div class="modal fade" id="AddModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
-        <div class="modal-content">
+        <div class="modal-content"  id="addMenuBody">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">关闭</span></button>
                 <h4 class="modal-title" id="modeltitle">添加菜单</h4>
             </div>
-            <div class="modal-body" id="modelbody">
+            <div class="modal-body">
                 <div class="row" style="margin-top:10px;">
                     <div class="col-md-12">
-                        <input type="text" class="form-control" id="name" name="name" placeholder="菜单">
+                        <input type="text" class="form-control"  v-model="menuName" placeholder="菜单">
                     </div>
                 </div>
             </div>
             <div class="modal-footer">
-                <button class="btn btn-success" onclick="sava()">
+                <button class="btn btn-success" v-on:click="savaMenu">
                     保存
                 </button>
                 <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
@@ -147,123 +147,65 @@
             $.post("/modifymenu", {
                 id: modiyMenuVue.oldMenu.id,
                 name: modiyMenuVue.oldMenu.name
-            }, function (result) {
-                if (!result) {
-                    alert("修改失败，请确认与服务器连接！");
-                }
-                var str = "/menus";
-                window.location.href = str;
+            }, function (dataBack) {
+                if (dataBack.result == 0) {
+                    alert(dataBack.message);
+                }                
+                $("#ModiyModal").modal('hide')
             });
         }
 
-
+        //查询全部主菜单
         $.get('/getmenus', {
-        }, function (result) {
+        }, function (dataBack) {
+            if (dataBack.result == 1) {
+                new Vue({
+                    el: "#menu-div",
+                    data: { menus: dataBack.data }
 
-            new Vue({
-                el: "#menu-div",
-                data: { menus: result }
-
-            })
+                })
+            } else {
+                alert(dataBack.message);
+            }
         })
 
-        //删除角色
+        //删除菜单
         function deleteMenu(id) {
             if (confirm("你确定要删除ID为：" + id + "的记录吗？")) {
                 $.post("/deletemenu", {
                     id: id
                 }, function (dataBack) {
-
-                    if (dataBack.result) {
-                        $("#tr_" + id).remove();
+                    if (dataBack.result==1) {
+                        $("#tr_" + id).remove();l
                     }
                     else {
-                        alert("删除失败！");
+                        alert(dataBack.message);
                     }
+                    $("#ModiyModal").modal('hide')
                 });
             }
         }
-    </script>
 
-    <script>
-        //$(function () {
-
-        //    getMenus();
-        //})
-        //function getMenus() {
-        //    $("#tbdata").html('');
-        //    $.get('/getmenus', {
-        //    }, function (result) {
-        //        var tbhtml = '';
-
-        //        $(result).each(function (index, ele) {
-        //            tbhtml += '<tr id="tr_' + ele.id + '" > \
-        //                 <td>'+ ele.id + '</td> \
-        //                  <td>'+ ele.name + '</td> \
-        //                  <td> \
-        //                  <button class="btn btn-xs btn-primary" style="margin-bottom:-5px;margin-top:-5px;" data-toggle="modal" data-target="#ModiyModal" onclick="modifyMenu('+ ele.id + ',\'' + ele.name + '\')"> \
-        //                   修改 \
-        //                   </button> \
-        //                   <button class="btn btn-xs btn-danger" style="margin-bottom:-5px;margin-top:-5px;" onclick="deleteMenu('+ ele.id + ')"> \
-        //                      删除 \
-        //                     </button>\
-        //                    </td>\
-        //                   </tr >'
-
-        //        })
-        //        $("#tbdata").html(tbhtml);
-        //    })
-
-        //}
-        ////删除角色
-        //function deleteMenu(id) {
-        //    if (confirm("你确定要删除ID为：" + id + "的记录吗？")) {
-        //        $.post("/deletemenu", {
-        //            id: id
-        //        }, function (result) {
-
-        //            if (result) {
-        //                $("#tr_" + id).remove();
-        //            }
-        //            else {
-        //                alert("删除失败！");
-        //            }
-        //        });
-        //    }
-        //}
-        ////修改角色
-        //function modifyMenu(id, oldname) {
-        //    $("#oldid").val(id);
-        //    $("#oldname").val(oldname);
-
-        //}
-        //保存修改
-        //function savaModify() {
-        //    $.post("/modifymenu", {
-        //        id: $("#oldid").val(),
-        //        name: $("#oldname").val()
-        //    }, function (result) {
-        //        if (!result) {
-        //            alert("修改失败，请确认与服务器连接！");
-        //        }
-        //        var str = "/menus";
-        //        window.location.href = str;
-        //    });
-        //}
-        //添加
-        function sava() {
-            $.post("/addmenu", {
-                name: $("#name").val(),
-                id: $("#id").val()
-            }, function (result) {
-                if (!result) {
-                    alert("添加失败，请确认与服务器连接！");
+        //添加菜单
+        var addVue = new Vue({
+            el: "#addMenuBody",
+            data: {
+                menuName: ""
+            },
+            methods: {
+                savaMenu: function () {               
+                    $.post("/addmenu", {
+                        name: this.menuName
+                    }, function (dataBack) {
+                        if (dataBack.result==0) {
+                            alert("添加失败，请确认与服务器连接！");
+                        }                      
+                        window.location.href = "/menus";
+                    });
                 }
-                var str = "/menus";
-                window.location.href = str;
-            });
-        }
-
-
+            }
+        })      
     </script>
+
+
 }
