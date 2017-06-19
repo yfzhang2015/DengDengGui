@@ -124,7 +124,7 @@ namespace GeneralBusinessSystem.Middleware
                     {
                         var userObj = Newtonsoft.Json.JsonConvert.DeserializeObject(userJson);
                         var username = (userObj as Newtonsoft.Json.Linq.JObject).GetValue("username").First.ToString();
-                        var actionCount = _userPermissions.Where(w => w.UserName == username && w.Action == context.Request.Path.Value).Count();
+                        var actionCount = _userPermissions.Where(w => w.UserName == username && context.Request.Path.Value.Contains(w.Action)).Count();
 
                         if (actionCount < 1)
                         {
