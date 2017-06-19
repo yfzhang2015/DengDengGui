@@ -90,8 +90,9 @@ namespace GeneralBusinessSystem.Controllers
         {
             try
             {
-                _businessRepository.AddMenu(name, CompanyID);   
-                return new JsonResult(new { result = 0, message = $"添加菜单成功" });
+               // _businessRepository.AddMenu(name, CompanyID);
+                _businessRepository.AddMenu(name, 1);   
+                return new JsonResult(new { result = 1, message = $"添加菜单成功" });
             }
             catch (Exception exc)
             {
@@ -111,7 +112,7 @@ namespace GeneralBusinessSystem.Controllers
             try
             {
                 _businessRepository.ModifyMenu(id, name);
-                return new JsonResult(new { result = 0, message = $"修改菜单成功" });
+                return new JsonResult(new { result = 1, message = $"修改菜单成功" });
             }
             catch (Exception exc)
             {

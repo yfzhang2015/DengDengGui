@@ -3,7 +3,14 @@
     ViewData["Title"] = "菜单管理";
     Layout = "_ManageLayout";
 }
+@section css{
+    <style>
 
+       [v-cloak] {
+            display: none;
+        }
+    </style>
+}
 <div class="row">
     <div class="panel panel-default" style="margin-bottom:-10px;">
         <div class="panel-heading">
@@ -24,7 +31,7 @@
 
 
             <div class="row" style="margin-bottom:-10px;">
-                <div class="col-md-12" id="menu-div">
+                <div class="col-md-12" id="menu-div" v-cloak>
                     <table class="table table-bordered table-hover  table-condensed table-striped">
                         <thead>
                             <tr>
@@ -47,7 +54,7 @@
 <div class="modal fade" id="ModiyModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
 
-        <div class="modal-content">
+        <div class="modal-content" id="modifyMenuDiv">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">关闭</span></button>
                 <h4 class="modal-title" id="modeltitle">修改菜单</h4>
@@ -104,7 +111,7 @@
             <td>{{menu.id}}</td>
             <td>{{menu.name}}</td>
             <td>
-                <button class="btn btn-xs btn-primary" style="margin-bottom:-5px;margin-top:-5px;" data-toggle="modal" data-target="#ModiyModal" v-on:click="modifyMenu()">
+                <button  class="btn btn-xs btn-primary" style="margin-bottom:-5px;margin-top:-5px;" data-toggle="modal" data-target="#ModiyModal" v-on:click="modifyMenu()">
                     修改
                 </button>
                 <button class="btn btn-xs btn-danger" style="margin-bottom:-5px;margin-top:-5px;" v-on:click="deleteMenu()">
@@ -133,7 +140,7 @@
         function showModifyMenu(menu) {
             if (modiyMenuVue == null) {
                 modiyMenuVue = new Vue({
-                    el: "#modelbody",
+                    el: "#modifyMenuDiv",
                     data: {
                         oldMenu: menu
                     }
@@ -199,8 +206,8 @@
                     $.post("/addmenu", {
                         name: this.menuName
                     }, function (dataBack) {
-                        if (dataBack.result==0) {
-                            alert("添加失败，请确认与服务器连接！");
+                        if (dataBack.result == 0) {
+                            alert(dataBack.message);
                         }                      
                         window.location.href = "/menus";
                     });
