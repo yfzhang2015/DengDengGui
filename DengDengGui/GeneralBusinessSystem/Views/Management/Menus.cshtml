@@ -97,8 +97,8 @@
     </div>
 </div>
 
-
 @section scripts {
+
     <script type="text/x-template" id="menu-row-template">
         <tr v-bind:id="'tr_'+menu.id">
             <td>{{menu.id}}</td>
@@ -113,8 +113,8 @@
             </td>
         </tr>
     </script>
-
     <script>
+        //#region表格行组件
         Vue.component("menu-row", {
             props: ["menu"],
             template: '#menu-row-template',
@@ -127,7 +127,8 @@
                 }
             }
         })
-        //修改
+        //#endregion
+        //#region赋值修改数据
         var modiyMenuVue;
         function showModifyMenu(menu) {
             if (modiyMenuVue == null) {
@@ -142,7 +143,8 @@
                 modiyMenuVue.oldMenu = menu;
             }
         }
-        //保存修改
+        //#endregion
+        //#region保存修改
         function savaModify() {
             $.post("/modifymenu", {
                 id: modiyMenuVue.oldMenu.id,
@@ -154,8 +156,8 @@
                 $("#ModiyModal").modal('hide')
             });
         }
-
-        //查询全部主菜单
+        //#endregion
+        //#region查询全部主菜单
         $.get('/getmenus', {
         }, function (dataBack) {
             if (dataBack.result == 1) {
@@ -168,8 +170,8 @@
                 alert(dataBack.message);
             }
         })
-
-        //删除菜单
+        //#endregion
+        //#region删除菜单
         function deleteMenu(id) {
             if (confirm("你确定要删除ID为：" + id + "的记录吗？")) {
                 $.post("/deletemenu", {
@@ -185,8 +187,8 @@
                 });
             }
         }
-
-        //添加菜单
+        //#endregion
+        //#region 添加菜单       
         var addVue = new Vue({
             el: "#addMenuBody",
             data: {
@@ -204,7 +206,8 @@
                     });
                 }
             }
-        })      
+        })   
+        //#endregion
     </script>
 
 
