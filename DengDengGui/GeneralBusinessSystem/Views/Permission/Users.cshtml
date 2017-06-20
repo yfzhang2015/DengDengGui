@@ -10,7 +10,6 @@
             <h3 class="panel-title">用户管理</h3>
         </div>
         <div class="panel-body">
-
             <div class="row" style="margin-bottom:10px;">
                 <div class="col-md-7">
                 </div>
@@ -63,7 +62,7 @@
             <div class="modal-body" id="modelbody">
                 <div class="row" style="margin-top:10px;">
                     <div class="col-md-6">
-                        <input type="text" readonly class="form-control"  v-model="olduser.id" id="oldid" name="oldid" placeholder="编号">
+                        <input type="text" readonly class="form-control" v-model="olduser.id" id="oldid" name="oldid" placeholder="编号">
                     </div>
 
                     <div class="col-md-6">
@@ -72,10 +71,10 @@
                 </div>
                 <div class="row" style="margin-top:10px;">
                     <div class="col-md-6">
-                        <input type="text" class="form-control" v-model="olduser.username"  id="oldusername" name="oldusername" placeholder="用户名">
+                        <input type="text" class="form-control" v-model="olduser.username" id="oldusername" name="oldusername" placeholder="用户名">
                     </div>
                     <div class="col-md-6">
-                        <input type="text" class="form-control" v-model="olduser.password"  id="oldpassword" name="oldpassword" placeholder="密码">
+                        <input type="text" class="form-control" v-model="olduser.password" id="oldpassword" name="oldpassword" placeholder="密码">
                     </div>
                 </div>
             </div>
@@ -177,53 +176,110 @@
         //#endregion
         //#region保存修改
         function modify(user) {
-            console.log(user)
-            $.post("/modifyuser", user, function (dataBack) {
-                if (dataBack.result == 0) {
-                    layer.alert(dataBack.message, {
+            $.ajax({
+                type: 'PUT',
+                url: '/modifyuser',
+                data: user,
+                success: function (dataBack) {
+                    if (dataBack.result == 0) {
+                        layer.alert(dataBack.message, {
+                            icon: 2,
+                            skin: 'layer-ext-moon'
+                        })
+                    } else {
+                        $("#ModiyModal").modal('hide')
+                    }
+                },
+                error: function (error) {
+                    layer.alert(error.status + error.statusText, {
                         icon: 2,
                         skin: 'layer-ext-moon'
                     })
                 }
-                $("#ModiyModal").modal('hide')
             });
+
         }
         //#endregion
         //#region查询全部主菜单
-        $.get('/getusers', {
-        }, function (dataBack) {
-            if (dataBack.result == 1) {
-                new Vue({
-                    el: "#user-div",
-                    data: { users: dataBack.data }
-
-                })
-            } else {
-                alert(dataBack.message);
-            }
+        $(function () {
+            queryUser()
         })
+
+        var listVue;
+        function queryUser() {
+            $.ajax({
+                type: 'GET',
+                url: '/getusers',
+                data: {
+                    queryname: $("#queryname").val()
+                },
+                success: function (dataBack) {
+                    console.log(dataBack.data)
+                    if (dataBack.result == 1) {
+                        if (listVue == null) {
+                            listVue = new Vue({
+                                el: "#user-div",
+                                data: { users: dataBack.data },
+                                computed: {
+                                    newusers: function () {
+                                        return dataBack.data;
+                                    }
+                                }
+                            })
+                        } else {
+                            listVue.users = dataBack.data;
+                            console.log(listVue.users)
+                        }
+                    } else {
+                        layer.alert(dataBack.message, {
+                            icon: 2,
+                            skin: 'layer-ext-moon'
+                        })
+                    }
+                },
+                error: function (error) {
+                    layer.alert(error.status + error.statusText, {
+                        icon: 2,
+                        skin: 'layer-ext-moon'
+                    })
+                }
+            });
+        }
+
         //#endregion
         //#region删除菜单
         function remove(id) {
             layer.confirm('你确定要删除ID为：' + id + '的记录吗？', {
                 btn: ['确定', '取消'] //按钮
             }, function () {
-                $.post("/deleteuser", {
-                    id: id
-                }, function (dataBack) {
-                    if (dataBack.result == 1) {
-                        $("#tr_" + id).remove();
-                        layer.msg('删除成功！', {
-                            time: 2000
-                        });
-                    }
-                    else {
-                        layer.alert(dataBack.message, {
+                $.ajax({
+                    type: 'DELETE',
+                    url: '/deleteuser',
+                    data: {
+                        id: id
+                    },
+                    success: function (dataBack) {
+                        if (dataBack.result == 1) {
+                            queryUser();
+                            layer.msg('删除成功！', {
+                                time: 2000
+                            });
+                        }
+                        else {
+                            layer.alert(dataBack.message, {
+                                icon: 2,
+                                skin: 'layer-ext-moon'
+                            })
+                        }
+                    },
+                    error: function (error) {
+                        layer.alert(error.status + error.statusText, {
                             icon: 2,
                             skin: 'layer-ext-moon'
                         })
                     }
                 });
+
             }, function () {
                 //取消按钮
             });
@@ -237,14 +293,25 @@
             },
             methods: {
                 sava: function () {
-                    $.post("/adduser", this.user, function (dataBack) {
-                        if (dataBack.result == 0) {
-                            layer.alert(dataBack.message, {
+                    $.ajax({
+                        type: 'POST',
+                        url: '/adduser',
+                        data: this.user,
+                        success: function (dataBack) {
+                            if (dataBack.result == 0) {
+                                layer.alert(dataBack.message, {
+                                    icon: 2,
+                                    skin: 'layer-ext-moon'
+                                })
+                            } else {
+                                window.location.href = "/users";
+                            }
+                        },
+                        error: function (error) {
+                            layer.alert(error.status + error.statusText, {
                                 icon: 2,
                                 skin: 'layer-ext-moon'
                             })
-                        } else {
-                            window.location.href = "/users";
                         }
                     });
                 }

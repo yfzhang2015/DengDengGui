@@ -156,60 +156,97 @@
         }
         //#endregion
         //#region保存修改
-        function modify(oldMenu) {
-            $.post("/modifymenu", {
-                id: oldMenu.id,
-                name: oldMenu.name
-            }, function (dataBack) {
-                if (dataBack.result == 0) {
+        function modify(oldMenu) {  
+            $.ajax({
+                type: 'PUT',
+                url: '/modifymenu',
+                data: {
+                    id: oldMenu.id,
+                    name: oldMenu.name
+                },
+                success: function (dataBack) {
+                    if (dataBack.result == 0) {
+                        layer.alert(dataBack.message, {
+                            icon: 2,
+                            skin: 'layer-ext-moon'
+                        })
+                    } else {
+                        $("#ModiyModal").modal('hide')
+                    }
+                },
+                error: function (error) {
+                    layer.alert(error.status + error.statusText, {
+                        icon: 2,
+                        skin: 'layer-ext-moon'
+                    })
+                }
+            });
+
+        }
+        //#endregion
+        //#region查询全部主菜单 
+        $.ajax({
+            type: 'GET',
+            url: '/getmenus',
+            data: {              
+            },
+            success: function (dataBack) {
+                if (dataBack.result == 1) {
+                    new Vue({
+                        el: "#menu-div",
+                        data: { menus: dataBack.data }
+
+                    })
+                } else {
                     layer.alert(dataBack.message, {
                         icon: 2,
                         skin: 'layer-ext-moon'
                     })
-                } else {
-                    $("#ModiyModal").modal('hide')
                 }
-            });
-        }
-        //#endregion
-        //#region查询全部主菜单
-        $.get('/getmenus', {
-        }, function (dataBack) {
-            if (dataBack.result == 1) {
-                new Vue({
-                    el: "#menu-div",
-                    data: { menus: dataBack.data }
-
-                })
-            } else {
-                layer.alert(dataBack.message, {
+            },
+            error: function (error) {
+                layer.alert(error.status + error.statusText, {
                     icon: 2,
                     skin: 'layer-ext-moon'
                 })
             }
-        })
+        });
+
+
         //#endregion
         //#region删除菜单
         function remove(id) {
             layer.confirm('你确定要删除ID为：' + id + '的记录吗？', {
                 btn: ['确定', '取消'] //按钮
-            }, function () {
-                $.post("/deletemenu", {
-                    id: id
-                }, function (dataBack) {
-                    if (dataBack.result == 1) {
-                        $("#tr_" + id).remove();
-                        layer.msg('删除成功！', {
-                            time: 2000
-                        });
-                    }
-                    else {
-                        layer.alert(dataBack.message, {
+            }, function () {             
+                $.ajax({
+                    type: 'DELETE',
+                    url: '/deletemenu',
+                    data: {
+                        id: id
+                    },
+                    success: function (dataBack) {
+                        if (dataBack.result == 1) {
+                            $("#tr_" + id).remove();
+                            layer.msg('删除成功！', {
+                                time: 2000
+                            });
+                        }
+                        else {
+                            layer.alert(dataBack.message, {
+                                icon: 2,
+                                skin: 'layer-ext-moon'
+                            })
+                        }
+                    },
+                    error: function (error) {
+                        layer.alert(error.status + error.statusText, {
                             icon: 2,
                             skin: 'layer-ext-moon'
                         })
                     }
                 });
+
             }, function () {
                 //取消按钮
             });
@@ -222,20 +259,32 @@
                 menuName: ""
             },
             methods: {
-                sava: function () {
-                    $.post("/addmenu", {
-                        name: this.menuName
-                    }, function (dataBack) {
-                        if (dataBack.result == 0) {
-                            layer.alert(dataBack.message, {
+                sava: function () { 
+                    $.ajax({
+                        type: 'POST',
+                        url: '/addmenu',
+                        data: {
+                            name: this.menuName
+                        },
+                        success: function (dataBack) {
+                            if (dataBack.result == 0) {
+                                layer.alert(dataBack.message, {
+                                    icon: 2,
+                                    skin: 'layer-ext-moon'
+                                })
+                            }
+                            else {
+                                window.location.href = "/menus";
+                            }
+                        },
+                        error: function (error) {                
+                            layer.alert(error.status + error.statusText, {
                                 icon: 2,
                                 skin: 'layer-ext-moon'
                             })
                         }
-                        else {
-                            window.location.href = "/menus";
-                        }
                     });
+
                 }
             }
         })

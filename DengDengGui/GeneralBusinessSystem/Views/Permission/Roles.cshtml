@@ -139,7 +139,7 @@
                     },
                     methods: {
                         modify: function () {
-                            savaModify(this.oldRole);
+                            modify(this.oldRole);
                         }
                     }
                 })
@@ -150,10 +150,12 @@
         }
         //#endregion
         //#region保存修改
-        function savaModify(oldRole) {
-
-            $.post("/modifyrole",
-                oldRole, function (dataBack) {
+        function modify(oldRole) {
+            $.ajax({
+                type: 'PUT',
+                url: '/modifyrole',
+                data: oldRole,
+                success: function (dataBack) {
                     if (dataBack.result == 0) {
                         layer.alert(dataBack.message, {
                             icon: 2,
@@ -162,25 +164,45 @@
                     } else {
                         $("#ModiyModal").modal('hide')
                     }
-                });
+                },
+                error: function (error) {
+                    layer.alert(error.status + error.statusText, {
+                        icon: 2,
+                        skin: 'layer-ext-moon'
+                    })
+                }
+            });
+
         }
         //#endregion
         //#region查询全部角色
-        $.get('/getroles', {
-        }, function (dataBack) {
-            if (dataBack.result == 1) {
-                new Vue({
-                    el: "#role-div",
-                    data: { roles: dataBack.data }
+        $.ajax({
+            type: 'GET',
+            url: '/getroles',
+            data: {
+            },
+            success: function (dataBack) {
+                if (dataBack.result == 1) {
+                    new Vue({
+                        el: "#role-div",
+                        data: { roles: dataBack.data }
 
-                })
-            } else {
-                layer.alert(dataBack.message, {
+                    })
+                } else {
+                    layer.alert(dataBack.message, {
+                        icon: 2,
+                        skin: 'layer-ext-moon'
+                    })
+                }
+            },
+            error: function (error) {
+                layer.alert(error.status + error.statusText, {
                     icon: 2,
                     skin: 'layer-ext-moon'
                 })
             }
-        })
+        });
+
         //#endregion
         //#region删除角色
         function remove(id) {
@@ -188,22 +210,35 @@
             layer.confirm('你确定要删除ID为：' + id + '的记录吗？', {
                 btn: ['确定', '取消'] //按钮
             }, function () {
-                $.post("/deleterole", {
-                    id: id
-                }, function (dataBack) {
-                    if (dataBack.result == 1) {
-                        $("#tr_" + id).remove();
-                        layer.msg('删除成功！', {
-                            time: 2000
-                        });
-                    }
-                    else {
-                        layer.alert(dataBack.message, {
+                $.ajax({
+                    type: 'DELETE',
+                    url: '/deleterole',
+                    data: {
+                        id: id
+                    },
+                    success: function (dataBack) {
+                        if (dataBack.result == 1) {
+                            $("#tr_" + id).remove();
+                            layer.msg('删除成功！', {
+                                time: 2000
+                            });
+                        }
+                        else {
+                            layer.alert(dataBack.message, {
+                                icon: 2,
+                                skin: 'layer-ext-moon'
+                            })
+                        }
+                    },
+                    error: function (error) {
+                        layer.alert(error.status + error.statusText, {
                             icon: 2,
                             skin: 'layer-ext-moon'
                         })
                     }
                 });
+
+
             }, function () {
                 //取消按钮
             });
@@ -220,19 +255,30 @@
             },
             methods: {
                 sava: function () {
-                    console.log(this.roleName)
-                    $.post("/addrole", {
-                        name: this.roleName
-                    }, function (dataBack) {
-                        if (dataBack.result == 0) {
-                            layer.alert(dataBack.message, {
+                    $.ajax({
+                        type: 'POST',
+                        url: '/addrole',
+                        data: {
+                            name: this.roleName
+                        },
+                        success: function (dataBack) {
+                            if (dataBack.result == 0) {
+                                layer.alert(dataBack.message, {
+                                    icon: 2,
+                                    skin: 'layer-ext-moon'
+                                })
+                            } else {
+                                window.location.href = "/roles";
+                            }
+                        },
+                        error: function (error) {
+                            layer.alert(error.status + error.statusText, {
                                 icon: 2,
                                 skin: 'layer-ext-moon'
                             })
-                        } else {
-                            window.location.href = "/roles";
                         }
                     });
+
                 }
             }
         })

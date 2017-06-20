@@ -106,7 +106,7 @@ namespace GeneralBusinessSystem.Controllers
         /// <param name="id">ID</param>
         /// <param name="name">Ãû³Æ</param>
         /// <returns></returns>
-        [HttpPost("modifymenu")]
+        [HttpPut("modifymenu")]
         public IActionResult ModifyMenu(int id, string name)
         {
             try
@@ -125,7 +125,7 @@ namespace GeneralBusinessSystem.Controllers
         /// </summary>
         /// <param name="id">ID</param>
         /// <returns></returns>
-        [HttpPost("deletemenu")]
+        [HttpDelete("deletemenu")]
         public IActionResult DeleteRole(int id)
         {
             try

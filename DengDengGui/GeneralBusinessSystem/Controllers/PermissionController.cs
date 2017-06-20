@@ -94,15 +94,26 @@ namespace GeneralBusinessSystem.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet("getusers")]
-        public ActionResult GetUsers()
+        public ActionResult GetUsers(string queryName)
         {
             try
             {
-                var list = _permissionRepository.GetUsers();
-                return new JsonResult(new { result = 1, message = "查询全部用户成功", data = list }, new JsonSerializerSettings()
+                if (string.IsNullOrEmpty(queryName))
                 {
-                    ContractResolver = new LowercaseContractResolver()
-                });
+                    var list = _permissionRepository.GetUsers();
+                    return new JsonResult(new { result = 1, message = "查询全部用户成功", data = list }, new JsonSerializerSettings()
+                    {
+                        ContractResolver = new LowercaseContractResolver()
+                    });
+                }
+                else
+                {
+                    var list = _permissionRepository.GetUsers(queryName);
+                    return new JsonResult(new { result = 1, message = $"按{queryName}查询用户成功", data = list }, new JsonSerializerSettings()
+                    {
+                        ContractResolver = new LowercaseContractResolver()
+                    });
+                }
             }
             catch (Exception exc)
             {
@@ -110,28 +121,7 @@ namespace GeneralBusinessSystem.Controllers
                 return new JsonResult(new { result = 0, message = $"查询全部用户：{exc.Message}" });
             }
         }
-        /// <summary>
-        /// 查询用户
-        /// </summary>
-        /// <param name="queryName">查询名称</param>
-        /// <returns></returns>
-        [HttpGet("queryusers")]
-        public ActionResult QueryUser(string queryName)
-        {
-            try
-            {
-                var list = _permissionRepository.GetUsers(queryName);
-                return new JsonResult(new { result = 1, message = $"按{queryName}查询用户成功", data = list }, new JsonSerializerSettings()
-                {
-                    ContractResolver = new LowercaseContractResolver()
-                });
-            }
-            catch (Exception exc)
-            {
-                _log.Log(NLog.LogLevel.Error, $"按{queryName}查询用户：{exc.Message}");
-                return new JsonResult(new { result = 0, message = $"按{queryName}查询用户：{exc.Message}" });
-            }
-        }
+
         /// <summary>
         /// 添加用户
         /// </summary>
@@ -163,7 +153,7 @@ namespace GeneralBusinessSystem.Controllers
         /// <param name="password">密码</param>
         /// <param name="name">名称</param>
         /// <returns></returns>
-        [HttpPost("modifyuser")]
+        [HttpPut("modifyuser")]
         public IActionResult UserModify(int ID, string userName, string password, string name)
         {
             try
@@ -182,7 +172,7 @@ namespace GeneralBusinessSystem.Controllers
         /// </summary>
         /// <param name="ID"></param>
         /// <returns></returns>
-        [HttpPost("deleteuser")]
+        [HttpDelete("deleteuser")]
         public IActionResult UserDelete(int ID)
         {
 
@@ -257,7 +247,7 @@ namespace GeneralBusinessSystem.Controllers
         /// <param name="id">ID</param>
         /// <param name="rolename">角色名称</param>
         /// <returns></returns>
-        [HttpPost("modifyrole")]
+        [HttpPut("modifyrole")]
         public IActionResult ModifyRole(int id, string name)
         {
             try
@@ -276,7 +266,7 @@ namespace GeneralBusinessSystem.Controllers
         /// </summary>
         /// <param name="id">ID</param>
         /// <returns></returns>
-        [HttpPost("deleterole")]
+        [HttpDelete("deleterole")]
         public IActionResult DeleteRole(int id)
         {
             try
