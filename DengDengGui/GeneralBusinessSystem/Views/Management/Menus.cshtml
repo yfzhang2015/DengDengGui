@@ -5,8 +5,7 @@
 }
 @section css{
     <style>
-
-       [v-cloak] {
+        [v-cloak] {
             display: none;
         }
     </style>
@@ -54,7 +53,7 @@
 <div class="modal fade" id="ModiyModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
 
-        <div class="modal-content" id="modifyMenuDiv">
+        <div class="modal-content" id="modifyBody">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">关闭</span></button>
                 <h4 class="modal-title" id="modeltitle">修改菜单</h4>
@@ -71,7 +70,7 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button class="btn btn-success" v-on:click="savaModify">
+                <button class="btn btn-success" v-on:click="modify">
                     保存
                 </button>
                 <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
@@ -82,7 +81,7 @@
 
 <div class="modal fade" id="AddModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
-        <div class="modal-content"  id="addMenuBody">
+        <div class="modal-content" id="addBody">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">关闭</span></button>
                 <h4 class="modal-title" id="modeltitle">添加菜单</h4>
@@ -90,12 +89,12 @@
             <div class="modal-body">
                 <div class="row" style="margin-top:10px;">
                     <div class="col-md-12">
-                        <input type="text" class="form-control"  v-model="menuName" placeholder="菜单">
+                        <input type="text" class="form-control" v-model="menuName" placeholder="菜单">
                     </div>
                 </div>
             </div>
             <div class="modal-footer">
-                <button class="btn btn-success" v-on:click="savaMenu">
+                <button class="btn btn-success" v-on:click="sava">
                     保存
                 </button>
                 <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
@@ -111,10 +110,10 @@
             <td>{{menu.id}}</td>
             <td>{{menu.name}}</td>
             <td>
-                <button  class="btn btn-xs btn-primary" style="margin-bottom:-5px;margin-top:-5px;" data-toggle="modal" data-target="#ModiyModal" v-on:click="modifyMenu()">
+                <button class="btn btn-xs btn-primary" style="margin-bottom:-5px;margin-top:-5px;" data-toggle="modal" data-target="#ModiyModal" v-on:click="modify">
                     修改
                 </button>
-                <button class="btn btn-xs btn-danger" style="margin-bottom:-5px;margin-top:-5px;" v-on:click="deleteMenu()">
+                <button class="btn btn-xs btn-danger" style="margin-bottom:-5px;margin-top:-5px;" v-on:click="remove">
                     删除
                 </button>
             </td>
@@ -126,27 +125,27 @@
             props: ["menu"],
             template: '#menu-row-template',
             methods: {
-                modifyMenu: function () {
-                    showModifyMenu(this.menu)
+                modify: function () {
+                    showModify(this.menu)
                 },
-                deleteMenu: function () {
-                    deleteMenu(this.menu.id);
+                remove: function () {
+                    remove(this.menu.id);
                 }
             }
         })
         //#endregion
         //#region赋值修改数据
-        var modiyMenuVue;
-        function showModifyMenu(menu) {
-            if (modiyMenuVue == null) {
-                modiyMenuVue = new Vue({
-                    el: "#modifyMenuDiv",
+        var modiyVue;
+        function showModify(menu) {
+            if (modiyVue == null) {
+                modiyVue = new Vue({
+                    el: "#modifyBody",
                     data: {
                         oldMenu: menu
                     },
                     methods: {
-                        savaModify: function () {
-                            savaModify(this.oldMenu);
+                        modify: function () {
+                            modify(this.oldMenu);
                         }
                     }
                 })
@@ -157,15 +156,19 @@
         }
         //#endregion
         //#region保存修改
-        function savaModify(oldMenu) {
+        function modify(oldMenu) {
             $.post("/modifymenu", {
                 id: oldMenu.id,
                 name: oldMenu.name
             }, function (dataBack) {
                 if (dataBack.result == 0) {
-                    alert(dataBack.message);
-                }                
-                $("#ModiyModal").modal('hide')
+                    layer.alert(dataBack.message, {
+                        icon: 2,
+                        skin: 'layer-ext-moon'
+                    })
+                } else {
+                    $("#ModiyModal").modal('hide')
+                }
             });
         }
         //#endregion
@@ -179,46 +182,63 @@
 
                 })
             } else {
-                alert(dataBack.message);
+                layer.alert(dataBack.message, {
+                    icon: 2,
+                    skin: 'layer-ext-moon'
+                })
             }
         })
         //#endregion
         //#region删除菜单
-        function deleteMenu(id) {
-            if (confirm("你确定要删除ID为：" + id + "的记录吗？")) {
+        function remove(id) {
+            layer.confirm('你确定要删除ID为：' + id + '的记录吗？', {
+                btn: ['确定', '取消'] //按钮
+            }, function () {
                 $.post("/deletemenu", {
                     id: id
                 }, function (dataBack) {
-                    if (dataBack.result==1) {
-                        $("#tr_" + id).remove();l
+                    if (dataBack.result == 1) {
+                        $("#tr_" + id).remove();
+                        layer.msg('删除成功！', {
+                            time: 2000
+                        });
                     }
                     else {
-                        alert(dataBack.message);
+                        layer.alert(dataBack.message, {
+                            icon: 2,
+                            skin: 'layer-ext-moon'
+                        })
                     }
-                    $("#ModiyModal").modal('hide')
                 });
-            }
+            }, function () {
+                //取消按钮
+            });
         }
         //#endregion
-        //#region 添加菜单       
+        //#region 添加菜单
         var addVue = new Vue({
-            el: "#addMenuBody",
+            el: "#addBody",
             data: {
                 menuName: ""
             },
             methods: {
-                savaMenu: function () {               
+                sava: function () {
                     $.post("/addmenu", {
                         name: this.menuName
                     }, function (dataBack) {
                         if (dataBack.result == 0) {
-                            alert(dataBack.message);
-                        }                      
-                        window.location.href = "/menus";
+                            layer.alert(dataBack.message, {
+                                icon: 2,
+                                skin: 'layer-ext-moon'
+                            })
+                        }
+                        else {
+                            window.location.href = "/menus";
+                        }
                     });
                 }
             }
-        })   
+        })
         //#endregion
     </script>
 

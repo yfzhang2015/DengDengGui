@@ -30,7 +30,7 @@
                 </div>
             </div>
             <div class="row" style="margin-bottom:-10px;">
-                <div class="col-md-12">
+                <div class="col-md-12" id="user-div">
                     <table class="table table-bordered table-hover  table-condensed table-striped">
                         <thead>
                             <tr>
@@ -41,7 +41,9 @@
                                 <th style="width:94px">操作</th>
                             </tr>
                         </thead>
-                        <tbody id="tbdata"></tbody>
+                        <tbody id="tbdata">
+                            <tr is="user-row" v-for="user in users" v-bind:user="user"></tr>
+                        </tbody>
                     </table>
                 </div>
             </div>
@@ -53,7 +55,7 @@
 <div class="modal fade" id="ModiyModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         bzsm
-        <div class="modal-content">
+        <div class="modal-content" id="modifyBody">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">关闭</span></button>
                 <h4 class="modal-title" id="modeltitle">修改子类型</h4>
@@ -61,24 +63,24 @@
             <div class="modal-body" id="modelbody">
                 <div class="row" style="margin-top:10px;">
                     <div class="col-md-6">
-                        <input type="text" readonly class="form-control" id="oldid" name="oldid" placeholder="编号">
+                        <input type="text" readonly class="form-control"  v-model="olduser.id" id="oldid" name="oldid" placeholder="编号">
                     </div>
 
                     <div class="col-md-6">
-                        <input type="text" class="form-control" id="oldname" name="oldname" placeholder="名称">
+                        <input type="text" class="form-control" v-model="olduser.name" id="oldname" name="oldname" placeholder="名称">
                     </div>
                 </div>
                 <div class="row" style="margin-top:10px;">
                     <div class="col-md-6">
-                        <input type="text" class="form-control" id="oldusername" name="oldusername" placeholder="用户名">
+                        <input type="text" class="form-control" v-model="olduser.username"  id="oldusername" name="oldusername" placeholder="用户名">
                     </div>
                     <div class="col-md-6">
-                        <input type="text" class="form-control" id="oldpassword" name="oldpassword" placeholder="密码">
+                        <input type="text" class="form-control" v-model="olduser.password"  id="oldpassword" name="oldpassword" placeholder="密码">
                     </div>
                 </div>
             </div>
             <div class="modal-footer">
-                <button class="btn btn-success" onclick="savaModify()">
+                <button class="btn btn-success" v-on:click="modify">
                     保存
                 </button>
                 <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
@@ -89,7 +91,7 @@
 
 <div class="modal fade" id="AddModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
-        <div class="modal-content">
+        <div class="modal-content" id="addBody">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">关闭</span></button>
                 <h4 class="modal-title" id="modeltitle">添加用户</h4>
@@ -97,26 +99,20 @@
             <div class="modal-body" id="modelbody">
                 <div class="row" style="margin-top:10px;">
                     <div class="col-md-6">
-                        <input type="text" class="form-control" id="username" name="username" placeholder="用户名">
+                        <input type="text" class="form-control" v-model="user.username" id="username" name="username" placeholder="用户名">
                     </div>
                     <div class="col-md-6">
-                        <input type="password" class="form-control" id="password" name="password" placeholder="密码">
+                        <input type="password" class="form-control" v-model="user.password" id="password" name="password" placeholder="密码">
                     </div>
                 </div>
                 <div class="row" style="margin-top:10px;">
                     <div class="col-md-6">
-
-                        <input type="text" class="form-control" id="name" name="name" placeholder="名称">
+                        <input type="text" class="form-control" v-model="user.name" id="name" name="name" placeholder="名称">
                     </div>
-
                 </div>
-
-
             </div>
-
-
             <div class="modal-footer">
-                <button class="btn btn-success" onclick="sava()">
+                <button class="btn btn-success" v-on:click="sava">
                     保存
                 </button>
                 <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
@@ -127,125 +123,134 @@
 
 
 @section scripts {
-
+    <script type="text/x-template" id="user-row-template">
+        <tr v-bind:id="'tr_'+user.id">
+            <td>{{user.id}}</td>
+            <td>{{user.username}}</td>
+            <td>******</td>
+            <td>{{user.name}}</td>
+            <td>
+                <button class="btn btn-xs btn-primary" style="margin-bottom:-5px;margin-top:-5px;" data-toggle="modal" data-target="#ModiyModal" v-on:click="modify">
+                    修改
+                </button>
+                <button class="btn btn-xs btn-danger" style="margin-bottom:-5px;margin-top:-5px;" v-on:click="remove">
+                    删除
+                </button>
+            </td>
+        </tr>
+    </script>
     <script>
-
-        $(function () {
-
-            getUsers();
+        //#region表格行组件
+        Vue.component("user-row", {
+            props: ["user"],
+            template: '#user-row-template',
+            methods: {
+                modify: function () {
+                    showModify(this.user)
+                },
+                remove: function () {
+                    remove(this.user.id);
+                }
+            }
         })
-        function getUsers() {
-            $("#tbdata").html('');
-            $.get('/getusers', {
-            }, function (dataBack) {         
-                var tbhtml = '';              
-                $(dataBack.data).each(function (index, ele) {
-                    tbhtml += '<tr id="tr_' + ele.id + '" > \
-                         <td>'+ ele.id + '</td> \
-                            <td>'+ ele.username + '</td> \
-                            <td>******</td> \
-                            <td>'+ ele.name + '</td> \
-                            <td> \
-                                <button class="btn btn-xs btn-primary" style="margin-bottom:-5px;margin-top:-5px;" data-toggle="modal" data-target="#ModiyModal" onclick="modifyUser('+ ele.id + ',\'' + ele.username + '\',\'' + ele.password + '\',\'' + ele.name + '\')"> \
-                                    修改 \
-                                        </button> \
-                                <button class="btn btn-xs btn-danger" style="margin-bottom:-5px;margin-top:-5px;" onclick="deleteUser('+ ele.id + ')"> \
-                                    删除 \
-                                        </button>\
-                            </td>\
-                                </tr >'
+        //#endregion
+        //#region赋值修改数据
+        var modiyVue;
+        function showModify(user) {
+            if (modiyVue == null) {
+                modiyVue = new Vue({
+                    el: "#modifyBody",
+                    data: {
+                        olduser: user
+                    },
+                    methods: {
+                        modify: function () {
+                            modify(this.olduser);
+                        }
+                    }
+                })
+            }
+            else {
+                modiyVue.olduser = user;
+            }
+        }
+        //#endregion
+        //#region保存修改
+        function modify(user) {
+            console.log(user)
+            $.post("/modifyuser", user, function (dataBack) {
+                if (dataBack.result == 0) {
+                    layer.alert(dataBack.message, {
+                        icon: 2,
+                        skin: 'layer-ext-moon'
+                    })
+                }
+                $("#ModiyModal").modal('hide')
+            });
+        }
+        //#endregion
+        //#region查询全部主菜单
+        $.get('/getusers', {
+        }, function (dataBack) {
+            if (dataBack.result == 1) {
+                new Vue({
+                    el: "#user-div",
+                    data: { users: dataBack.data }
 
                 })
-                $("#tbdata").html(tbhtml);
-            })
-
-        }
-        function queryUser() {
-            $("#tbdata").html('');
-            $.get('/queryusers', {
-                queryName: $('#queryname').val()
-            }, function (dataBack) {
-                var tbhtml = '';
-                $(dataBack.data).each(function (index, ele) {
-                    tbhtml += '<tr id="tr_' + ele.id + '" > \
-                         <td>'+ ele.id + '</td> \
-                            <td>'+ ele.username + '</td> \
-                            <td>******</td> \
-                            <td>'+ ele.name + '</td> \
-                            <td> \
-                                <button class="btn btn-xs btn-primary" style="margin-bottom:-5px;margin-top:-5px;" data-toggle="modal" data-target="#ModiyModal" onclick="modifyUser('+ ele.id + ',\'' + ele.username + '\',\'' + ele.password + '\',\'' + ele.name + '\')"> \
-                                    修改 \
-                                        </button> \
-                                <button class="btn btn-xs btn-danger" style="margin-bottom:-5px;margin-top:-5px;" onclick="deleteUser('+ ele.id + ')"> \
-                                    删除 \
-                                        </button>\
-                            </td>\
-                                </tr >'
-
-                })
-                $("#tbdata").html(tbhtml);
-            })
-
-        }
-        function deleteUser(id) {
-            if (confirm("你确定要删除ID为：" + id + "的记录吗？")) {
+            } else {
+                alert(dataBack.message);
+            }
+        })
+        //#endregion
+        //#region删除菜单
+        function remove(id) {
+            layer.confirm('你确定要删除ID为：' + id + '的记录吗？', {
+                btn: ['确定', '取消'] //按钮
+            }, function () {
                 $.post("/deleteuser", {
                     id: id
                 }, function (dataBack) {
-
-                    if (dataBack.result==1) {
+                    if (dataBack.result == 1) {
                         $("#tr_" + id).remove();
+                        layer.msg('删除成功！', {
+                            time: 2000
+                        });
                     }
                     else {
-                        alert(dataBack.message);
+                        layer.alert(dataBack.message, {
+                            icon: 2,
+                            skin: 'layer-ext-moon'
+                        })
                     }
-                    var str = "/Users";
-                    window.location.href = str;
                 });
+            }, function () {
+                //取消按钮
+            });
+        }
+        //#endregion
+        //#region 添加菜单
+        var addVue = new Vue({
+            el: "#addBody",
+            data: {
+                user: { username: "", password: "", name: "" }
+            },
+            methods: {
+                sava: function () {
+                    $.post("/adduser", this.user, function (dataBack) {
+                        if (dataBack.result == 0) {
+                            layer.alert(dataBack.message, {
+                                icon: 2,
+                                skin: 'layer-ext-moon'
+                            })
+                        } else {
+                            window.location.href = "/users";
+                        }
+                    });
+                }
             }
-        }
-
-        function modifyUser(id, username, password, name) {
-            console.log(id)
-            $("#oldid").val(id);
-            $("#oldusername").val(username);
-            $("#oldpassword").val(password);
-            $("#oldname").val(name);
-        }
-
-        function savaModify() {
-            $.post("/modifyuser", {
-                ID: $("#oldid").val(),
-                UserName: $("#oldusername").val(),
-                Password: $("#oldpassword").val(),
-                Name: $("#oldname").val(),
-
-            }, function (dataBack) {
-                if (dataBack.result != 1) {
-                    alert(dataBack.message);
-                }
-                var str = "/Users";
-                window.location.href = str;
-            });
-        }
-
-        function sava() {
-            $.post("/adduser", {
-                ID: $("#id").val(),
-                UserName: $("#username").val(),
-                Password: $("#password").val(),
-                Name: $("#name").val(),
-
-
-            }, function (dataBack) {
-                if (dataBack.result!=1) {
-                    alert(dataBack.message);
-                }
-                var str = "/Users";
-                window.location.href = str;
-            });
-        }
-
-
+        })
+        //#endregion
     </script>
+
 }

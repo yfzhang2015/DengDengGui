@@ -47,7 +47,7 @@
 <div class="modal fade" id="ModiyModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         bzsm
-        <div class="modal-content" id="modifyRoleDiv">
+        <div class="modal-content" id="modifyBody">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">关闭</span></button>
                 <h4 class="modal-title" id="modeltitle">修改角色</h4>
@@ -59,12 +59,12 @@
                     </div>
 
                     <div class="col-md-6">
-                        <input type="text" class="form-control" id="oldrolename" v-model="oldRole.name"  name="oldrolename" placeholder="角色">
+                        <input type="text" class="form-control" id="oldrolename" v-model="oldRole.name" name="oldrolename" placeholder="角色">
                     </div>
                 </div>
             </div>
             <div class="modal-footer">
-                <button class="btn btn-success" v-on:click="savaModify">
+                <button class="btn btn-success" v-on:click="modify">
                     保存
                 </button>
                 <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
@@ -75,7 +75,7 @@
 
 <div class="modal fade" id="AddModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
-        <div class="modal-content" id="addRoleBody">
+        <div class="modal-content" id="addBody">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">关闭</span></button>
                 <h4 class="modal-title" id="modeltitle">添加角色</h4>
@@ -83,12 +83,12 @@
             <div class="modal-body" id="modelbody">
                 <div class="row" style="margin-top:10px;">
                     <div class="col-md-12">
-                        <input type="text" class="form-control"  v-model="roleName" id="rolename" name="rolename" placeholder="角色">
+                        <input type="text" class="form-control" v-model="roleName" id="rolename" name="rolename" placeholder="角色">
                     </div>
                 </div>
             </div>
             <div class="modal-footer">
-                <button class="btn btn-success"  v-on:click="savaRole">
+                <button class="btn btn-success" v-on:click="sava">
                     保存
                 </button>
                 <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
@@ -104,10 +104,10 @@
             <td>{{role.id}}</td>
             <td>{{role.name}}</td>
             <td>
-                <button class="btn btn-xs btn-primary" style="margin-bottom:-5px;margin-top:-5px;" data-toggle="modal" data-target="#ModiyModal" v-on:click="modifyRole()">
+                <button class="btn btn-xs btn-primary" style="margin-bottom:-5px;margin-top:-5px;" data-toggle="modal" data-target="#ModiyModal" v-on:click="modify">
                     修改
                 </button>
-                <button class="btn btn-xs btn-danger" style="margin-bottom:-5px;margin-top:-5px;" v-on:click="deleteRole()">
+                <button class="btn btn-xs btn-danger" style="margin-bottom:-5px;margin-top:-5px;" v-on:click="remove">
                     删除
                 </button>
             </td>
@@ -119,46 +119,50 @@
             props: ["role"],
             template: '#role-row-template',
             methods: {
-                modifyRole: function () {
-                    showModifyRole(this.role)
+                modify: function () {
+                    showModify(this.role)
                 },
-                deleteRole: function () {
-                    deleteRole(this.role.id);
+                remove: function () {
+                    remove(this.role.id);
                 }
             }
         })
         //#endregion
         //#region赋值修改数据
-        var modiyRoleVue;
-        function showModifyRole(role) {
-            if (modiyRoleVue == null) {
-                modiyRoleVue = new Vue({
-                    el: "#modifyRoleDiv",
+        var modiyVue;
+        function showModify(role) {
+            if (modiyVue == null) {
+                modiyVue = new Vue({
+                    el: "#modifyBody",
                     data: {
                         oldRole: role
                     },
                     methods: {
-                        savaModify: function () {
+                        modify: function () {
                             savaModify(this.oldRole);
                         }
                     }
                 })
             }
             else {
-                modiyRoleVue.oldRole = role;
+                modiyVue.oldRole = role;
             }
         }
         //#endregion
         //#region保存修改
         function savaModify(oldRole) {
-       
-            $.post("/modifyrole", 
+
+            $.post("/modifyrole",
                 oldRole, function (dataBack) {
-                if (dataBack.result == 0) {
-                    alert(dataBack.message);
-                }
-                $("#ModiyModal").modal('hide')
-            });
+                    if (dataBack.result == 0) {
+                        layer.alert(dataBack.message, {
+                            icon: 2,
+                            skin: 'layer-ext-moon'
+                        })
+                    } else {
+                        $("#ModiyModal").modal('hide')
+                    }
+                });
         }
         //#endregion
         //#region查询全部角色
@@ -171,130 +175,67 @@
 
                 })
             } else {
-                alert(dataBack.message);
+                layer.alert(dataBack.message, {
+                    icon: 2,
+                    skin: 'layer-ext-moon'
+                })
             }
         })
         //#endregion
         //#region删除角色
-        function deleteRole(id) {
-            if (confirm("你确定要删除ID为：" + id + "的记录吗？")) {
+        function remove(id) {
+
+            layer.confirm('你确定要删除ID为：' + id + '的记录吗？', {
+                btn: ['确定', '取消'] //按钮
+            }, function () {
                 $.post("/deleterole", {
                     id: id
                 }, function (dataBack) {
                     if (dataBack.result == 1) {
-                        $("#tr_" + id).remove(); l
+                        $("#tr_" + id).remove();
+                        layer.msg('删除成功！', {
+                            time: 2000
+                        });
                     }
                     else {
-                        alert(dataBack.message);
+                        layer.alert(dataBack.message, {
+                            icon: 2,
+                            skin: 'layer-ext-moon'
+                        })
                     }
-                    $("#ModiyModal").modal('hide')
                 });
-            }
+            }, function () {
+                //取消按钮
+            });
+
+
+
         }
-        //#endregion 
+        //#endregion
         //#region添加角色
         var addVue = new Vue({
-            el: "#addRoleBody",
+            el: "#addBody",
             data: {
                 roleName: ""
             },
             methods: {
-                savaRole: function () {
+                sava: function () {
+                    console.log(this.roleName)
                     $.post("/addrole", {
                         name: this.roleName
                     }, function (dataBack) {
                         if (dataBack.result == 0) {
-                            alert(dataBack.message);
+                            layer.alert(dataBack.message, {
+                                icon: 2,
+                                skin: 'layer-ext-moon'
+                            })
+                        } else {
+                            window.location.href = "/roles";
                         }
-                        window.location.href = "/roles";
                     });
                 }
             }
         })
         //#endregion
-    </script>
-    <script>
-        //$(function () {
-
-        //    getRoles();
-        //})
-        //function getRoles() {
-        //    $("#tbdata").html('');
-        //    $.get('/getroles', {
-        //    }, function (dataBack) {
-        //        var tbhtml = '';
-        //        if (dataBack.result == 1) {
-        //            $(dataBack.data).each(function (index, ele) {
-        //                tbhtml += '<tr id="tr_' + ele.id + '" > \
-        //                 <td>'+ ele.id + '</td> \
-        //                  <td>'+ ele.name + '</td> \
-        //                  <td> \
-        //                  <button class="btn btn-xs btn-primary" style="margin-bottom:-5px;margin-top:-5px;" data-toggle="modal" data-target="#ModiyModal" onclick="modifyRole('+ ele.id + ',\'' + ele.name + '\')"> \
-        //                   修改 \
-        //                   </button> \
-        //                   <button class="btn btn-xs btn-danger" style="margin-bottom:-5px;margin-top:-5px;" onclick="deleteRole('+ ele.id + ')"> \
-        //                      删除 \
-        //                     </button>\
-        //                    </td>\
-        //                   </tr>'
-        //            })
-        //            $("#tbdata").html(tbhtml);
-        //        }
-        //        else {
-        //            alert(dataBack.message);
-        //        }
-        //    })
-
-        //}
-        ////删除角色
-        //function deleteRole(id) {
-        //    if (confirm("你确定要删除ID为：" + id + "的记录吗？")) {
-        //        $.post("/deleterole", {
-        //            id: id
-        //        }, function (dataBack) {
-
-        //            if (dataBack.result == 1) {
-        //                $("#tr_" + id).remove();
-        //            }
-        //            else {
-        //                alert(dataBack.message);
-        //            }
-        //        });
-        //    }
-        //}
-        ////修改角色
-        //function modifyRole(id, oldrolename) {
-        //    $("#oldid").val(id);
-        //    $("#oldrolename").val(oldrolename);
-
-        //}
-        ////保存修改
-        //function savaModify() {
-        //    $.post("/modifyrole", {
-        //        id: $("#oldid").val(),
-        //        rolename: $("#oldrolename").val()
-        //    }, function (dataBack) {
-        //        if (dataBack.result != 1) {
-        //            alert(dataBack.message);
-        //        }
-        //        var str = "/roles";
-        //        window.location.href = str;
-        //    });
-        //}
-        ////添加
-        //function sava() {
-        //    $.post("/addrole", {
-        //        rolename: $("#rolename").val(),
-        //        id: $("#id").val()
-        //    }, function (dataBack) {
-        //        if (dataBack.result != 1) {
-        //            alert(dataBack.message);
-        //        }
-        //        var str = "/roles";
-        //        window.location.href = str;
-        //    });
-        //}
-
-
     </script>
 }

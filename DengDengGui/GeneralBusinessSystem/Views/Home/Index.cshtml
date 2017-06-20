@@ -2,8 +2,9 @@
     ViewData["Title"] = "主页";
 }
 @section css{
+  
     @*<link href="~/lib/bootstrap-datetimepicker/css/bootstrap-datetimepicker.css" rel="stylesheet" />*@
-    @*<link href="~/lib/sweetalert/dist/sweetalert.css" rel="stylesheet" />*@
+    <link href="~/lib/sweetalert/dist/sweetalert.css" rel="stylesheet" />
     @*<style>
             .autocomplete-suggestions {
                 border: 1px solid #999;
@@ -71,6 +72,7 @@
         </div>
         <div class="col-md-6">
             <button onclick="ShowMessage()">测试</button>
+            <button onclick="Show()">测试</button>
         </div>
     </div>
 </div>
@@ -78,13 +80,33 @@
 
 
 @section Scripts{
+
+    <script src="~/lib/layui-v1.0.9_rls/layui/lay/dest/layui.all.js"></script>
     @*<script src="~/lib/bootstrap-datetimepicker/js/bootstrap-datetimepicker.js"></script>
         <script src="~/lib/bootstrap-datetimepicker/js/locales/bootstrap-datetimepicker.zh-CN.js"></script>*@
     <script src="~/js/PrototypeExtensions.js"></script>
     <script src="~/js/ControlFactory.js"></script>
-    @*<script src="~/lib/devbridge-autocomplete/dist/jquery.autocomplete.js"></script>
-        <script src="~/lib/sweetalert/dist/sweetalert.min.js"></script>*@
+    @*<script src="~/lib/devbridge-autocomplete/dist/jquery.autocomplete.js"></script>*@
+    <script src="~/lib/sweetalert/dist/sweetalert.min.js"></script>
     <script type="text/javascript">
+        function Show() {
+            layer.alert('内容您是如何看待前端开发您是如何看待前端开发您是如何看待前端开发您是如何看待前端开发您是如何看待前端开发您是如何看待前端开发您是如何看待前端开发您是如何看待前端开发您是如何看待前端开发您是如何看待前端开发您是如何看待前端开发您是如何看待前端开发您是如何看待前端开发您是如何看待前端开发您是如何看待前端开发您是如何看待前端开发', {
+                icon: 2,
+                skin: 'layer-ext-moon' //该皮肤由layer.seaning.com友情扩展。关于皮肤的扩展规则，去这里查阅
+            })
+
+            //layer.confirm('您是如何看待前端开发您是如何看待前端开发您是如何看待前端开发您是如何看待前端开发您是如何看待前端开发您是如何看待前端开发您是如何看待前端开发您是如何看待前端开发您是如何看待前端开发您是如何看待前端开发您是如何看待前端开发您是如何看待前端开发您是如何看待前端开发您是如何看待前端开发您是如何看待前端开发您是如何看待前端开发您是如何看待前端开发您是如何看待前端开发您是如何看待前端开发您是如何看待前端开发您是如何看待前端开发？', {
+            //    btn: ['重要', '奇葩'] //按钮
+            //}, function () {
+            //    layer.msg('的确很重要', { icon: 1 });
+            //}, function () {
+            //    layer.msg('也可以这样', {
+            //        time: 20000, //20s后自动关闭
+            //        btn: ['明白了', '知道了']
+            //    });
+            //});
+        }
+
         $("#ttt").html(CreateDateTime());
 
         /**
@@ -133,24 +155,23 @@
         /*
         弹框
         */
-        //function ShowMessage()
-        //{
-        //    swal({
-        //        title: "标题",
-        //        text: "这是一个内容提示!",
-        //        type: "warning",
-        //        showCancelButton: true,
-        //        cancelButtonText: "取消",
-        //        confirmButtonColor: "#DD6B55",
-        //        confirmButtonText: "确定",
-        //        closeOnConfirm: false,
-        //        html: false
-        //    }, function () {
-        //        console.log("确定")
-        //        swal("Deleted!", "你选了确定", "success");
-        //    });
+        function ShowMessage() {
+            swal({
+                title: "标题",
+                text: "这是一个内容提示!",
+                type: "warning",
+                showCancelButton: true,
+                cancelButtonText: "取消",
+                confirmButtonColor: "#DD6B55",
+                confirmButtonText: "确定",
+                closeOnConfirm: false,
+                html: false
+            }, function () {
+                console.log("确定")
+                swal("Deleted!", "你选了确定", "success");
+            });
 
-        //}
+        }
     </script>
     <script>
 

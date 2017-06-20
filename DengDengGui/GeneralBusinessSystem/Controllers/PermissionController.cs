@@ -144,7 +144,8 @@ namespace GeneralBusinessSystem.Controllers
         {
             try
             {
-                _permissionRepository.AddUser(userName, password, name, CompanyID);
+                // _permissionRepository.AddUser(userName, password, name, CompanyID);
+                _permissionRepository.AddUser(userName, password, name, 1);
                 return new JsonResult(new { result = 1, message = "添加用户成功" });
             }
             catch (Exception exc)
@@ -240,8 +241,8 @@ namespace GeneralBusinessSystem.Controllers
         {
             try
             {
-                _permissionRepository.AddRole(name, CompanyID);
-                //_permissionRepository.AddRole(name, 1);
+                //_permissionRepository.AddRole(name, CompanyID);
+                _permissionRepository.AddRole(name, 1);
                 return new JsonResult(new { result = 1, message = "添加角色成功" });
             }
             catch (Exception exc)
