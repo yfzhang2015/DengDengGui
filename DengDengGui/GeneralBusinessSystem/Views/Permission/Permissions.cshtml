@@ -23,7 +23,7 @@
             </div>
             <div class="panel-body" style="padding:0px;">
                 <div class="" style="width:95px;">
-                    <textarea id="actiondescription" type="text" placeholder="权限描述" class="form-control" style="width:100%;" rows="8"></textarea>
+                    <textarea id="actiondescription" type="text" placeholder="权限描述" class="form-control" style="width:100%;" rows="16"></textarea>
                     <button class="btn btn-success" onclick="selectOne()" style="width:100%;margin-top:5px">单项添加</button>
                 </div>
             </div>
@@ -35,7 +35,7 @@
 
                 <b style="font-size:1.3em">权限表action</b>
             </div>
-            <div class="panel-body" style="padding:1px;">
+            <div class="panel-body" style="padding:1px;" id="permission-div">
                 <table class="table table-bordered table-hover  table-condensed table-striped">
                     <thead>
                         <tr>
@@ -69,8 +69,7 @@
                     alert("你选择的action过多，请只选择一人子项！");
                 } else {
                     $(nodes).each(function (index, ele) {
-                        if (ele.isParent == false) {
-                            console.log(ele.getParentNode().name + "-" + ele.name);
+                        if (ele.isParent == false) {                      
                             var controllername = ele.getParentNode().name;
                             var arr = ele.name.split('【');
                             var action = arr[0];
@@ -83,27 +82,60 @@
                 }
             }
         }
+        //选中添加的权限
+        function checkedPermission(actionName)
+        {
+            $(zTreeObj.getNodes()).each(function (index, ele) {
+                $(ele.children).each(function (i, el) {
+                    if (el.name == actionName) {
+                        //console.log(actionName)
+                        //el.checked(true);
+                        zTreeObj.checkNode(el,true,true);
+                        zTreeObj.setChkDisabled(el, true);
+                        return;
+                    }
+                })  
 
+            })           
+
+        }
         //查询权限
         function loadPermissions() {
-            $.get("/getpermissions", {}, function (dataBack) {
-                if (dataBack.result == 1) {
-                    $("#tbody").html("");
-                    $(dataBack.data).each(function (index, ele) {
-                        var trhtml = "<tr>";
-                        trhtml += "<td>" + ele.id + "</td>";
-                        trhtml += "<td>" + ele.controllername + "</td>";
-                        trhtml += "<td>" + ele.action + "</td>";
-                        trhtml += "<td>" + ele.actiondescription + "</td>";
-                        trhtml += "<td>" + ele.predicate + "</td>";
-                        trhtml += "<td><button onclick=\"deletePermission(" + ele.id + ")\" class=\"btn btn-danger btn-xs\">删除</button></td>";
-                        trhtml += "</tr>";
-                        $("#tbody").append(trhtml);
-                    });
-                } else {
-                    alert(dataBack.message);
+            $.ajax({
+                type: 'GET',
+                url: '/getpermissions',
+                data: {},
+                success: function (dataBack) {
+                    if (dataBack.result == 1) {
+                        $("#tbody").html("");
+                        $(dataBack.data).each(function (index, ele) {
+                            var trhtml = "<tr>";
+                            trhtml += "<td>" + ele.id + "</td>";
+                            trhtml += "<td>" + ele.controllername + "</td>";
+                            trhtml += "<td>" + ele.action + "</td>";
+                            trhtml += "<td>" + ele.actiondescription + "</td>";
+                            trhtml += "<td>" + ele.predicate + "</td>";
+                            trhtml += "<td><button onclick=\"deletePermission(" + ele.id + ")\" class=\"btn btn-danger btn-xs\">删除</button></td>";
+                            trhtml += "</tr>";
+                            $("#tbody").append(trhtml);
+                            checkedPermission(ele.action + "【" + ele.predicate +"】")
+                        });
+                    } else {
+                        layer.alert(dataBack.message, {
+                            icon: 2,
+                            skin: 'layer-ext-moon'
+                        })
+                    }
+                },
+                error: function (error) {
+                    layer.alert(error.status + error.statusText, {
+                        icon: 2,
+                        skin: 'layer-ext-moon'
+                    })
                 }
             });
+
+
         }
         //删除权限
         function deletePermission(id) {
@@ -113,14 +145,20 @@
                 data: { id: id },
                 success: function (dataBack) {
                     if (dataBack.result == false) {
-                        alert(dataBack.message);
+                        layer.alert(dataBack.message, {
+                            icon: 2,
+                            skin: 'layer-ext-moon'
+                        })
                     } else {
                         //查询权限
                         loadPage();
                     }
                 },
-                error: function (data) {
-                    alert(data);
+                error: function (error) {
+                    layer.alert(error.status + error.statusText, {
+                        icon: 2,
+                        skin: 'layer-ext-moon'
+                    })
                 }
             });
 
@@ -138,7 +176,10 @@
                 },
                 success: function (dataBack) {
                     if (dataBack.result == false) {
-                        alert(dataBack.message);
+                        layer.alert(dataBack.message, {
+                            icon: 2,
+                            skin: 'layer-ext-moon'
+                        })
                     } else {
                         //查询权限
                         loadPage();
@@ -146,7 +187,10 @@
                     }
                 },
                 error: function (error) {
-                    alert(error.status + error.statusText);
+                    layer.alert(error.status + error.statusText, {
+                        icon: 2,
+                        skin: 'layer-ext-moon'
+                    })
                 }
             });
 
@@ -167,27 +211,32 @@
         });
 
         function loadPage() {
-            $.ajax(
-                {
-                    url: "/allaction",
-                    type: "Get",
-                    data: {},
-                    success: function (dataBack) {
-
-                        if (dataBack.result == 1) {
-                            zTreeObj = $.fn.zTree.init($("#tree"), setting, dataBack.data);
-                            //全部选中
-                            //zTreeObj.checkAllNodes(true);
-                        }
-                        else {
-                            alert(dataBack.message);
-                        }
-                    },
-                    error: function (error) {
-                        alert(error.status == 401 ? "无权限" : error.statusText);
+            $.ajax({
+                url: "/allaction",
+                type: "Get",
+                data: {},
+                success: function (dataBack) {
+                    if (dataBack.result == 1) {
+                        zTreeObj = $.fn.zTree.init($("#tree"), setting, dataBack.data);
+                        //全部选中
+                        //zTreeObj.checkAllNodes(true);
                     }
-                })
-            loadPermissions();
+                    else {
+                        layer.alert(dataBack.message, {
+                            icon: 2,
+                            skin: 'layer-ext-moon'
+                        })
+                    }
+                    loadPermissions();
+                },
+                error: function (error) {
+                    layer.alert(error.status + error.statusText, {
+                        icon: 2,
+                        skin: 'layer-ext-moon'
+                    })
+                }
+            })
+    
         }
         //添加按钮浮动
         jQuery(function ($) {

@@ -342,7 +342,8 @@ namespace GeneralBusinessSystem.Controllers
         {
             try
             {
-                _permissionRepository.AddPermission(action, actiondescription, controllername, predicate, CompanyID);
+                _permissionRepository.AddPermission(action, actiondescription, controllername, predicate, 1);
+                // _permissionRepository.AddPermission(action, actiondescription, controllername, predicate, CompanyID);
                 return new JsonResult(new { result = 1, message = "添加权限成功" });
             }
             catch (Exception exc)
