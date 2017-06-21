@@ -87,7 +87,10 @@
                         $("input[type=checkbox][value=" + ele.permissionid + "]").iCheck('check')//.attr("checked", "checked");
                     })
                 } else {
-                    alert(dataBack.message)
+                    layer.alert(dataBack.message, {
+                        icon: 2,
+                        skin: 'layer-ext-moon'
+                    })
                 }
             })
         }
@@ -109,11 +112,11 @@
             })
 
             $.post("/savarolepermissons", { roleid: roleid, rolepermissions: rolePermissionArr }, function (dataBack) {
-                if (dataBack.result == 1) {
-                    alert("保存成功!")
-                }
-                else {
-                    alert(dataBack.message);
+                if (dataBack.result == 0) {               
+                    layer.alert(dataBack.message, {
+                        icon: 2,
+                        skin: 'layer-ext-moon'
+                    })
                 }
             })
 
@@ -136,7 +139,10 @@
                         loadICheck()
                     });
                 } else {
-                    alert(dataBack.message);
+                    layer.alert(dataBack.message, {
+                        icon: 2,
+                        skin: 'layer-ext-moon'
+                    })
                 }
             });
         }
@@ -155,7 +161,10 @@
                         loadICheck()
                     });
                 } else {
-                    alert(dataBack.message);
+                    layer.alert(dataBack.message, {
+                        icon: 2,
+                        skin: 'layer-ext-moon'
+                    })
                 }
             });
         }
