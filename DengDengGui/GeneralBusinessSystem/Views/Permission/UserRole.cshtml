@@ -173,13 +173,14 @@
                         el: "#roleDiv",
                         data: { roles: dataBack.data }
                     })
+                    loadICheck();
                 } else {
                     layer.alert(dataBack.message, {
                         icon: 2,
                         skin: 'layer-ext-moon'
                     })
                 }
-                loadICheck();
+             
             });
         }
 

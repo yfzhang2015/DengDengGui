@@ -13,7 +13,7 @@
     <div class="col-md-5">
         <div class="panel panel-default">
             <div class="panel-heading"><b style="font-size:1.3em">角色</b></div>
-            <div class="panel-body" style="padding:1px;">
+            <div class="panel-body" style="padding:1px;" id="roleDiv">
                 <table class="table table-bordered table-hover  table-condensed table-striped">
                     <thead>
                         <tr>
@@ -22,7 +22,9 @@
                             <th style="width:40px">选择</th>
                         </tr>
                     </thead>
-                    <tbody id="role_tbody"></tbody>
+                    <tbody id="role_tbody">
+                        <tr is="role-row" v-for="role in roles" v-bind:role="role"></tr>
+                    </tbody>
                 </table>
             </div>
         </div>
@@ -33,7 +35,7 @@
 
                 <b style="font-size:1.3em">权限</b>
             </div>
-            <div class="panel-body" style="padding:1px;">
+            <div class="panel-body" style="padding:1px;" id="permissionDiv">
                 <table class="table table-bordered table-hover  table-condensed table-striped">
                     <thead>
                         <tr>
@@ -45,7 +47,9 @@
                             <th style="width:50px">谓词</th>
                         </tr>
                     </thead>
-                    <tbody id="permission_tbody"></tbody>
+                    <tbody id="permission_tbody">
+                        <tr is="permission-row" v-for="permission in permissions" v-bind:permission="permission"></tr>
+                    </tbody>
                 </table>
             </div>
         </div>
@@ -59,6 +63,24 @@
 </div>
 @section scripts {
     <script src="~/lib/icheck-1.x/icheck.js"></script>
+
+<script type="text/x-template" id="permission-row-template">
+    <tr>
+        <td style="text-align:center"><input type="checkbox" class="permissionCheckbox" v-bind:value="permission.id" /></td>
+        <td>{{permission.id}}</td>
+        <td>{{permission.controllername}}</td>
+        <td>{{permission.action}}</td>
+        <td>{{permission.actiondescription}}</td>
+        <td>{{permission.predicate}}</td>
+    </tr>
+</script>
+<script type="text/x-template" id="role-row-template">
+    <tr>
+        <td>{{role.id}}</td>
+        <td>{{role.name}}</td>
+        <td style="text-align:center"><input type="radio" name="roleRadio" v-bind:value="role.id" /></td>
+    </tr>
+</script>
     <script>
 
         $(function () {
@@ -123,49 +145,68 @@
         }
         //查询权限
         function loadPermissions() {
+            //$.get("/getpermissions", {}, function (dataBack) {
+            //    if (dataBack.result == 1) {
+            //        $("#permission_tbody").html("");
+            //        $(dataBack.data).each(function (index, ele) {
+            //            var trhtml = "<tr>";
+            //            trhtml += "<td style=\"text-align:center\"><input type=\"checkbox\" class=\"permissionCheckbox\" value=\"" + ele.id + "\"/></td>";
+            //            trhtml += "<td>" + ele.id + "</td>";
+            //            trhtml += "<td>" + ele.controllername + "</td>";
+            //            trhtml += "<td>" + ele.action + "</td>";
+            //            trhtml += "<td>" + ele.actiondescription + "</td>";
+            //            trhtml += "<td>" + ele.predicate + "</td>";
+            //            trhtml += "</tr>";
+            //            $("#permission_tbody").append(trhtml);
+            //            loadICheck()
+            //        });
+            //    } else {
+            //        layer.alert(dataBack.message, {
+            //            icon: 2,
+            //            skin: 'layer-ext-moon'
+            //        })
+            //    }
+            //});
+            Vue.component("permission-row", {
+                props: ["permission"],
+                template: '#permission-row-template'
+            })
             $.get("/getpermissions", {}, function (dataBack) {
                 if (dataBack.result == 1) {
-                    $("#permission_tbody").html("");
-                    $(dataBack.data).each(function (index, ele) {
-                        var trhtml = "<tr>";
-                        trhtml += "<td style=\"text-align:center\"><input type=\"checkbox\" class=\"permissionCheckbox\" value=\"" + ele.id + "\"/></td>";
-                        trhtml += "<td>" + ele.id + "</td>";
-                        trhtml += "<td>" + ele.controllername + "</td>";
-                        trhtml += "<td>" + ele.action + "</td>";
-                        trhtml += "<td>" + ele.actiondescription + "</td>";
-                        trhtml += "<td>" + ele.predicate + "</td>";
-                        trhtml += "</tr>";
-                        $("#permission_tbody").append(trhtml);
-                        loadICheck()
-                    });
+                    new Vue({
+                        el: "#permissionDiv",
+                        data: { permissions: dataBack.data }
+                    })
                 } else {
                     layer.alert(dataBack.message, {
                         icon: 2,
                         skin: 'layer-ext-moon'
                     })
                 }
+                loadICheck();
             });
         }
         //查询角色
-        function loadRoles() {
+        function loadRoles() {  
+
+            Vue.component("role-row", {
+                props: ["role"],
+                template: '#role-row-template'
+            })
+
             $.get("/getroles", {}, function (dataBack) {
                 if (dataBack.result == 1) {
-                    $("#role_tbody").html("");
-                    $(dataBack.data).each(function (index, ele) {
-                        var trhtml = "<tr>";
-                        trhtml += "<td>" + ele.id + "</td>";
-                        trhtml += "<td>" + ele.name + "</td>";
-                        trhtml += "<td style=\"text-align:center\"><input type=\"radio\" name=\"roleRadio\" value=\"" + ele.id + "\"/></td>";
-                        trhtml += "</tr>";
-                        $("#role_tbody").append(trhtml);
-                        loadICheck()
-                    });
+                    new Vue({
+                        el: "#roleDiv",
+                        data: { roles: dataBack.data }
+                    })
                 } else {
                     layer.alert(dataBack.message, {
                         icon: 2,
                         skin: 'layer-ext-moon'
                     })
                 }
+                loadICheck();
             });
         }
 
