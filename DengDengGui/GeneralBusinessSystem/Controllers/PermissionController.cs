@@ -44,7 +44,7 @@ namespace GeneralBusinessSystem.Controllers
             try
             {
                 var permissions = _permissionRepository.GetPermissions();
-                var actions = Common.ActionHandle.GetActions();
+                var actions = Common.ActionHandle.GetActions("basecontroller");
                 var list = new List<dynamic>();
                 foreach (var groupItem in actions.GroupBy(s => s.ControllerName))
                 {
