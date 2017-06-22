@@ -12,7 +12,7 @@
 
                 <b style="font-size:1.3em">用户</b>
             </div>
-            <div class="panel-body" style="padding:1px;">
+            <div class="panel-body" style="padding:1px;" id="userDiv">
                 <table class="table table-bordered table-hover  table-condensed table-striped">
                     <thead>
                         <tr>
@@ -22,7 +22,9 @@
                             <th style="width:40px">选择</th>
                         </tr>
                     </thead>
-                    <tbody id="user_tbody"></tbody>
+                    <tbody id="user_tbody">
+                        <tr is="user-row" v-for="user in users" v-bind:user="user"></tr>
+                    </tbody>
                 </table>
             </div>
         </div>
@@ -30,7 +32,7 @@
     <div class="col-md-6">
         <div class="panel panel-default">
             <div class="panel-heading"><b style="font-size:1.3em">角色</b></div>
-            <div class="panel-body" style="padding:1px;">
+            <div class="panel-body" style="padding:1px;" id="roleDiv">
                 <table class="table table-bordered table-hover  table-condensed table-striped">
                     <thead>
                         <tr>
@@ -39,7 +41,9 @@
                             <th>角色名称</th>
                         </tr>
                     </thead>
-                    <tbody id="role_tbody"></tbody>
+                    <tbody id="role_tbody">
+                        <tr is="role-row" v-for="role in roles" v-bind:role="role"></tr>
+                    </tbody>
                 </table>
             </div>
         </div>
@@ -54,11 +58,27 @@
 @section scripts {
     <script src="~/lib/icheck-1.x/icheck.js"></script>
     <script src="~/js/stickUp.js"></script>
+    <script type="text/x-template" id="user-row-template">
+        <tr>
+            <td> {{user.id}}</td>
+            <td> {{user.username}}</td>
+            <td> {{user.name}}</td>
+            <td style="text-align:center"><input type="radio" name="userRadio" v-bind:value="user.id" /></td>
+        </tr>
+    </script>
+    <script type="text/x-template" id="role-row-template">  
+        <tr>          
+            <td style="text-align:center"><input type="checkbox" class="roleCheckbox" v-bind:value="role.id" /></td>
+            <td>{{role.id}}</td>
+            <td>{{role.name}}</td>
+        </tr>
+    </script>
     <script>
 
         $(function () {
             loadUsers();
             loadRoles();
+          
         })
         //加载icheck
         function loadICheck() {
@@ -102,12 +122,12 @@
 
             var userRoleArr = [];
             $(".icheckbox_square-blue.checked input").each(function (index, ele) {
-                var userRole = { userid:userid,roleid:parseInt($(ele).val()) }
+                var userRole = { userid: userid, roleid: parseInt($(ele).val()) }
                 userRoleArr.push(userRole);
             })
-   
+
             $.post("/savauserroles", { userid: userid, userroles: userRoleArr }, function (dataBack) {
-                if (dataBack.result == 0) {      
+                if (dataBack.result == 0) {
                     layer.alert(dataBack.message, {
                         icon: 2,
                         skin: 'layer-ext-moon'
@@ -116,51 +136,50 @@
             })
 
         }
+
         //查询用户
         function loadUsers() {
+            Vue.component("user-row", {
+                props: ["user"],
+                template: '#user-row-template',
+                methods: {                
+                }
+            })
             $.get("/getusers", {}, function (dataBack) {
                 if (dataBack.result == 1) {
-                    $("#user_tbody").html("");
-                    $(result).each(function (index, ele) {
-                        var trhtml = "<tr>";
-                        trhtml += "<td>" + ele.id + "</td>";
-                        trhtml += "<td>" + ele.username + "</td>";
-                        trhtml += "<td>" + ele.name + "</td>";
-                        trhtml += "<td style=\"text-align:center\"><input type=\"radio\" name=\"userRadio\" value=\"" + ele.id + "\"/></td>";
-                        trhtml += "</tr>";
-                        $("#user_tbody").append(trhtml);
-                        loadICheck()
-
-                    });
+                    new Vue({
+                        el: "#userDiv",
+                        data: { users: dataBack.data }
+                    })
                 } else {
                     layer.alert(dataBack.message, {
                         icon: 2,
                         skin: 'layer-ext-moon'
                     })
-
                 }
+                loadICheck();
             });
         }
         //查询角色
         function loadRoles() {
+            Vue.component("role-row", {
+                props: ["role"],
+                template: '#role-row-template'
+            })
+
             $.get("/getroles", {}, function (dataBack) {
                 if (dataBack.result == 1) {
-                    $("#role_tbody").html("");
-                    $(result).each(function (index, ele) {
-                        var trhtml = "<tr>";
-                        trhtml += "<td style=\"text-align:center\"><input type=\"checkbox\" class=\"roleCheckbox\" value=\"" + ele.id + "\"/></td>";
-                        trhtml += "<td>" + ele.id + "</td>";
-                        trhtml += "<td>" + ele.name + "</td>";
-                        trhtml += "</tr>";
-                        $("#role_tbody").append(trhtml);
-                        loadICheck()
-                    });
+                    new Vue({
+                        el: "#roleDiv",
+                        data: { roles: dataBack.data }
+                    })
                 } else {
                     layer.alert(dataBack.message, {
                         icon: 2,
                         skin: 'layer-ext-moon'
                     })
                 }
+                loadICheck();
             });
         }
 
