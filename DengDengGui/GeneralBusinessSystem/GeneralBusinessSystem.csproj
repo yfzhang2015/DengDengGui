@@ -1186,5 +1186,15 @@
     <ProjectReference Include="..\GeneralBusinessData\GeneralBusinessData.csproj" />
     <ProjectReference Include="..\GeneralBusinessRepository\GeneralBusinessRepository.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <Content Update="hosting.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <None Update="NLog.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
 
 </Project>
