@@ -1,0 +1,16 @@
+﻿<script type="text/x-template" id="user-row-template">
+    <tr v-bind:id="'tr_'+user.id">
+        <td>{{user.id}}</td>
+        <td>{{user.username}}</td>
+        <td>******</td>
+        <td>{{user.name}}</td>
+        <td>
+            <button class="btn btn-xs btn-primary" style="margin-bottom:-5px;margin-top:-5px;" data-toggle="modal" data-target="#ModiyModal" v-on:click="modify">
+                修改
+            </button>
+            <button class="btn btn-xs btn-danger" style="margin-bottom:-5px;margin-top:-5px;" v-on:click="remove">
+                删除
+            </button>
+        </td>
+    </tr>
+</script>
