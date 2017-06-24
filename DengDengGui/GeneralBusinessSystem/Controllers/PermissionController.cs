@@ -46,13 +46,18 @@ namespace GeneralBusinessSystem.Controllers
                 var permissions = _permissionRepository.GetPermissions();
                 var actions = Common.ActionHandle.GetActions("basecontroller");
                 var list = new List<dynamic>();
+                //按ControllerName分组
                 foreach (var groupItem in actions.GroupBy(s => s.ControllerName))
                 {
+                    //组装树形结点数据
                     var node = new { name = groupItem.Key, open = true, children = new List<dynamic>() };
+                    //遍历所有action
                     foreach (var action in actions)
                     {
+                        //按ControllerName分组
                         if (groupItem.Key == action.ControllerName)
                         {
+                            //组织最终树形控件需要的list
                             var permission = permissions.SingleOrDefault(s => s["Action"] == action.ActionName && s["ControllerName"] == action.ControllerName && s["Predicate"] == action.Predicate.ToString());
                             if (permission == null)
                             {
