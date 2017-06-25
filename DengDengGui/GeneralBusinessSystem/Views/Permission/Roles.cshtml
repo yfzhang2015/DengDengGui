@@ -114,20 +114,7 @@
         </tr>
     </script>
     <script>
-        //#region表格行组件
-        Vue.component("role-row", {
-            props: ["role"],
-            template: '#role-row-template',
-            methods: {
-                modify: function () {
-                    showModify(this.role)
-                },
-                remove: function () {
-                    remove(this.role.id);
-                }
-            }
-        })
-        //#endregion
+
         //#region赋值修改数据
         var modiyVue;
         function showModify(role) {
@@ -149,6 +136,7 @@
             }
         }
         //#endregion
+
         //#region保存修改
         function modify(oldRole) {
             $.ajax({
@@ -183,11 +171,39 @@
             },
             success: function (dataBack) {
                 if (dataBack.result == 1) {
+                    console.log(dataBack.data)
+                    console.log(dataBack.data.length)
+                    if (dataBack.data.length > 0) {
+                        var item = dataBack.data[0];
+                        var ssss = "<tr v-bind:id=\"'tr_'+ role.id\">";
+                   
+                        for (var pro in item) {
+                            ssss += "<td>{{role." + pro + "}}</td>"
+                        }
+
+                        ssss += '<td><button class="btn btn-xs btn-primary" style="margin-bottom:-5px;margin-top:-5px;" data-toggle="modal" data-target="#ModiyModal" v-on:click="modify">修改</button><button class="btn btn-xs btn-danger" style="margin-bottom:-5px;margin-top:-5px;" v-on:click="remove">删除</button></td></tr>';
+                    }
+
+                    //#region表格行组件
+                    Vue.component("role-row", {
+                        props: ["role"],
+                        template: ssss,
+                        methods: {
+                            modify: function () {
+                                showModify(this.role)
+                            },
+                            remove: function () {
+                                remove(this.role.id);
+                            }
+                        }
+                    })
+                    //#endregion
                     new Vue({
                         el: "#role-div",
                         data: { roles: dataBack.data }
 
                     })
+
                 } else {
                     layer.alert(dataBack.message, {
                         icon: 2,
