@@ -107,6 +107,10 @@ namespace GeneralBusinessSystem
 
 
             app.UseStaticFiles();
+
+            //添加websocket中间件
+            //app.UseWebSockets();
+            //app.UseWebSocketNotify();
             ////添加权限中间件
             //app.UsePermission(new PermissionMiddlewareOption()
             //{

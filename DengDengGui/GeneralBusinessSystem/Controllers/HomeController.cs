@@ -97,5 +97,10 @@ namespace GeneralBusinessSystem.Controllers
             return new JsonResult(new {query= queryBH, suggestions = list });
         }
 
+        public IActionResult WebSocketPage()
+        {
+            return View();
+        }
+
     }
 }

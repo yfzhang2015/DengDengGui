@@ -17,6 +17,7 @@
     <Content Include="wwwroot\js\PrototypeExtensions.js" />
     <Content Include="wwwroot\js\stickUp.js" />
     <Content Include="wwwroot\js\stickUp.min.js" />
+    <Content Include="wwwroot\js\WebSocketNotify.js" />
     <Content Include="wwwroot\lib\bootstrap-datetimepicker\.gitattributes" />
     <Content Include="wwwroot\lib\bootstrap-datetimepicker\.gitignore" />
     <Content Include="wwwroot\lib\bootstrap-datetimepicker\.jshintrc" />

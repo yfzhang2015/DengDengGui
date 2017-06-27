@@ -1,0 +1,47 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div>
+    当前在信息：<div id="message"></div>
+    <div id="output"></div>
+    <input class="form-control" type="text" id="sendtxt" value="测试" />
+    <input type="button" onclick="start()" value="开始" />
+    <input type="button" onclick="send()" value="发送" />
+</div>
+@section scripts{
+    <script src="~/js/WebSocketNotify.js"></script>
+    <script>
+        //打开连接回调
+        function open() {
+            console.log("open")
+            document.getElementById("message").innerText = "连接打开";
+        }
+        //接收数据回调
+        function accept(result) {
+            console.log("accept")
+            document.getElementById("output").innerText=result;
+        }
+        //关闭连接回调
+        function close() {
+            console.log("close")
+            document.getElementById("message").innerText="连接关闭";
+        }//错误回调
+        function error(result) {
+            console.log("error")
+            alert("错误："+result);
+        }
+        //开始方法
+        function start() {
+            console.log("start")
+            doConnect(open, accept, close, error);
+         
+        }
+        function send()
+        {
+            console.log("send")
+            doSend(document.getElementById("sendtxt").value);
+
+        }
+    </script>
+}
