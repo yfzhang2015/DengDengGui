@@ -26,12 +26,8 @@
             <div class="row" style="margin-bottom:-10px;">
                 <div class="col-md-12" id="role-div">
                     <table class="table table-bordered table-hover  table-condensed table-striped">
-                        <thead>
-                            <tr>
-                                <th>编号</th>
-                                <th>角色</th>
-                                <th style="width:94px">操作</th>
-                            </tr>
+                        <thead id="tbhead">
+                            
                         </thead>
                         <tbody id="tbdata">
                             <tr is="role-row" v-for="role in roles" v-bind:role="role"></tr>
@@ -171,23 +167,26 @@
             },
             success: function (dataBack) {
                 if (dataBack.result == 1) {
-                    console.log(dataBack.data)
-                    console.log(dataBack.data.length)
+
+                    var rowStr = "";
+                    var headStr = "";
                     if (dataBack.data.length > 0) {
                         var item = dataBack.data[0];
-                        var ssss = "<tr v-bind:id=\"'tr_'+ role.id\">";
-                   
+                        rowStr = "<tr v-bind:id=\"'tr_'+ role.id\">";
+                        headStr = "<tr>";
                         for (var pro in item) {
-                            ssss += "<td>{{role." + pro + "}}</td>"
+                            rowStr += "<td>{{role." + pro + "}}</td>"
+                            headStr += "<th>" + pro + "</th>";
                         }
+                        headStr += "<th>操作</th></tr>";
 
-                        ssss += '<td><button class="btn btn-xs btn-primary" style="margin-bottom:-5px;margin-top:-5px;" data-toggle="modal" data-target="#ModiyModal" v-on:click="modify">修改</button><button class="btn btn-xs btn-danger" style="margin-bottom:-5px;margin-top:-5px;" v-on:click="remove">删除</button></td></tr>';
+                        rowStr += '<td><button class="btn btn-xs btn-primary" style="margin-bottom:-5px;margin-top:-5px;" data-toggle="modal" data-target="#ModiyModal" v-on:click="modify">修改</button><button class="btn btn-xs btn-danger" style="margin-bottom:-5px;margin-top:-5px;" v-on:click="remove">删除</button></td></tr>';
                     }
-
+                    $("#tbhead").html(headStr);
                     //#region表格行组件
                     Vue.component("role-row", {
                         props: ["role"],
-                        template: ssss,
+                        template: rowStr,
                         methods: {
                             modify: function () {
                                 showModify(this.role)
@@ -200,7 +199,9 @@
                     //#endregion
                     new Vue({
                         el: "#role-div",
-                        data: { roles: dataBack.data }
+                        data: {
+                            roles: dataBack.data
+                        }
 
                     })
 
