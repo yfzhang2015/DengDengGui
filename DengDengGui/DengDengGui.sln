@@ -1,9 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26430.12
+VisualStudioVersion = 15.0.26430.16
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GeneralBusinessSystem", "GeneralBusinessSystem\GeneralBusinessSystem.csproj", "{896A5701-3335-407C-9DA9-D7B4BCA96207}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GeneralBusinessSystem", "GeneralBusinessSystem\GeneralBusinessSystem.csproj", "{896A5701-3335-407C-9DA9-D7B4BCA96207}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "文档", "文档", "{A9EA6AD1-1A76-4599-AB5D-4CCF7842454B}"
 	ProjectSection(SolutionItems) = preProject
@@ -11,13 +11,18 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "文档", "文档", "{A9EA6A
 		doc\《通用业务管理系统》开发文档2.0.doc = doc\《通用业务管理系统》开发文档2.0.doc
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GeneralBusinessData", "GeneralBusinessData\GeneralBusinessData.csproj", "{6C53484D-97BD-4974-B1A3-84CA549907C1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GeneralBusinessData", "GeneralBusinessData\GeneralBusinessData.csproj", "{6C53484D-97BD-4974-B1A3-84CA549907C1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GeneralBusinessRepository", "GeneralBusinessRepository\GeneralBusinessRepository.csproj", "{359E778B-157E-4FE3-AA5F-B173AB8DF472}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GeneralBusinessRepository", "GeneralBusinessRepository\GeneralBusinessRepository.csproj", "{359E778B-157E-4FE3-AA5F-B173AB8DF472}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "通用业务平台", "通用业务平台", "{CAFD7866-29D5-4244-AF96-134A3713A367}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common", "Common\Common.csproj", "{1A254C02-FA52-4D4F-8C8A-3E392313D057}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Common", "Common\Common.csproj", "{1A254C02-FA52-4D4F-8C8A-3E392313D057}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{DF3C4063-38AB-4E78-92CF-E63E4E68F337}"
+	ProjectSection(SolutionItems) = preProject
+		高效程序员的45个习惯.json = 高效程序员的45个习惯.json
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
