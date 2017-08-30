@@ -21,7 +21,7 @@ namespace PrivilegeManagement
 
         public IConfiguration Configuration { get; }
 
-   
+
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
@@ -48,7 +48,13 @@ namespace PrivilegeManagement
             app.UsePermission(new PermissionMiddlewareOption()
             {
                 LoginAction = @"/login",
-                NoPermissionAction = @"/nopermission"
+                NoPermissionAction = @"/nopermission",
+                //这个集合从数据库中查出所有用户的全部权限
+                UserPerssions = new List<UserPermission>()
+                 {
+                     new UserPermission { Url="/", UserName="aaa"},
+                     new UserPermission { Url="/home/about", UserName="aaa"}
+                 }
             });
             app.UseMvc(routes =>
             {

@@ -20,5 +20,11 @@ namespace PrivilegeManagement.Middleware
         /// </summary>
         public string NoPermissionAction
         { get; set; }
+
+        /// <summary>
+        /// 用户权限集合
+        /// </summary>
+        public List<UserPermission> UserPerssions
+        { get; set; } = new List<UserPermission>();
     }
 }

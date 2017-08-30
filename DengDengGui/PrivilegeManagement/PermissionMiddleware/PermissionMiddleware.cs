@@ -28,7 +28,7 @@ namespace PrivilegeManagement.Middleware
         /// <summary>
         /// 用户权限集合
         /// </summary>
-        internal static List<dynamic> _userPermissions;
+        internal static List<UserPermission> _userPermissions;
 
         /// <summary>
         /// 权限中间件构造
@@ -40,35 +40,37 @@ namespace PrivilegeManagement.Middleware
         {
             _option = option;
             _next = next;
-            LoadUserPermissions();
-        }
-        /// <summary>
-        /// 获取用户权限
-        /// </summary>
-        void LoadUserPermissions()
-        {
-            if (_userPermissions == null)
-            {
-                _userPermissions = new List<dynamic>();
-
-            }
-        }
+            _userPermissions = option.UserPerssions;
+        }       
         /// <summary>
         /// 调用管道
         /// </summary>
-        /// <param name="context"></param>
+        /// <param name="context">请求上下文</param>
         /// <returns></returns>
         public Task Invoke(HttpContext context)
         {
-            var questUrl = context.Request.Path.Value;
+            //请求Url
+            var questUrl = context.Request.Path.Value.ToLower();
+            //用户名
             var userName = context.User.Identity.Name;
+            //是否经过验证
             var isAuthenticated = context.User.Identity.IsAuthenticated;
-
-            ////无权限跳转到拒绝页面
-            //context.Response.Redirect(_option.NoPermissionAction);
-
+            if (isAuthenticated)
+            {
+                if (_userPermissions.GroupBy(g=>g.Url).Where(w => w.Key.ToLower() == questUrl).Count() > 0)
+                {
+                    if (_userPermissions.Where(w => w.UserName == userName).Count() > 0)
+                    {
+                        return this._next(context);
+                    }
+                    else
+                    {
+                        //无权限跳转到拒绝页面
+                        context.Response.Redirect(_option.NoPermissionAction);
+                    }
+                }
+            }
             return this._next(context);
         }
-
     }
 }
