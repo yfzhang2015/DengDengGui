@@ -34,10 +34,15 @@
                     <li><a asp-area="" asp-controller="Home" asp-action="About">About</a></li>
                     <li><a asp-area="" asp-controller="Home" asp-action="Contact">Contact</a></li>
                 </ul>
-                <ul class="nav navbar-nav">
-                    <li>
-                        <span>aaaa</span>
-                    </li>
+                <ul class="" style="float:right; margin:0;">
+                    <li style="overflow:hidden;">
+                        <div style="float:left;line-height:50px;margin-right:10px;">
+                            <span style="color:#ffffff">当前用户：@User.Identity.Name</span>
+                        </div>
+                        <div style="float:left;line-height:50px;">
+                            <a asp-area="" asp-controller="Home" asp-action="Logout">注销</a>
+                        </div>
+                    </li>              
                 </ul>
             </div>
 
