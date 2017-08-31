@@ -4,16 +4,16 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using PrivilegeManagement.Models;
-using Microsoft.AspNetCore.Authorization;
+using RolePrivilegeManagement.Models;
 using System.Security.Claims;
-using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
 
-namespace PrivilegeManagement.Controllers
+namespace RolePrivilegeManagement.Controllers
 {
- 
-    public class HomeController : BaseController
+    [Authorize(Roles ="admin")]
+    public class HomeController : Controller
     {
         public IActionResult Index()
         {
@@ -23,14 +23,12 @@ namespace PrivilegeManagement.Controllers
         public IActionResult About()
         {
             ViewData["Message"] = "Your application description page.";
-            
             return View();
         }
-
+        [Authorize(Roles = "system")]
         public IActionResult Contact()
         {
             ViewData["Message"] = "Your contact page.";
-
             return View();
         }
 
@@ -38,6 +36,7 @@ namespace PrivilegeManagement.Controllers
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
+
         [AllowAnonymous]
         [HttpGet("login")]
         public IActionResult Login(string returnUrl = null)
@@ -47,13 +46,13 @@ namespace PrivilegeManagement.Controllers
         }
         [AllowAnonymous]
         [HttpPost("login")]
-        public async Task<IActionResult> Login(string userName,string password, string returnUrl = null)
+        public async Task<IActionResult> Login(string userName, string password, string returnUrl = null)
         {
             if (userName == "aaa" && password == "bbb")
             {
                 var identity = new ClaimsIdentity(CookieAuthenticationDefaults.AuthenticationScheme);
                 identity.AddClaim(new Claim(ClaimTypes.Name, userName));
-
+                identity.AddClaim(new Claim(ClaimTypes.Role, "admin"));
                 await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(identity));
                 if (returnUrl == null)
                 {
@@ -86,6 +85,4 @@ namespace PrivilegeManagement.Controllers
             return View();
         }
     }
-
- 
 }

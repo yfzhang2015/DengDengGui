@@ -59,7 +59,7 @@ namespace PrivilegeManagement.Middleware
             {
                 if (_userPermissions.GroupBy(g=>g.Url).Where(w => w.Key.ToLower() == questUrl).Count() > 0)
                 {
-                    if (_userPermissions.Where(w => w.UserName == userName).Count() > 0)
+                    if (_userPermissions.Where(w => w.UserName == userName&&w.Url.ToLower()==questUrl).Count() > 0)
                     {
                         return this._next(context);
                     }
