@@ -9,7 +9,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Http;
 
-namespace RolePrivilegeManagement
+namespace PolicyPrivilegeManagement
 {
     public class Startup
     {
@@ -24,16 +24,13 @@ namespace RolePrivilegeManagement
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc();
-            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-             .AddCookie(options =>
-             {
-                 options.LoginPath = new PathString("/login");
-                 options.AccessDeniedPath = new PathString("/denied");
-
-             }
-             );
-
-
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("RequireAdministratorRole", policy => policy.RequireRole("admin", "system"));
+            }).AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(options =>{
+                options.LoginPath = new PathString("/login");
+                options.AccessDeniedPath = new PathString("/denied");
+            });
         }
 
 

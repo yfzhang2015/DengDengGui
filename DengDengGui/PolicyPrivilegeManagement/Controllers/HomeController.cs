@@ -4,15 +4,15 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using RolePrivilegeManagement.Models;
-using System.Security.Claims;
+using PolicyPrivilegeManagement.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Authorization;
+using System.Security.Claims;
 
-namespace RolePrivilegeManagement.Controllers
+namespace PolicyPrivilegeManagement.Controllers
 {
-    [Authorize(Roles ="admin")]
+    [Authorize(Policy = "RequireAdministratorRole")]
     public class HomeController : Controller
     {
         public IActionResult Index()
@@ -23,12 +23,14 @@ namespace RolePrivilegeManagement.Controllers
         public IActionResult About()
         {
             ViewData["Message"] = "Your application description page.";
+
             return View();
         }
-       
+        [Authorize(Roles = "me")]
         public IActionResult Contact()
         {
             ViewData["Message"] = "Your contact page.";
+
             return View();
         }
 
@@ -36,7 +38,6 @@ namespace RolePrivilegeManagement.Controllers
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
-
         [AllowAnonymous]
         [HttpGet("login")]
         public IActionResult Login(string returnUrl = null)
