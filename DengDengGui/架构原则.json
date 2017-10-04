@@ -47,6 +47,11 @@
     "10. 开发环境和线上环境等价": "尽可能保持开发、测试、预发和线上环境相同。容器可以保证容器内运行时环境的一致性，还需要保证不同环境的一致性，例如不同环境内的操作系统，负载均衡，服务发现，后台服务，监控告警等要尽可能一致。",
     "11. 日志": "把日志当作数据流。Heroku 不支持本地文件，所以必须以流方式把日志输送到后台日志服务。除了日志以外还要补充考虑 metrics 流的采集和输送。",
     "12. 管理进程": "后台管理任务当作一次性的进程。其实相当于在 Heroku 上以独立进程方式运行任务 Job。"
+  },
+  "CAP定理": {
+    "1.一致性 (Consistency)": "一致性指“all nodes see the same data at the same time”，即更新操作成功，所有节点在同一时间的数据完全一致。",
+    "2.可用性 (Availability)": "可用性指“Reads and writes always succeed”，即服务一直可用，而且响应时间正常。",
+    "3.分区容忍性 (Partition tolerance)": "分区容忍性指“the system continue to operate despite arbitrary message loss or failure of part of the system.”，即分布式系统在遇到某节点或网络分区故障时，仍然能够对外提供满足一致性和可用性的服务。",
   }
 
 }
