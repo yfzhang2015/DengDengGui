@@ -51,7 +51,12 @@
   "CAP定理": {
     "1.一致性 (Consistency)": "一致性指“all nodes see the same data at the same time”，即更新操作成功，所有节点在同一时间的数据完全一致。",
     "2.可用性 (Availability)": "可用性指“Reads and writes always succeed”，即服务一直可用，而且响应时间正常。",
-    "3.分区容忍性 (Partition tolerance)": "分区容忍性指“the system continue to operate despite arbitrary message loss or failure of part of the system.”，即分布式系统在遇到某节点或网络分区故障时，仍然能够对外提供满足一致性和可用性的服务。",
+    "3.分区容忍性 (Partition tolerance)": "分区容忍性指“the system continue to operate despite arbitrary message loss or failure of part of the system.”，即分布式系统在遇到某节点或网络分区故障时，仍然能够对外提供满足一致性和可用性的服务。"
+  },
+  "BASE理论": {
+    "1.基本可用 (Basically Available)": "基本可用是指分布式系统在出现故障时，允许损失部分可用性，即保证核心可用。比如服务降级。",
+    "2.软状态 (Soft State)": "软状态是指允许系统存在中间状态，而该中间状态不会影响系统的整体可用性。分布式存储中一般一份数据至少存三个副本，允许不同节点间副本同步的延迟就是软状态的体现。",
+    "3.最终一致性 (Eventual Consistency)": "最终一致性是指系统中的所有数据副本经过一段时间后，最终能够达成一致状态。弱一致性和强一致性相反，最终一致性是弱一致性的一种特殊情况。"
   }
 
 }
