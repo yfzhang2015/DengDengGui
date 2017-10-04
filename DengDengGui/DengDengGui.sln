@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26730.12
+VisualStudioVersion = 15.0.26730.16
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GeneralBusinessSystem", "GeneralBusinessSystem\GeneralBusinessSystem.csproj", "{896A5701-3335-407C-9DA9-D7B4BCA96207}"
 EndProject
@@ -21,6 +21,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Common", "Common\Common.csp
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{DF3C4063-38AB-4E78-92CF-E63E4E68F337}"
 	ProjectSection(SolutionItems) = preProject
+		架构原则.json = 架构原则.json
 		高效程序员的45个习惯.json = 高效程序员的45个习惯.json
 	EndProjectSection
 EndProject
