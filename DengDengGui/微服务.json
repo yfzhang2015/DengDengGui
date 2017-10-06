@@ -22,5 +22,27 @@
         "微服务平台的设计目标": "微服务平台的主要目标主要就是要支撑微服务应用的全生命周期管理，从需求到设计开发测试，运行期的业务数据处理和应用的管理监控等，后续将从应用生命周期的几个重要阶段切入，结合前面提到的设计原则和问题，介绍平台提供的能力支撑情况。"
       }
     }
+  },
+  "微服务组件": {
+    "服务注册发现路由 ": "",
+    "统一认证鉴权 ": "",
+    "日志与流水设计 ": "",
+    "集中配置管理 ": "",
+    "统一管理门户 ": "",
+    "分布式事务问题 ": "",
+    "分布式同步调用问题 ": ""
+  },
+  "SpringCloud": {
+    "API Doc": "Swagger UI",
+    "API Mock": "Swagger Mock API",
+    "AOP基础框架": "Spring framework",
+    "微服务容器": "Spring Boot",
+    "服务注册中心": "Spring Cloud-Eureka",
+    "服务负载均衡": "Spring Cloud-Ribbon",
+    "服务调用": "Spring Cloud-Feign",
+    "服务容错保护": "Spring Cloud-Hystrix",
+    "安全认证": "Spring Cloud-Security",
+    "服务配置中心": "Apollo,Spring Cloud-Config",
+    "服务监控": "Spring Boot Admin"
   }
 }
