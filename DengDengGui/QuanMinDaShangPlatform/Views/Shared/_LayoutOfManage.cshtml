@@ -1,0 +1,62 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - QuanMinDaShangPlatform</title>
+
+    <link href="~/css/public.css" rel="stylesheet" />
+    <link href="~/css/newPeople.css" rel="stylesheet" />
+    <script src="~/js/jquery.min.js"></script>
+    <script src="~/js/menu.js"></script>
+    <script src="~/js/modle.js"></script>
+    @RenderSection("css", required: false)
+</head>
+<body>
+    <!--头部-->
+    <header class="top">
+        <div class="top_leftBox">
+            <h1>全民打赏平台</h1>
+        </div>
+        <div class="top_rightBox">
+            <ul>
+                <li><a href="/ModifyPassword">当前用户：@User.Identity.Name</a></li>
+                <li><a href="/comlogin">注销</a></li>
+            </ul>
+        </div>
+    </header>
+    <!--侧边栏-->
+    <div class="contentBox">
+        <div class="contentLeftBox">
+            <div class="select">
+                <p>基础信息管理</p>
+                <ul>
+                    <li><a asp-area="" asp-controller="Commercial" asp-action="showcompany"><img src="~/images/is_in.png" />商户管理</a></li>
+                    <li><a asp-area="" asp-controller="Commercial" asp-action="showaddemployee"><img src="~/images/hos_summ.png" />人员管理</a></li>
+                </ul>
+            </div>
+            <div class="select">
+                <p>打赏详情</p>
+                <ul>
+                    <li><a asp-area="" asp-controller="Manage" asp-action="CompanyEmployDsInfo"><img src="~/images/hos_summ.png" />公司打赏信息</a></li>
+                </ul>
+            </div>
+            <div class="select">
+                <p>打赏设置</p>
+                <ul>
+                    <li><a asp-area="" asp-controller="Manage" asp-action="TemplateManage"><img src="~/images/hos_summ.png" />打赏模板</a></li>
+                    <li><a asp-area="" asp-controller="Manage" asp-action="CompanyTemplate"><img src="~/images/hos_summ.png" />公司人员模板设置</a></li>
+                </ul>
+            </div>
+
+
+
+        </div>
+        <!--内容-->
+        @RenderBody()
+        <hr />
+    </div>
+   
+    @RenderSection("Scripts", required: false)
+</body>
+</html>

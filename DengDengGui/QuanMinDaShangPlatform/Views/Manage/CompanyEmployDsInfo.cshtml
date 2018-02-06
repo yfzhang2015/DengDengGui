@@ -1,0 +1,166 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta content="telephone=no" name="format-detection">
+    <meta content="email=no" name="format-detection" />
+    <title>查询明细</title>
+    <link href="~/css/definite.css" rel="stylesheet" />
+    <link href="~/css/light7.min.css" rel="stylesheet" />
+    <link href="~/css/light7-swiper.min.css" rel="stylesheet" />
+
+
+    <script src="~/js/jquery-1.9.1.min.js"></script>
+    <script src="~/js/light7.min.js"></script>
+    <script src="~/js/light7-swiper.min.js"></script>
+    <script src="~/js/light7-city-picker.min.js"></script>
+    <script src="~/js/rjs.js"></script>
+    <style>
+    </style>
+</head>
+<body style="background-color:white;">
+
+    <div class="page" style="width:960px; margin:0 auto;">
+        <header class="bar bar-nav" style=" height: 6rem;background-color: #d01e3e;">
+            <div class="content-padded grid-demo">
+                <div class="row" style="margin-top: .5rem;">
+                    <div class="col-40">
+                        <div class="startTime">
+                            <input type="text" placeholder="开始时间" id='startTime' />
+                        </div>
+                    </div>
+                    <div class="col-40">
+                        <div class="endTime">
+                            <input type="text" placeholder="结束时间" id='endTime' />
+                        </div>
+                    </div>
+                    <div class="col-20">
+                        <div class="inquiry">
+                            <input type="button" value="查询" onclick="QueryEmployeeInfo()" />
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-100">
+                        <div class="bill">
+                            <span class="pull-left">公司账单明细</span>
+                            <span class="pull-right">汇总：<span id="totalfee"></span></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row" style="margin-top: .5rem;">
+                    <div class="col-33">
+                        <div class="definiteName">员工姓名</div>
+                    </div>
+                    <div class="col-33">
+                        <div class="definitenum">打赏时间</div>
+                    </div>
+                    <div class="col-33">
+                        <div class="definiteTime">金额</div>
+                    </div>
+                </div>
+            </div>
+        </header>
+        <!-- 这里是页面内容区 -->
+        <div class="content infinite-scroll" data-distance="100" style="margin-top:2.2rem;">
+
+
+
+
+            <div class="list-block">
+                <ul class="list-container"></ul>
+            </div>
+            <!-- preloader -->
+            @*<div class="infinite-scroll-preloader">
+                    <div class="preloader"></div>
+                </div>*@
+        </div>
+        <input type="hidden" id="openid" value="@ViewData["openid"]" />
+    </div>
+    <!--滚动条滚动 -->
+
+
+
+</body>
+</html>
+
+<script>
+    $(document).on("pageInit", function () {
+        $("#startTime,#endTime").calendar({
+            dateFormat: "yyyy-mm-dd",
+        });
+    });
+    $.init();
+
+
+
+    function QueryEmployeeInfo() {
+        var employeeID = GetQueryString('employeeid');
+        var loading = false;
+        var maxItems = 80;
+        var itemsPerLoad = 20;
+        function addItems(number, lastIndex) {
+            $.ajax({
+                url: 'getcompanyemployeedsinfo',
+                type: "GET",
+                data: {
+                    index: lastIndex,
+                    employeeid: employeeID,
+                    start: $("#startTime").val(),
+                    end: $("#endTime").val()
+
+                },
+                success: function (dataBack) {
+                    console.log(dataBack)
+                    $("#totalfee").text(dataBack.ErrMeg);
+                    var str = '';
+                    if (dataBack.Result) {
+                        $(dataBack.Data).each(function (index, item) {
+                            str += '<li class="content-padded grid-demo" style="margin: 0 1rem; border-bottom: 1px solid #e7e7e7;"><div class="row"><div class="col-33"><div class="definiteNames">' + item.员工名称 + '</div></div><div class="col-33"><div class="definitenums">' + item.打赏时间 + '</div></div><div class="col-33"><div class="definiteTimes">' + item.打赏金额 + '</div></div></div></li>';
+                        });
+
+                    }
+                    $('.list-container').html(str);
+                }
+            });
+        }
+        addItems(itemsPerLoad, 1);
+        var lastIndex = 20;
+        $(document).on('infinite', '.infinite-scroll', function () {
+            // 如果正在加载，则退出
+            if (loading) return;
+            // 设置flag
+            loading = true;
+            setTimeout(function () {
+                loading = false;
+                if (lastIndex >= maxItems) {
+                    $.detachInfiniteScroll($('.infinite-scroll'));
+                    $('.infinite-scroll-preloader').remove();
+                    return;
+                }
+                addItems(itemsPerLoad, lastIndex);
+                lastIndex = $('.list-container li').length;
+            }, 1000);
+        });
+
+        $.init();//关键
+
+
+    }
+
+    function GetQueryString(name) {
+        var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+        var r = window.location.search.substr(1).match(reg);
+        if (r != null) return unescape(r[2]); return null;
+    }
+</script>

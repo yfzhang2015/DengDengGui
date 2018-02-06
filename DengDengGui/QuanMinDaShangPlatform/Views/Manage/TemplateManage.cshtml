@@ -1,0 +1,386 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    Layout = "~/Views/Shared/_LayoutOfManage.cshtml";
+    ViewData["Title"] = "人员管理";
+}
+
+<div class="contentRightBox">
+    <!--标题-->
+    <div class="contentTitle">
+        <p>
+            <span>
+                <img src="~/images/currmodal.png" />&nbsp;基础信息管理&nbsp;<img src="~/images/arrow_small.png" />
+            </span>打赏模板管理
+        </p>
+    </div>
+    <!--按钮区域-->
+    <div class="l_buttonnav">
+        <a href="#" class="tfbtn" id="add">
+            <span class="l-btn-left">
+                <span>增加</span>
+                <span><img src="~/images/edit_add.png" /></span>
+            </span>
+        </a>
+       
+    </div>
+    <!--内容-->
+    <div class="contentMiddle">
+        <div class="contentMiddle_box">
+            <!--左边盒子-->
+
+            <div class="contentMiddle_rightbox">
+                <div class="l_organize">
+                    <div class="panel-body" style="width: 99%;">
+                        <div class="tableBox">
+                            <table class="table" border="1" cellspacing="0" cellpadding="0">
+                                <thead>
+                                    <tr>
+                                        <th>模板名称</th>
+                                        <th>模板类型</th>
+                                        <th>打赏金额1</th>
+                                        <th>打赏金额2</th>
+                                        <th>打赏金额3</th>
+                                        <th>打赏金额4</th>
+                                        <th>操作</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tabledata"></tbody>
+                            </table>
+                        </div>
+                        @*<div class="flickr">
+                                <span class="all">共50条</span>
+                                <a href="#" class="next">下一页</a>
+                                <a href="#">5</a>
+                                <a href="#">4</a>
+                                <a href="#">3</a>
+                                <a href="#">2</a>
+                                <a href="#">1</a>
+                                <a href="#" class="pr">上一页</a>
+                                <a href="#" class="fir current">首 页</a>
+                            </div>*@
+                        <div class="flickr" id="paging" style="width: 420px; margin: 0 auto;">
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <!--内容结束-->
+    </div>
+</div>
+<!--弹出层-->
+<div class="popMask">
+    <div class="pop">
+        <div class="popTitle">模板信息</div>
+        <div class="cha"></div>
+        <div class="popContent">
+            <div class="popContent_box">
+                <div class="popContent_title">
+                    <ul id="tit">
+                        <span class="select">模板信息</span>
+                    </ul>
+                </div>
+                <div style="overflow: auto; height: 480px;">
+                    <input type="hidden" id="hiddeid"/>
+                    <ul id="con">
+                        <li class="show">
+                            <div class="showBox">
+                                <div class="showBox_left">
+                                    模板名称
+                                </div>
+                                <div class="showBox_right">
+                                    <input type="text" style="cursor: not-allowed;" id="tempname" />
+                                </div>
+                            </div>
+                            <div class="showBox">
+                                <div class="showBox_left">
+                                    模板类型
+                                </div>
+                                <div class="showBox_right_select">
+                                    <select id="temptype">
+                                        <option value="0">自由打赏</option>
+                                        <option value="1">多金额打赏</option>
+                                        <option value="2">单金额打赏</option>
+                                        <option value="3">自由多金额打赏</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="showBox">
+                                <div class="showBox_left">
+                                    打赏金额1
+                                </div>
+                                <div class="showBox_right">
+                                    <input type="number" id="ds1" />
+                                </div>
+                            </div>
+                            <div class="showBox">
+                                <div class="showBox_left">
+                                    打赏金额2
+                                </div>
+                                <div class="showBox_right">
+                                    <input type="number" id="ds2" />
+                                </div>
+                            </div>
+                            <div class="showBox">
+                                <div class="showBox_left">
+                                    打赏金额3
+                                </div>
+                                <div class="showBox_right">
+                                    <input type="number" id="ds3" />
+                                </div>
+                            </div>
+                            <div class="showBox">
+                                <div class="showBox_left">
+                                    打赏金额4
+                                </div>
+                                <div class="showBox_right">
+                                    <input type="number" id="ds4" />
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="btnBox">
+            <a href="javascript:;" id="back">
+                <span><img src="~/images/cancel.png"></span>
+                <span>返回</span>
+            </a>
+            <a href="javascript:;" id="suretemp">
+                <span><img src="~/images/okm.png"></span>
+
+                <span>确定</span>
+            </a>
+            <input type="hidden" value="0" id="hidden" />
+        </div>
+    </div>
+</div>
+
+
+@section scripts{
+    <script src="~/js/jquery.form.js"></script>
+    <script src="~/lib/layer/layer.js"></script>
+    <script>
+        $(function () {
+            GetAllTemplateMsg();
+        });
+
+        function GetAllTemplateMsg() {
+            $.ajax({
+                url: 'querytemplates',
+                method: 'GET',
+                success: function (backData) {
+                    var data = JSON.parse(backData);
+
+                    console.log(data)
+                    if (data.result) {
+                        var str = '';
+                        var templateType = '';
+                        $(data.data).each(function (index, item) {
+                            console.log(item.dsTemplatType)
+                            switch (item.dsTemplateType) {
+                                case 0:
+                                    templateType = "自由打赏模式";
+                                    break;
+                                case 1:
+                                    templateType = "多金额固定模式";
+                                    break;
+                                case 2:
+                                    templateType = "单金额固定模式";
+                                    break;
+                                case 3:
+                                    templateType = "自由多金额模式";
+                                    break;
+                            }
+                            str += '<tr>';
+                            str += '<td align="center">' + (item.dsTemplateName == null ? '' : item.dsTemplateName) + '</td>';//模板名称
+                            str += '<td align="center">' + templateType + '</td>';//模板类型
+                            str += '<td align="center">' + item.dS1 + '</td>';//打赏金额1
+                            str += '<td align="center">' + item.dS2 + '</td>';//打赏金额2
+                            str += '<td align="center">' + item.dS3 + '</td>';//打赏金额3
+                            str += '<td align="center">' + item.dS4 + '</td>';//打赏金额4
+                            str += '<td align="center">';
+                            str += '<div class="bj_box">';
+                            str += '<a href="#" id="edit" onclick="GetTempSet(' + item.id + ')">';
+                            str += '<span class="l-btn-left">';
+                            str += '<span>编辑</span>';
+                            str += '<span><img src="../images/add.png">';
+                            str += '</span>';
+                            str += '</a>';
+                            str += '<a href="#" onclick="DeleteTemp(' + item.id + ')">';
+                            str += '<span class="l-btn-left">';
+                            str += '<span>删除</span>';
+                            str += '<span><img src="../images/del.png">';
+                            str += '</span>';
+                            str += '</a>';
+                            str += '<a href="#" onclick="UseTemp(' + item.id + ')">';
+                            str += '<span class="l-btn-left">';
+                            str += '<span>使用</span>';
+                            str += '<span><img src="../images/pencil.png">';
+                            str += '</span>';
+                            str += '</a>';
+                            str += '</div>';
+                            str += '</td>';
+                            str += '</tr>'
+                        })
+                        $("#tabledata").html(str);
+                    }
+                }
+            });
+
+        }
+
+        //加载添加模态框
+        $("#add").click(function () {
+            $(".popMask").fadeIn();
+            var scrollTop = document.body.scrollTop;//保存点击前滚动条的位置
+            window.onscroll = function () {
+                document.body.scrollTop = scrollTop;
+            }
+        });
+
+        //添加/修改模板信息
+        $('#suretemp').click(function () {
+            var mark = $("#hidden").val();
+            var id = $("#hiddeid").val();
+            var tempName = $("#tempname").val();//模板名称
+            var tempType = $("#temptype option:selected").val();//模板类型
+            var ds1 = $("#ds1").val();//打赏金额1
+            var ds2 = $("#ds2").val();//打赏金额2
+            var ds3 = $("#ds3").val();//打赏金额3
+            var ds4 = $("#ds4").val();//打赏金额4
+            if (mark == 0) {
+                $.ajax({
+                    url: 'addqmdstemplate',
+                    type: 'POST',
+                    data: {
+                        DSTemplateType: tempType,
+                        DS1: ds1,
+                        DS2: ds2,
+                        DS3: ds3,
+                        DS4: ds4,
+                        DSTemplateName: tempName
+                    },
+                    success: function (backData) {
+                        var backData = JSON.parse(backData);
+                        if (backData.result) {
+                            alert("添加模板信息成功！")
+                            $(".popMask").fadeOut();//关闭模态窗
+                            GetAllTemplateMsg();//刷新打赏模板
+                        }
+                    }
+                });
+            } else {
+                $.ajax({
+                    url: 'modifyqmdstemplate',
+                    type: 'PUT',
+                    data: {
+                        DSTemplateType: tempType,
+                        DS1: ds1,
+                        DS2: ds2,
+                        DS3: ds3,
+                        DS4: ds4,
+                        DSTemplateName: tempName,
+                        ID:id
+                    },
+                    success: function (backData) {
+                        var backData = JSON.parse(backData);
+                        if (backData.result) {
+                            alert("修改模板信息成功！")
+                            $(".popMask").fadeOut();//关闭模态窗
+                            GetAllTemplateMsg();//刷新打赏模板
+                            $("#hidden").val(0);
+                        }
+                    }
+                });
+
+            }
+          
+        });
+
+        //删除模板
+        function DeleteTemp(id) {
+            $.ajax({
+                url: "deleteqmdstemplate",
+                type: 'DELETE',
+                data: {
+                    id: id
+
+                },
+                success: function (dataBack) {
+                    var data = JSON.parse(dataBack);
+                    if (data.result) {
+
+                        alert("删除模板成功");
+                        GetAllTemplateMsg();
+                    } else {
+                        alert(data.errMsg);
+
+                    }
+                }
+            })
+
+        }
+
+        //通过模板ID获取模板信息
+        function GetTempSet(id) {
+            $("#hidden").val(1);
+            $("#hiddeid").val(id)
+            $(".popMask").fadeIn();//弹出编辑模态窗
+            $.ajax({
+                url: 'querytemplatebyid',
+                type: "GET",
+                data: {
+                    id: id
+
+                },
+                success: function (backData) {
+                    var data = JSON.parse(backData);
+                    console.log(data)
+                    if (data.result) {
+                        $("#tempname").val(data.data[0].dsTemplateName);//模板名称
+                        $("#temptype").val(data.data[0].dsTemplateType);//模板类型
+                        $("#ds1").val(data.data[0].dS1);//打赏金额1
+                        $("#ds2").val(data.data[0].dS2);//打赏金额2
+                        $("#ds3").val(data.data[0].dS3);//打赏金额3
+                        $("#ds4").val(data.data[0].dS4);//打赏金额4
+                    } else {
+                        alert(data.errMsg)
+
+                    }
+                }
+            });
+        }
+
+        //公司为所有员工使用模板
+        function UseTemp(id) {
+
+            $.ajax({
+                url: "addcompanytemplate",
+                type: "POST",
+                data: {
+                    id: id
+
+                },
+                success: function (backData) {
+                   
+                    var data = JSON.parse(backData);
+                    console.log(data)
+                    if (data.result) {
+                        alert("使用模板成功");
+                        window.location.href ="/getcompanytemplate"
+                    }
+                }
+            });
+        }
+
+        
+
+
+    </script>
+
+}
+

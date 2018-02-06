@@ -1,0 +1,130 @@
+﻿@{ 
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <meta charset="UTF-8">
+    <link href="~/lib/bootstrap/dist/css/bootstrap.css" rel="stylesheet" />
+    <link href="~/css/style.css" rel="stylesheet" />
+    <script src="~/js/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
+    <script src="~/js/rjs.js"></script>
+    <title>登录</title>
+</head>
+<body>
+    <!--头部-->
+    <div class="container-fluid">
+        <div class="row">
+            <div class="registerBox">
+                <div class="registerLogo">
+                    <img src="../images/logo.png" alt="" />
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--中间-->
+    <div class="container">
+        <div class="row">
+            <div class="registerMiddle loginMiddle">
+                <div class="registerMiddle_title">密码登录</div>
+                <div class="sellerName loginName">
+                    <div class="row">
+                        <div class="col-sm-3 col-xs-3">用&nbsp; 户 &nbsp;名</div>
+                        <div class="col-sm-9 col-xs-9">
+                            <input type="number" id="number" placeholder="请输入手机号" />
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="sellerName loginName">
+                    <div class="row">
+                        <div class="col-sm-3 col-xs-3">登录密码</div>
+                        <div class="col-sm-9 col-xs-9">
+                            <input type="password" id="text"/>
+                        </div>
+                    </div>
+                </div>
+                <input type="hidden" id="openid" value="@ViewData["openid"]"/>
+                <div class="registerSure login">
+                    <div class="row">
+                       
+                            <input type="button" value="登录" onclick="Submite()"/>
+                     
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+
+<script>
+
+    function Submite() {
+        var number = $("#number").val();
+        var text = $("#text").val();
+        if (number != "" && text != "") {
+            $.ajax({
+                url: 'verifyemployee',
+                type: 'POST',
+                data: {
+                    number: number,
+                    password: text
+
+
+                },
+                success: function (backData) {
+                    BindEmployee(backData);
+                }
+            })
+        }
+    };
+
+    function GetQueryString(name) {
+        var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+        var r = window.location.search.substr(1).match(reg);
+        if (r != null) return unescape(r[2]); return null;
+    }
+
+    //绑定人员openid
+    function BindEmployee(backData) {
+        var openID = $("#openid").val();
+        var data = JSON.parse(backData);
+
+        if (data.result) {
+            if (confirm("是否绑定账号")) {
+                $.ajax({
+                    url: 'bindopenid',
+                    type: 'POST',
+                    data: {
+                        openid: openID,
+                        employeeID: data.data[0].employeeID
+
+                    },
+                    success: function (dataBack) {
+                        var data = JSON.parse(dataBack)
+                        if (data.result) {
+                            alert("绑定成功");
+                            window.location.href = "/showregistrationcategory?openid=" + openID;
+
+                        }
+
+                    }
+                });
+
+            }
+
+        } else {
+            alert("账号密码不正确，请重试!")
+
+        }
+
+    }
+</script>
+

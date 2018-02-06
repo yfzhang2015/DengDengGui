@@ -1,0 +1,46 @@
+﻿
+
+@section Scripts{
+    <script type="text/javascript">
+        //获取共享地址
+        function editAddress()
+        {       
+            WeixinJSBridge.invoke(
+                'editAddress',
+                  function (res)
+                  {
+                      var addr1 = res.proviceFirstStageName;
+                      var addr2 = res.addressCitySecondStageName;
+                      var addr3 = res.addressCountiesThirdStageName;
+                      var addr4 = res.addressDetailInfo;
+                      var tel = res.telNumber;
+                      var addr = addr1 + addr2 + addr3 + addr4;
+                      alert(addr + ":" + tel);
+                  }
+              );
+        }
+        //获取Openid方法
+        window.onload = function ()
+        {   
+            if (typeof WeixinJSBridge == "undefined")
+            {
+                if (document.addEventListener)
+                {
+                    document.addEventListener('WeixinJSBridgeReady', editAddress, false);
+                }
+                else if (document.attachEvent)
+                {
+                    document.attachEvent('WeixinJSBridgeReady', editAddress);
+                    document.attachEvent('onWeixinJSBridgeReady', editAddress);
+                }
+            }
+            else
+            {
+                editAddress();
+            }
+        };
+
+    </script>
+
+
+}

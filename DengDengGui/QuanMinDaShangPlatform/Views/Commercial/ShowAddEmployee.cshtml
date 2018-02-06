@@ -1,0 +1,523 @@
+﻿@{
+    Layout = "~/Views/Shared/_LayoutOfManage.cshtml";
+    ViewData["Title"] = "人员管理";
+}
+
+<div class="contentRightBox">
+    <input type="hidden" id="companyid" />
+    <!--标题-->
+    <div class="contentTitle">
+        <p>
+            <span>
+                <img src="~/images/currmodal.png" />&nbsp;基础信息管理&nbsp;<img src="~/images/arrow_small.png" />
+            </span>人员管理
+        </p>
+    </div>
+    <!--按钮区域-->
+    <div class="l_buttonnav">
+        <a href="#" class="tfbtn" id="add">
+            <span class="l-btn-left">
+                <span>增加</span>
+                <span><img src="~/images/edit_add.png" /></span>
+            </span>
+        </a>
+    </div>
+    <!--内容-->
+    <div class="contentMiddle">
+        <div class="contentMiddle_box">
+            <!--左边盒子-->
+            <div class="contentMiddle_rightbox">
+                <div class="l_organize">
+                    <div class="panel-body" style="width: 99%;">
+                        <div class="tableBox">
+                            <table class="table" border="1" cellspacing="0" cellpadding="0">
+                                <thead>
+                                    <tr>
+                                        <th>序号</th>
+                                        <th>头像</th>
+                                        <th>员工编号</th>
+                                        <th>员工姓名</th>
+                                        <th>联系电话</th>
+                                        <th>联系地址</th>
+
+                                        <th>操作</th>
+
+                                    </tr>
+                                </thead>
+                                <tbody id="tabledata"></tbody>
+                            </table>
+                        </div>
+                        @*<div class="flickr">
+                                <span class="all">共50条</span>
+                                <a href="#" class="next">下一页</a>
+                                <a href="#">5</a>
+                                <a href="#">4</a>
+                                <a href="#">3</a>
+                                <a href="#">2</a>
+                                <a href="#">1</a>
+                                <a href="#" class="pr">上一页</a>
+                                <a href="#" class="fir current">首 页</a>
+                            </div>*@
+                        <div class="flickr" id="paging" style="width: 420px; margin: 0 auto;">
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <!--内容结束-->
+    </div>
+</div>
+<!--弹出层-->
+<div class="popMask">
+    <div class="pop">
+        <div class="popTitle" id="titlename"></div>
+        <div class="cha"></div>
+        <div class="popContent">
+            <div class="popContent_box">
+                <div class="popContent_title">
+                    <ul id="tit">
+                        <span class="select">基础信息</span>
+                        <span id="messa">照片</span>
+                    </ul>
+                </div>
+                <div style="overflow: auto; height: 480px;">
+                    <ul id="con">
+                        <li class="show">
+
+                            <div class="showBox">
+                                <div class="showBox_left">
+                                    员工姓名
+                                </div>
+                                <div class="showBox_right">
+                                    <input type="text" id="EName" placeholder="请输入员工姓名" class="tex" />
+                                </div>
+                            </div>
+                            <div class="showBox">
+                                <div class="showBox_left">
+                                    工作昵称
+                                </div>
+                                <div class="showBox_right">
+                                    <input type="text" id="Nickname" placeholder="请输入工作昵称" class="tex" />
+                                </div>
+                            </div>
+                            <div class="showBox">
+                                <div class="showBox_left">
+                                    联系电话
+                                </div>
+                                <div class="showBox_right">
+                                    <input type="text" id="Phone" placeholder="请输入联系电话" class="tex" />
+                                </div>
+                            </div>
+                            <div class="showBox" id="ygmima">
+                                <div class="showBox_left">
+                                    员工密码
+                                </div>
+                                <div class="showBox_right">
+                                    <input type="text" id="password" placeholder="请输入员工姓名" value="000000" />
+                                </div>
+                            </div>
+                            <div class="showBox">
+                                <div class="showBox_left">
+                                    家庭地址
+                                </div>
+                                <div class="showBox_right">
+                                    <input type="text" id="Address" placeholder="请输入家庭地址" class="tex" />
+                                </div>
+                            </div>
+                            <div class="showBox">
+                                <div class="showBox_left">
+                                    籍贯
+                                </div>
+                                <div class="showBox_right">
+                                    <input type="text" id="NativePlace" placeholder="请输入籍贯" class="tex" />
+                                </div>
+                            </div>
+                            <div class="showBox">
+                                <div class="showBox_left">
+                                    主页留言
+                                </div>
+                                <div class="showBoxTwo_right">
+                                    <textarea rows="5" placeholder="请输入主页留言" id="Message" class="tex"></textarea>
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="showBoxThree">
+                                <div class="showBoxThree_right">
+                                    <div id="uphide">
+                                        <input type="hidden" name="imgpath" id="imgpath" />
+                                        <label>照片格式：gif,png,jpg,jpeg</label>
+                                        <form id="form" method="post" enctype="multipart/form-data">
+                                            <input type="file" name="Photo" id="Photo" />
+                                        </form>
+                                        <input type="button" value="上传" class="sub" onclick="upload()" />
+                                    </div>
+                                    <div class="picture">
+                                        <img src="~/images/BackImage.png" id="myimg">
+                                    </div>
+                                    <div id="toemployeeinfomanage">
+
+                                    </div>
+                                    <br />
+                                    <div id="mycodediv">
+                                        <label>我的二维码</label>
+                                        <div class="picture">
+                                            <img src="" id="mycode">
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="btnBox">
+            <a href="javascript:;" id="back">
+                <span><img src="~/images/cancel.png"></span>
+                <span>返回</span>
+            </a>
+            <div id="sure"></div>
+        </div>
+    </div>
+</div>
+
+
+
+
+@section scripts{
+    <script src="~/js/jquery-1.9.1.min.js"></script>
+    <script src="~/js/jquery.form.js"></script>
+    <script src="~/lib/layer/layer.js"></script>
+
+    <script>
+        //上传照片
+        function upload() {
+            $("#form").ajaxSubmit({
+                type: "POST",//提交类型 
+                url: "/uploadimage",//请求地址  
+                dataType: 'json',
+                success: function (data) {//请求成功后的函数  
+                    console.log('data' + data)
+                    if (data != "") {
+                        $("#myimg").attr("src", data[0]);
+                        $("#imgpath").val(data[0]);
+                    } else {
+                        layer.msg("请选择上传的图片！", { icon: 2 });
+                    }
+
+                },
+                error: function (data) { layer.msg(data, { icon: 2 }); },//请求失败的函数  
+                async: true
+            });
+        }
+        //页面开始加载人员
+        $(function () {
+            layer.load();
+            LoadEmployee(1, 100);
+        });
+
+        //修改模态层
+        function ShowModelModify(id) {
+            $(".popMask").fadeIn();
+            var scrollTop = document.body.scrollTop;//保存点击前滚动条的位置
+            window.onscroll = function () {
+                document.body.scrollTop = scrollTop;
+            }
+            $("#ygmima").show();
+            $("#uphide").show();
+            $('.tex').val('');
+            $("#mycodediv").hide();
+            $('input').removeAttr("readonly");
+            $("#titlename").text("修改人员")
+            $("#sure").html('<a href="javascript:;" onclick="ModifyEmployee(\'' + id + '\')"><span><img src="../images/okm.png"></span><span>修改</span></a>');
+            GetEmployeeByID(id)
+
+        }
+        //查询人员
+        function GetEmployeeByID(id) {
+            $.ajax({
+                type: 'Get',
+                url: '/getemployeebyid',
+                dataType: 'json',
+                data: {
+                    id: id
+                },
+                success: function (dataBack) {
+                    console.log(dataBack)
+                    if (dataBack.data != "") {
+                        $("#EName").val(dataBack.data[0].eName)
+                        $("#Nickname").val(dataBack.data[0].nickname);
+                        $("#Phone").val(dataBack.data[0].phone);
+                        $("#Address").val(dataBack.data[0].address);
+                        $("#NativePlace").val(dataBack.data[0].nativePlace);
+                        $("#Message").val(dataBack.data[0].message);
+                        $("#imgpath").val(dataBack.data[0].picture);
+                        if (dataBack.data[0].picture != null) {
+                            $("#myimg").attr("src", dataBack.data[0].picture)
+                        }
+                        if (dataBack.money == null) {
+                            dataBack.money =0
+                        }
+                        $("#mycode").attr("src", "upload/myimage/" + dataBack.data[0].eNumber+".jpg")
+                        var str = '<label>打赏总金额：' + dataBack.money + '元</label>';
+                        str += '<label><a href="/employeeinfomanage?employeeid=' + id + '">点击查看打赏详细信息</a></label>'
+
+                        $("#toemployeeinfomanage").html(str);
+
+                    }
+                }, error: function (error) {
+
+                    alert(error.status + error.statusText);
+                }
+            })
+        }
+
+        //查询人员详细
+        function ShowEmployee(id) {
+            $(".popMask").fadeIn();
+            var scrollTop = document.body.scrollTop;//保存点击前滚动条的位置
+            window.onscroll = function () {
+                document.body.scrollTop = scrollTop;
+            }
+            $('.tex').val('');
+            $('.tex').attr("readOnly", "true");
+            $("#titlename").text("人员详细");
+            $("#ygmima").hide();
+            $("#uphide").hide();
+            $("#sure").hide();
+            $("#mycodediv").show();
+            GetEmployeeByID(id)
+            $("#messa").text("打赏信息")
+        }
+
+        //加载添加模态框
+        $("#add").click(function () {
+            $(".popMask").fadeIn();
+            var scrollTop = document.body.scrollTop;//保存点击前滚动条的位置
+            window.onscroll = function () {
+                document.body.scrollTop = scrollTop;
+            }
+            $("#toemployeeinfomanage").html("");
+            $('input').removeAttr("readonly");
+            $("#ygmima").show();
+            $("#uphide").show();
+            $('.tex').val('');
+            $("#myimg").attr("src", "/images/BackImage.png");
+            $("#imgpath").val("");
+            $("#titlename").text("添加人员")
+            $("#mycodediv").hide();
+            $("#sure").html('<a href="javascript:;" onclick="AddEmployee()"><span><img src="../images/okm.png"></span><span>添加</span></a>');
+        });
+
+        //返回按钮
+        $("#back").click(function () {
+            $(".popMask").fadeOut();
+            window.onscroll = function () {
+                document.body.scrollTop = document.body.scrollTop;//关闭后清除保存位置的值
+            }
+        });
+        //添加员工
+        function AddEmployee() {
+            if (Check()) {
+                $.ajax({
+                    type: 'Post',
+                    url: '/addemployee',
+                    dataType: 'json',
+                    data: {
+                        EName: $("#EName").val(),
+                        Nickname: $("#Nickname").val(),
+                        Phone: $("#Phone").val(),
+                        Address: $("#Address").val(),
+                        NativePlace: $("#NativePlace").val(),
+                        Message: $("#Message").val(),
+                        Picture: $("#imgpath").val(),
+                        password: $("#password").val(),
+                        CompanyID: $("#companyid").val(),
+                        CreaterID: $("#companyid").val()
+                    },
+                    success: function (dataBack) {
+                        if (dataBack == 0) {
+                            layer.msg("该手机号已经存在！请输入正确的手机号！", { icon: 2 });
+                        } else {
+                            if (dataBack.result == 1) {
+                                layer.msg("添加成功", { icon: 1 });
+                                LoadEmployee(1, 100);
+                                Back()
+                            } else {
+                                layer.msg("添加失败！", { icon: 2 });
+                            }
+                        }
+                    }, error: function (error) {
+
+                        alert(error.status + error.statusText);
+                    }
+                })
+            }
+        }
+        //修改员工
+        function ModifyEmployee(id) {
+            if (Check()) {
+                $.ajax({
+                    type: 'Post',
+                    url: '/modifyemployee',
+                    dataType: 'json',
+                    data: {
+                        ID: id,
+                        EName: $("#EName").val(),
+                        Nickname: $("#Nickname").val(),
+                        Phone: $("#Phone").val(),
+                        Address: $("#Address").val(),
+                        NativePlace: $("#NativePlace").val(),
+                        Message: $("#Message").val(),
+                        Picture: $("#imgpath").val(),
+                        password: $("#password").val(),
+                        CompanyID: $("#companyid").val(),
+                        ModifierID: $("#companyid").val()
+                    },
+                    success: function (dataBack) {
+                        if (dataBack == 0) {
+                            layer.msg("该手机号已经存在！请输入正确的手机号！", { icon: 2 });
+                        } else {
+                            if (dataBack.result == 1) {
+                                layer.msg("修改成功", { icon: 1 });
+                                LoadEmployee(1, 100);
+                                Back()
+                            } else {
+                                layer.msg("修改失败！", { icon: 2 });
+                            }
+                        }
+                    }, error: function (error) {
+
+                        alert(error.status + error.statusText);
+                    }
+                })
+            }
+        }
+        //删除员工
+        function DeleteEmployee(id, eNumber) {
+
+            layer.confirm('确实要删除编号为：【' + eNumber + '】的员工吗？', {
+                btn: ['是', '否'] //按钮
+            }, function () {
+                $.ajax({
+                    type: 'Post',
+                    url: '/deleteemployee',
+                    dataType: 'json',
+                    data: {
+                        id: id
+                    },
+                    success: function (dataBack) {
+                        if (dataBack.result == 1) {
+                            layer.msg("删除成功", { icon: 1 });
+                            LoadEmployee(1, 100);
+                        } else {
+                            layer.msg("删除失败！", { icon: 2 });
+                        }
+
+                    }, error: function (error) {
+
+                        alert(error.status + error.statusText);
+                    }
+                })
+            }, function () {
+
+            });
+        }
+        //验证
+        function Check() {
+            var str = '';
+            //验证姓名
+            if ($.trim($('#EName').val()).length == 0) {
+                str += "请输入员工姓名！\n"
+                $('#fICNo').focus();
+            }
+            //验证昵称
+            if ($.trim($('#Nickname').val()).length == 0) {
+                str += "请输入工作昵称！\n"
+                $('#fICNo').focus();
+            }
+            //验证手机
+            if ($.trim($('#Phone').val()).length != 11) {
+                str += "请输入正确的11位手机号！\n"
+                $('#fICNo').focus();
+            }
+            //验证密码
+            if ($.trim($('#password').val()).length == 0) {
+                str += "请设置密码！\n"
+                $('#fICNo').focus();
+            }
+            if (str != '') {
+                layer.msg(str, { icon: 2 });
+                return false;
+            } else {
+                return true;
+            }
+
+        }
+        //关闭
+        function Back() {
+            $(".popMask").fadeOut();
+            window.onscroll = function () {
+                document.body.scrollTop = document.body.scrollTop;//关闭后清除保存位置的值
+            }
+        }
+
+        //加载公司下的所有人员
+        function LoadEmployee(pageIndex, pageRow) {
+            console.log("公司ID：" + $("#companyid").val());
+            $.ajax({
+                type: 'GET',
+                url: '/getemployees',
+                dataType: 'json',
+                data: {
+                    companyID: $("#companyid").val(),
+                    pageIndex: pageIndex,
+                    pageRow: pageRow
+                },
+                success: function (dataBack) {
+                    layer.closeAll('loading');
+                    if (dataBack.result == 1) {
+                        $("#companyid").val(dataBack.companyID);
+                        var str = "";
+                        $(dataBack.data).each(function (index, item) {
+                            if (item.picture == null) {
+                                item.picture = '../images/BackImage.png';
+                            }
+                            str += '<tr><td align="center">' + item.rowNum + '</td>';
+                            str += '<td align="center"><div class="tablePic"><img src="' + item.picture + '" /></div></td>';
+                            str += '<td align="center">' + item.eNumber + '</td>';
+                            str += '<td align="center">' + item.eName + '</td>';
+                            str += '<td align="center">' + item.phone + '</td>';
+                            str += '<td align="center">' + (item.address == null?"": item.address)+ '</td>';
+                            str += '<td align="center"><div class="bj_box"> ';
+                            str += '<a href="#" onclick="ShowModelModify(\'' + item.id + '\')"> <span class="l-btn-left">'
+                            str += ' <span>编辑</span> <span><img src="../images/add.png"></span></span></a>';
+                            str += '<a href="#" onclick="ShowEmployee(\'' + item.id + '\')"> <span class="l-btn-left">';
+                            str += '<span>详情</span> <span><img src="../images/qk.png"></span></span></a>';
+                            str += '<a href="#" onclick="DeleteEmployee(\'' + item.id + '\',\'' + item.eNumber + '\')"> <span class="l-btn-left">';
+                            str += ' <span>删除</span> <span><img src="../images/del.png"></span></span></a>';
+                            str += ' </div></td></tr>'
+                        })
+                        $("#tabledata").html(str);
+                    } else {
+                        layer.closeAll('loading');
+                        layer.msg("查询人员失败！", { icon: 2 });
+                    }
+
+                }, error: function (error) {
+                    layer.closeAll('loading');
+                    layer.msg(error.status + error.statusText, { icon: 2 });
+
+                }
+            })
+        }
+        //跳转人员打赏明细页
+        function ToEmployeeinFomanage(id) {
+            window.location.href = "/employeeinfomanage?employeeid=" + id;
+        }
+    </script>
+
+}

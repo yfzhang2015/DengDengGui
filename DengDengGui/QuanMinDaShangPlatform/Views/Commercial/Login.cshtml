@@ -1,0 +1,127 @@
+﻿@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <meta charset="UTF-8">
+    <title>登录</title>
+
+    <link href="~/lib/bootstrap/dist/css/bootstrap.css" rel="stylesheet" />
+    <link href="~/css/main.css" rel="stylesheet" />
+    <script src="~/js/jquery-1.9.1.min.js"></script>
+    <script src="~/js/rjs.js"></script>
+</head>
+<body>
+
+    <div class="login">
+        <div class="login_box">
+            <div class="login_top">
+                <h1>欢迎登录全民打赏平台</h1>
+            </div>
+            <form method="post" action="/comlogin" id="myform">
+                <div class="login_admin">
+                    <input type="text" maxlength="16" placeholder="Email Address" id="username" name="username" value="@ViewBag.fanme" />
+                    <div class="admin"></div>
+                </div>
+                <div class="login_lock">
+                    <input type="password" maxlength="20" placeholder="password" id="password" name="password" value="@ViewBag.password" />
+                    <div class="lock"></div>
+                </div>
+                <div class="text-danger" style="float:left;margin-top:14px;font-weight:900;font-size:16px;text-align: center; width:100%;" id="errors">@ViewBag.error</div>
+                <!--<div class="forget">
+                    <div class="forget_right">
+                        <a href="#">Forgot password？</a>
+                    </div>
+                </div>-->
+                <input type="hidden" value="@ViewBag.returnUrl" name="returnUrl" id="returnUrl" />
+                <div class="push_btn">
+                    <div class="push_btn_left">
+                        <input type="button" value="登录" class="button" onclick="Checkin()" />
+                    </div>
+                    <div class="push_btn_right">
+                        <input type="button" value="注册" class="button" onclick="ToRegister()" />
+                    </div>
+                </div>
+
+            </form>
+        </div>
+    </div>
+    <div class="air-balloon ab-1 png"></div>
+    <div class="air-balloon ab-2 png"></div>
+    <div class="air-balloon ab-3 png"></div>
+    <div class="air-balloon ab-4 png"></div>
+
+</body>
+</html>
+<script src="~/lib/jquery/dist/jquery.js"></script>
+<script src="~/lib/layer/layer.js"></script>
+<script>
+    $(function () {
+        var txt1 = '<div class="air-balloon ab-1 png"></div>';
+        var txt2 = '<div class="air-balloon ab-2 png"></div>';
+        var txt3 = '<div class="air-balloon ab-3 png"></div>';
+        var txt4 = '<div class="air-balloon ab-4 png"></div>';
+        var a = 0;
+        for (var i = 0; i < 3; i++) {
+            $("body").append(txt1, txt2, txt3, txt4);
+        }
+    })
+    //登录
+    function Checkin() {
+        var str = '';
+        // 判断名称
+        if ($.trim($('#username').val()).length == 0) {
+            str += '请输入用户名！';
+            $('#username').focus();
+        }
+        if ($.trim($('#password').val()).length == 0) {
+            str += '请输入密码！';
+            $('#password').focus();
+        }
+        if (str != '') {
+            //layer.msg(str, { icon: 2 });
+             $('#errors').text(str)
+            return false;
+        } else {
+            //页面验证通过后提交表单
+            $("#myform").submit();
+        }
+    }
+
+    function Login() {
+        alert(1111)
+        $.ajax({
+            type: 'Post',
+            url: '/comlogin',
+            dataType: 'json',
+            data: {
+                username: $("#username").val(),
+                password: $("#password").val(),
+                returnUrl: $("#returnUrl").val()
+            },
+            success: function (dataBack) {
+                if (dataBack.result == 1) {
+                    window.location.href = "/showaddemployee";
+                } else {
+                    layer.msg(dataBack.message, { icon: 2 });
+                }
+            }, error: function (error) {
+
+                alert(error.status + error.statusText);
+            }
+
+        })
+    }
+
+    //跳转注册页
+    function ToRegister() {
+        window.location.href = "comregister";
+    }
+</script>
+<script src="~/js/fun.base.js"></script>
+<script src="~/js/script.js"></script>

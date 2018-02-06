@@ -1,0 +1,142 @@
+﻿@charset "utf-8";
+/* CSS Document */
+/*重置*/
+html {
+    font-size: 62.5%;
+}
+
+body {
+    font-family: "微软雅黑";
+    color: #333;
+    font-size: .8rem !important;
+}
+@media screen and (max-width: 960px) {
+    body {
+        font-size: 1.4rem !important;
+    }
+    .list-block {
+        font-size: 1.2rem !important;
+    }
+    .startTime input {
+        font-size: 1.4rem;
+    }
+
+    .endTime input {
+        font-size: 1.4rem;
+    }
+}
+
+dl, dt {
+    margin: 0;
+}
+
+    dl dd {
+        margin: 0;
+    }
+
+* {
+    margin: 0;
+    padding: 0;
+}
+
+h1 {
+    font-weight: normal;
+    margin: 0;
+    padding: 0;
+}
+
+h2 {
+    font-weight: normal;
+    margin: 0;
+    padding: 0;
+}
+
+li {
+    list-style: none;
+}
+
+ul {
+    margin: 0;
+    padding: 0;
+}
+
+a {
+    text-decoration: none;
+}
+
+img {
+    border: none;
+    display: block;
+}
+
+a:hover {
+    text-decoration: none;
+}
+
+a:link {
+    text-decoration: none;
+}
+
+p {
+    margin: 0;
+}
+/*明细*/
+.startTime input {
+    width: 100%;
+}
+
+.endTime input {
+    width: 100%;
+}
+
+.inquiry input {
+    width: 100%;
+}
+
+.bill {
+    margin-top: .5rem;
+    color: white;
+}
+
+.definiteName {
+    width: 100%;
+    text-align: left;
+    color: white;
+}
+
+.definitenum {
+    width: 100%;
+    text-align: center;
+    color: white;
+}
+
+.definiteTime {
+    width: 100%;
+    text-align: right;
+    color: white;
+}
+
+.list-block {
+    font-size: .8rem !important;
+}
+
+.definiteNames {
+    width: 100%;
+    text-align: left;
+}
+
+.definitenums {
+    width: 100%;
+    text-align: center;
+}
+
+.definiteTimes {
+    width: 100%;
+    text-align: right;
+}
+.startTime input {
+    font-size: .8rem;
+}
+.endTime input {
+    font-size: .8rem;
+}

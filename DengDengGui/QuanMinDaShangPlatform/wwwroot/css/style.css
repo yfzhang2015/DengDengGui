@@ -1,0 +1,518 @@
+/*重置*/
+html{font-size: 62.5%;}
+body {font-family:"微软雅黑"; color: #333;}
+dl,dt{ margin:0;}
+dl dd{ margin:0;}
+*{ margin:0; padding:0;}
+h1{ font-weight:normal; margin:0; padding:0;}
+h2{ font-weight:normal; margin:0; padding:0;}
+li{ list-style:none;}
+ul{ margin:0; padding:0;}
+a{ text-decoration:none;}
+img{border:none; display:block;}
+a:hover{text-decoration:none;}
+a:link{text-decoration:none;}
+p{ margin:0;}
+/*注册头部*/
+.registerBox{
+	width: 100%;
+	height: 200px;
+	background-image: url(../images/registerBg.png);
+	background-size:cover;
+	background-repeat: no-repeat;
+	text-align: center;
+	line-height: 200px; 
+}
+.registerLogo{
+	width: 160px;
+	height: 160px;
+	border-radius: 50%;
+	background-color: white;
+	vertical-align: middle;
+	display: inline-block;
+	line-height: 160px;	
+	text-align: center;
+}
+.registerLogo img{
+	vertical-align: middle;
+	display: inline-table;
+	width: 96%;
+}
+/*注册中间*/
+.registerMiddle{
+	width: 50%;
+	margin: 30px auto;
+	background-color: #e1e7fa;
+	border-radius: 12px;
+	padding-bottom: 20px;
+}
+.registerMiddle_title{
+	text-align: center;
+	color: #6276a7;
+	font-size: 24px;
+	line-height: 48px;
+	padding-bottom: 16px;
+}
+.sellerName{
+	width: 96%;
+	margin: 0 auto 10px;
+}
+.sellerName div div:nth-child(1){
+	text-align: right;
+	color: #6276a7;
+	font-size: 18px;
+	line-height: 42px;
+}
+.sellerName div div:nth-child(2) input{
+	width: 86%;
+	font-size: 18px;
+	line-height: 42px;
+	padding-left: 10px;
+}
+.identifying{
+	width: 96%;
+	margin: 0 auto 10px;
+}
+.identifying div div:nth-child(1){
+	text-align: right;
+	color: #6276a7;
+	font-size: 18px;
+	line-height: 42px;
+}
+.identifying div div:nth-child(2) input{
+	width: 100%;
+	font-size: 18px;
+	line-height: 42px;
+	padding-left: 10px;
+}
+.identifying div div:nth-child(3) input{
+	width: 92%;
+	font-size: 18px;
+	line-height: 42px;
+	text-align: center;
+	background-color: #b5c7e7;
+	color: white;
+	border: 1px solid #919fb9;
+	outline: none;
+}
+.picUpload{
+	width: 70%;
+	margin: 20px auto 10px;
+	background-color: #b5c7e7;
+	border-radius: 6px;
+	overflow: hidden;
+	padding: 10px 0;
+}
+.picUpload_left{
+	width: 50%;
+	float: left;
+}
+.picUpload_font{
+	width: 90%;
+	margin: 0 auto;
+	font-size: 16px;
+	color: #66759c;
+	line-height: 24px;
+}
+.picUpload_right{
+	width: 50%;
+	float: right;
+}
+.file_btn {
+    width: 90%;
+    height: 78px;
+    border: 1px solid #dddddd;
+    border-radius: 5px;
+    background-color: #ffffff;
+    text-align: center;
+    line-height: 80px;
+    overflow: hidden;
+    position: relative;
+    margin-right: 20px;
+    margin-left: 3px;
+}
+.file_btn input {
+    width: 100%;
+    height: 78px;
+    border-radius: 5px;
+    background-color: #ffffff;
+    text-align: center;
+    opacity: 0;
+    position: absolute;
+    top: 0;
+    left: 0;
+    color: #465468;
+}
+.read{
+	width: 70%;
+	margin: 15px auto 10px;
+	background-color: white;
+	height: 40px;
+	border-radius: 40px;
+}
+.read h1{
+	width: 94%;
+	margin: 0 auto;
+	font-size: 16px;
+	font-weight: normal;
+	line-height: 40px;
+}
+.read h1 a{
+	color: #3872ff;
+	margin: 0 15px;
+}
+.read h1 input{
+	width: 14px;
+	height: 14px;
+	margin-left: 10px;
+}
+.registerSure{
+	width: 70%;
+	margin: 15px auto 0;
+	height: 40px;
+}
+.registerSure input{
+	width: 100%;
+	line-height: 40px;
+	border-radius: 40px;
+	outline: none;
+	border: none;
+	background-color: #7b92bb;
+	color: white;
+	text-align: center;
+	font-size:16px ;
+}
+.showEnterprise{
+	display: none;
+}
+.enterprise label{
+	font-size: 18px;
+    line-height: 42px;
+}
+.enterpriseLab input{
+	width: 100%;
+	margin-top: 15px;
+}
+@media screen and (max-width: 640px) {
+	/*注册头部*/
+    .registerBox {
+        height: 14rem;
+        line-height: 14rem;    	
+    }
+    .registerLogo{
+		width:12rem;
+		height: 12rem;
+		line-height: 12rem;	
+	}
+	/*注册中间*/
+	.registerMiddle{
+		width: 90%;
+		margin: 3rem auto;
+		border-radius: .8rem;
+		padding-bottom: 2rem;
+	}
+	.registerMiddle_title{
+		font-size: 1.6rem;
+	}
+	.sellerName{
+		width: 96%;
+		margin: 0 auto 1rem;
+	}
+	.sellerName div div:nth-child(1){
+		font-size: 1.4rem;
+		line-height: 2.8rem;
+		padding-right: 0;
+		padding-left: 0;
+	}
+	.sellerName div div:nth-child(2) input{
+		width: 90%;
+		font-size: 1.2rem;
+		line-height: 2.8rem;
+		padding-left: 1rem;
+	}
+	.identifying{
+		width: 96%;
+		margin: 0 auto 1rem;
+	}
+	.identifying div div:nth-child(1){
+		font-size: 1.4rem;
+		line-height: 2.8rem;
+		padding-right: 0;
+		padding-left: 0;
+	}
+	
+	.identifying div div:nth-child(2) input{
+		width: 100%;
+		font-size: 1.2rem;
+		line-height: 2.8rem;
+		padding-left: 1rem;
+	}
+	.identifying div div:nth-child(3) input{
+		width: 77%;
+		font-size: 1rem;
+		line-height: 2.8rem;
+	}
+	.identifying div div:nth-child(3){
+		padding-left: 0;
+	}
+	.picUpload{
+		width: 80%;
+		margin: 1.4rem auto 1rem;
+    	padding: 1rem 0;
+	}
+	.picUpload_font {
+	    font-size: 1.2rem;
+    	line-height: 1.5rem;
+	}
+	.read {
+	    width: 80%;
+	    margin: 1.4rem auto 1rem;
+	    height: 3.6rem;
+	}
+	.read h1 {
+	    width: 96%;
+	    margin: 0 auto;
+	    font-size: 1.2rem;
+	    font-weight: normal;
+	    line-height: 3.6rem;
+	}
+	.read h1 a {
+    	margin: 0 .5rem;
+	}
+	.read h1 input {
+	    width: 1rem;
+	    height: 1rem;
+	    margin-left: .5rem;
+	}
+	.registerSure {
+	    width: 80%;
+	    margin: 1.4rem auto 0;
+	    height: 3.6rem;
+	}
+	.registerSure input {
+	    line-height: 3.6rem;
+	    font-size: 1.4rem;
+	}
+	.enterprise label{
+		line-height: 2.8rem;
+    	font-size: 1.4rem;
+	}
+	.enterprise div label input{
+		width: 100%;
+		margin-top: 1rem;
+	}
+}
+
+/*选择方式*/
+.choiceBox{
+	background-color: white;
+	width: 100%;
+	margin-top: 1.5rem;
+	margin-bottom: 1.5rem;
+	padding-bottom: 2rem;
+	box-shadow: 0 0 40px -13px #323232;
+}
+.choiceTop{
+	border-bottom: 1px solid #d5d5d5;
+	font-size: 2rem;
+	color: #333;
+	line-height: 4rem;
+}
+.choiceSingle h1{
+	color: #323232;
+	font-size: 1.4rem;
+	line-height: 6rem;
+}
+.singleBox{
+	width: 100%;
+	height: 6rem;
+	border: 1px solid #81b891;
+	border-radius: 6px;
+	line-height: 6rem;
+	text-align: center;
+	font-size: 2rem;
+	color: #81b891;
+}
+.singleBox a{
+	color: #81b891;
+}
+.write{
+	overflow: hidden;
+}
+.write input[type=number]{
+	width: 70%;
+	padding-left: 4%;
+	height: 4rem;
+	border-radius: 6px;
+	outline: none;
+	border:1px solid #84bb94;
+	line-height: 4rem;
+	font-size: 1.4rem;
+	color: #333;
+}
+.write input[type=button]{
+	width: 26%;
+	height: 4rem;
+	border-radius: 6px;
+	outline: none;
+	border: none;
+	line-height: 4rem;
+	font-size: 1.4rem;
+	color: #fff;
+	background-color:#84bb94 ;
+}
+.write input[type=number]:focus{
+    border:1px solid #84bb94
+}
+input.singleBox{
+	outline: none;
+}
+input.singleBox:focus{
+    border:1px solid #84bb94
+}
+
+.choiceTally{
+	position: relative;
+}
+.choiceTallyer {
+	display: none;
+    content: ' ';
+	width: 2rem;
+	height: 2rem;
+	background-image:url(../images/dui.png);
+	position: absolute;
+	right: 1.2rem;
+	bottom: 0;
+	background-repeat: no-repeat;
+    z-index: 1;
+}
+/*打赏界面*/
+.rewardBox{
+	width: 100%;
+	height: 26rem;
+	background-color: #d43b33;
+	position: relative;
+	margin-bottom: 4rem;
+}
+.rewardTitle{
+	color: white;
+	font-size: 2rem;
+	text-align: center;
+	line-height: 5rem;
+	/*font-weight: bold;*/
+}
+.rewardComment{
+	text-align: center;
+	color: white;
+	font-size: 1.4rem;
+/*	font-weight: bold;*/
+}
+.starZan{
+	width: 100%;
+	height: 9rem;
+	position: relative;
+	margin-top: 1.5rem;
+}
+.star{
+	width: 6rem;
+	height: 9rem;
+	background-image: url(../images/star.png);
+	background-repeat: no-repeat;
+	position:absolute;
+	left: 50%;
+	margin-left: -3rem;
+	background-size: 100%;
+	text-align: center;
+	padding-top: .8rem;
+}
+.star p{
+	color: #333;
+	font-size: 1rem;
+}
+.star p:nth-child(2){
+	font-size: 1.2rem;
+	font-weight: bold;
+}
+.rewardPic{
+	width: 12rem;
+	height: 12rem;
+	border-radius: 50%;
+	border:1px solid #9e9d9d;
+	display: inline-block;
+	vertical-align: middle;
+	overflow: hidden;
+	position: absolute;
+	bottom: -6rem;
+	background-color: blueviolet;
+	left: 50%;
+	margin-left: -6rem;
+}
+.rewardPicBox{
+	width: 100%;
+	height: 12rem;
+	position: relative;
+}
+.shade{
+	width: 100%;
+	height: 6rem;
+	background-color:rgba(0,0,0,0.6);
+	position: absolute;
+	bottom:-2.5rem;
+	z-index: 999;
+}
+.shade h1{
+	text-align: center;
+	color: white;
+	font-size: 1.5rem;
+/*	font-weight: bold;*/
+	margin-top: .7rem;
+}
+.headSculpture {
+    width: 12rem;
+    height: 12rem;
+    background-image: url('../upload/image/2018012304183579670.jpg');
+    background-image: url('../images/gsw.jpg');
+    background-size: 100%;
+}
+
+.rewardPay{
+	width: 96%;
+	margin: 6rem auto 0;
+}
+.rewardPay input{
+	width: 100%;
+	height: 4.5rem;
+	padding-left: 6%;
+	outline: none;
+	border:1px solid #ff0000;
+	border-radius: 6px ;
+	font-size: 1.4rem;
+}
+.rewardPay input:focus{
+    border:1px solid #ff0000;
+}
+.rewardPaySure{
+	width: 96%;
+	margin: 3rem auto 0;
+}
+.rewardPaySure input{
+	width: 100%;
+	height: 4.5rem;
+	outline: none;
+	border:none;
+	border-radius: 6px ;
+	font-size: 1.4rem;
+	background-color: #d43b33;
+	color: white;
+}
+.rewardPay input.singleBox {
+    border: 1px solid #d43b33;
+    color: #d43b33;
+    background-color:white;
+    line-height:4.5rem;
+    text-align:center;
+    font-weight:bold;
+}
+
+   
+

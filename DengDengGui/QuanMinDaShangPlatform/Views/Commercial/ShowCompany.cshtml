@@ -1,0 +1,237 @@
+﻿@{
+    Layout = "~/Views/Shared/_LayoutOfManage.cshtml";
+    ViewData["Title"] = "商户管理";
+}
+<div class="contentRightBox">
+    <input type="hidden" id="companyid" />
+    <!--标题-->
+    <div class="contentTitle">
+        <p>
+            <span>
+                <img src="~/images/currmodal.png" />&nbsp;基础信息管理&nbsp;<img src="~/images/arrow_small.png" />
+            </span>商户管理
+        </p>
+    </div>
+    <!--按钮区域-->
+    <div class="l_buttonnav">
+
+        <a href="#" class="tfbtn" id="save" onclick="Save()" hidden>
+            <span class="l-btn-left">
+                <span>保存</span>
+                <span><img src="~/images/ok.png" /></span>
+            </span>
+        </a>
+        <a href="#" class="tfbtn" id="edit" onclick="Edit()">
+            <span class="l-btn-left">
+                <span>编辑</span>
+                <span><img src="~/images/pencil.png" /></span>
+            </span>
+        </a>
+    </div>
+
+    <ul id="con">
+        <li class="show">
+            <div class="showBoxThree_right">
+                <div class="showBox_left">
+                    营业执照
+                </div>
+                <div class="picture">
+                    <img src="" id="myimg">
+                </div>
+                <div id="uphide" hidden>
+                    <input type="hidden" name="imgpath" id="imgpath" />
+                    <label>请上传营业执照的真实有效照片（要求：35K以下；jpeg）</label>
+                    <form id="form" method="post" enctype="multipart/form-data">
+                        <input type="file" name="Photo" id="Photo" />
+                    </form>
+                    <input type="button" value="上传" class="sub" onclick="upload()" />
+                </div>
+            </div>
+
+            <div class="showBox">
+                <div class="showBox_left">
+                    商家名称：
+                </div>
+                <div class="showBox_right">
+                    <input type="text" id="CompanyName" placeholder="请输入商家名称" class="tex"  />
+                </div>
+            </div>
+            <div class="showBox">
+                <div class="showBox_left">
+                    联系电话：
+                </div>
+                <div class="showBox_right">
+                    <input type="text" id="Phone" placeholder="请输入联系电话" class="tex"  />
+                </div>
+            </div>
+            @*
+        <div class="showBox" id="ygmima">
+            <div class="showBox_left">
+                用户名：
+            </div>
+            <div class="showBox_right">
+                <input type="text" id="userusername" placeholder="请输入用户名" />
+            </div>
+        </div>
+        <div class="showBox" id="ygmima">
+            <div class="showBox_left">
+                登录密码：
+            </div>
+            <div class="showBox_right">
+                <input type="text" id="password" placeholder="请输入员工姓名" />
+            </div>
+        </div>
+        <div class="showBox">
+            <div class="showBox_left">
+                确认密码：
+            </div>
+            <div class="showBox_right">
+                <input type="text" id="rpassword" placeholder="请输入家庭地址" class="tex" />
+            </div>
+        </div>*@
+            <div class="showBox" id="ygmima">
+                <div class="showBox_left">
+                    微信账号：
+                </div>
+                <div class="showBox_right">
+                    <input type="text" id="WeiXinPay" placeholder="请输微信账号"  class="tex" />
+                </div>
+            </div>
+
+        </li>
+
+    </ul>
+</div>
+@section scripts{
+    <script src="~/lib/jquery/dist/jquery.js"></script>
+    <script src="~/js/jquery.form.js"></script>
+    <script src="~/lib/layer/layer.js"></script>
+
+    <script>
+
+        //上传照片
+        function upload() {
+            $("#form").ajaxSubmit({
+                type: "POST",//提交类型 
+                url: "/uploadimage",//请求地址  
+                dataType: 'json',
+                success: function (data) {//请求成功后的函数  
+                    console.log('data' + data)
+                    if (data != "") {
+                        $("#myimg").attr("src", data[0]);
+                        $("#imgpath").val(data[0]);
+                    } else {
+                        layer.msg("请选择上传的图片！", { icon: 2 });
+                    }
+
+                },
+                error: function (data) { layer.msg(data, { icon: 2 }); },//请求失败的函数  
+                async: true
+            });
+        }
+        //页面开始加载人员
+        $(function () {
+            layer.load();
+            LoadComoany();
+        });
+        function LoadComoany() {
+            $(".tex").attr("disabled", "disabled");
+            $("#uphide").hide();
+            $("#save").hide();
+            $("#edit").show();
+            $.ajax({
+                type: 'Get',
+                url: '/getcompanybyid',
+                dataType: 'json',
+                data: {
+
+                },
+                success: function (dataBack) {
+                    console.log(dataBack)
+                    layer.closeAll('loading');
+                    if (dataBack.data != "") {
+                        $("#companyid").val(dataBack.data.id)
+                        $("#CompanyName").val(dataBack.data.companyName);
+                        $("#Phone").val(dataBack.data.phone);
+                        $("#imgpath").val(dataBack.data.license);
+                        $("#WeiXinPay").val(dataBack.data.weiXinPay);
+                        if (dataBack.data.license != null) {
+                            $("#myimg").attr("src", dataBack.data.license)
+                        }
+                    }
+                }, error: function (error) {
+                    layer.closeAll('loading');
+                    alert(error.status + error.statusText);
+                }
+            })
+
+        }
+
+        function Save() {
+            if (Check()) {
+                $.ajax({
+                    type: 'Post',
+                    url: '/modifycompany',
+                    dataType: 'json',
+                    data: {
+                        ID: $("#companyid").val(),
+                        CompanyName: $("#CompanyName").val(),
+                        Phone: $("#Phone").val(),
+                        License: $("#imgpath").val(),
+                        WeiXinPay: $("#WeiXinPay").val(),
+                        CompanyID: $("#companyid").val(),
+                        ModifierID: $("#companyid").val()
+                    },
+                    success: function (dataBack) {
+                        if (dataBack == 0) {
+                            layer.msg("该手机号已经存在！请输入正确的手机号！", { icon: 2 });
+                        } else {
+                            if (dataBack.result == 1) {
+                                layer.msg("修改成功", { icon: 1 });
+                                LoadComoany();
+                            } else {
+                                layer.msg("修改失败！", { icon: 2 });
+                            }
+                        }
+                    }, error: function (error) {
+
+                        alert(error.status + error.statusText);
+                    }
+                })
+            }
+
+        }
+        //编辑
+        function Edit() {
+            $('input').removeAttr("disabled");
+            $("#uphide").show();
+            $("#save").show();
+            $("#edit").hide();
+        }
+        function Check() {
+            var str = '';
+            //验证公司名称
+            if ($.trim($('#CompanyName').val()).length == 0) {
+                str += "请输入员工姓名！\n"
+                $('#CompanyName').focus();
+            }
+            //验证手机
+            if ($.trim($('#Phone').val()).length != 11) {
+                str += "请输入正确的11位手机号！\n"
+                $('#Phone').focus();
+            }
+            //验证营业执照
+            if ($.trim($('#imgpath').val()).length == 0) {
+                str += "上传营业执照！\n"
+            }
+            if (str != '') {
+                layer.msg(str, { icon: 2 });
+                return false;
+            } else {
+                return true;
+            }
+
+        }
+
+    </script>
+}

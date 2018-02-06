@@ -1,0 +1,225 @@
+﻿@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <meta charset="UTF-8">
+    <title>注册</title>
+    <link href="~/lib/bootstrap/dist/css/bootstrap.css" rel="stylesheet" />
+    <link href="~/css/main.css" rel="stylesheet" />
+    <script src="~/js/rjs.js"></script>
+
+
+</head>
+<body>
+    <div class="register">
+        <div class="container">
+            <div class="row">
+                <div class="registerBox">
+                    <div class="registerMiddle_title">全民打赏平台-商家注册</div>
+                    <div class="container-fluid sellerName">
+                        <div class="row">
+                            <div class="col-sm-3 col-xs-3">商家名称：</div>
+                            <div class="col-sm-9 col-xs-9">
+                                <input type="text" placeholder="请输入商家名称" id="CompanyName" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="container-fluid sellerName">
+                        <div class="row">
+                            <div class="col-sm-3 col-xs-3">联系电话：</div>
+                            <div class="col-sm-9 col-xs-9">
+                                <input type="text" placeholder="请输入联系电话" id="Phone" />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="container-fluid sellerName">
+                        <div class="row">
+                            <div class="col-sm-3 col-xs-3">用&nbsp;户&nbsp;名：</div>
+                            <div class="col-sm-9 col-xs-9">
+                                <input type="text" placeholder="请输入用户名" id="username" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="container-fluid sellerName">
+                        <div class="row">
+                            <div class="col-sm-3 col-xs-3">登录密码：</div>
+                            <div class="col-sm-9 col-xs-9">
+                                <input type="password" placeholder="请输入登录密码" id="password" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="container-fluid sellerName" style="margin-bottom: 5px;">
+                        <div class="row">
+                            <div class="col-sm-3 col-xs-3">确认密码：</div>
+                            <div class="col-sm-9 col-xs-9">
+                                <input type="password" placeholder="请确认密码" id="rpassword" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="picUpload container">
+                        <div class="col-sm-6 col-xs-6">
+                            <input type="hidden" name="imgpath" id="imgpath" />
+                            <div class="picUpload_font">
+                                请上传营业执照的真实有效照片（要求：35K以下；jpeg）
+                                <form id="form" method="post" enctype="multipart/form-data">
+                                    <input type="file" name="Photo" id="Photo">
+                                </form>
+                            </div>
+                        </div>
+                        <div class="col-sm-3 col-xs-3" style="padding-left: 0;">
+                            <div class="file_btn">
+                                点击上传
+                                <input type="button" onclick="upload()">
+                            </div>
+                        </div>
+                        <div class="col-sm-3 col-xs-3" style="padding-left: 0;">
+                            <div class="file_btn_img">
+                                <img src="~/images/admin.png" id="myimg" />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="read">
+                        <h1>
+                            《打赏系统商业协议》
+                            <a href="/agreementindex" target="_blank">阅读协议</a>
+                            <span>同意</span>
+                            <input type="checkbox" id="agree" />
+                        </h1>
+                    </div>
+                    <div class="registerSure">
+                        <input type="button" value="确认注册" onclick="Register()">
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="air-balloon ab-1 png"></div>
+    <div class="air-balloon ab-2 png"></div>
+    <div class="air-balloon ab-3 png"></div>
+    <div class="air-balloon ab-4 png"></div>
+
+    <script src="~/js/jquery-3.2.1.min.js"></script>
+    <script src="~/js/jquery.form.js"></script>
+    <script src="~/lib/layer/layer.js"></script>
+    <script>
+        $(function () {
+            var txt1 = '<div class="air-balloon ab-1 png"></div>';
+            var txt2 = '<div class="air-balloon ab-2 png"></div>';
+            var txt3 = '<div class="air-balloon ab-3 png"></div>';
+            var txt4 = '<div class="air-balloon ab-4 png"></div>';
+            var a = 0;
+            for (var i = 0; i <= 2; i++) {
+                $("body").append(txt1, txt2, txt3, txt4);
+            }
+        })
+        //上传照片
+        function upload() {
+            $("#form").ajaxSubmit({
+                type: "POST",//提交类型 
+                url: "/uploadimage",//请求地址  
+                dataType: 'json',
+                success: function (data) {//请求成功后的函数  
+                    console.log('data' + data)
+                    if (data != "") {
+                        $("#myimg").attr("src", data[0]);
+                        $("#imgpath").val(data[0]);
+                    } else {
+                        layer.msg("请选择上传的图片！", { icon: 2 });
+                    }
+
+                },
+                error: function (data) { layer.msg(data, { icon: 2 }); },//请求失败的函数  
+                async: true
+            });
+        }
+        //注册
+        function Register() {
+            if (Checkin()) {
+                $.ajax({
+                    type: 'Post',
+                    url: '/comregister',
+                    dataType: 'json',
+                    data: {
+                        CompanyName: $('#CompanyName').val(),
+                        Phone: $('#Phone').val(),
+                        License: $("#imgpath").val(),
+                        username: $("#username").val(),
+                        password: $("#password").val()
+                    },
+                    success: function (dataBack) {
+                        if (dataBack.result == 2) {
+                            layer.msg("用户名已经在,请重新输入用户名！", { icon: 2 });
+                            $('#username').focus();
+                        } else if (dataBack.result == 1) {
+                            layer.msg("注册成功", { icon: 1 });
+                            window.location.href = "/comlogin?username=" + $("#username").val();
+
+                        } else {
+                            layer.msg("注册失败！", { icon: 2 });
+                        }
+
+                    }, error: function (error) {
+                        layer.msg(error.status + error.statusText, { icon: 2 });
+
+                    }
+
+                })
+            }
+
+        }
+
+        function Checkin() {
+            var str = '';
+            //验证商户名称
+            if ($.trim($('#CompanyName').val()).length == 0) {
+                str += "请输入商户名称！\n"
+                $('#CompanyName').focus();
+            }
+            //验证手机
+            if ($.trim($('#Phone').val()).length != 11) {
+                str += "请输入正确的11位手机号！\n"
+                $('#Phone').focus();
+            }
+            //验证用户名
+            if ($.trim($('#username').val()).length == 0) {
+                str += "请输入用户名！\n"
+                $('#username').focus();
+            }
+            //验证营业执照
+            if ($.trim($('#imgpath').val()).length == 0) {
+                str += "上传营业执照！\n"
+            }
+            //验证密码
+            if ($('#password').val() != $('#rpassword').val()) {
+                str += "两次输入的密码不一致！\n"
+            } else if ($.trim($('#password').val()).length < 6 || $.trim($('#rpassword').val()).length < 6) {
+                str += "请设置六位以上密码！\n"
+                $('#password').focus();
+            }
+            if ($("input[type='checkbox']").is(':checked') == false) {
+                str += '请同意打赏系统商业协议!\n';
+            }
+            if (str != '') {
+                layer.msg(str, { icon: 2 });
+                return false;
+            } else {
+                return true;
+            }
+        }
+
+    </script>
+    <script src="~/js/fun.base.js"></script>
+    <script src="~/js/script.js"></script>
+</body>
+</html>

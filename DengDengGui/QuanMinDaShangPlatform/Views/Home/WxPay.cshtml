@@ -1,0 +1,110 @@
+﻿
+@{
+    Layout = null;
+}
+@*<form action="/showregistrationmessage" method="post">
+    <input name="openid" value="" id="openid" />
+    <input type="submit" />
+</form>*@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <meta charset="UTF-8">
+    <title>全民打赏</title>
+    <link href="~/lib/bootstrap/dist/css/bootstrap.css" rel="stylesheet" />
+    <link href="~/css/style.css" rel="stylesheet" />
+    <script src="~/lib/jquery/dist/jquery.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>    
+    <script src="~/js/rjs.js"></script>
+    <style>
+        body {
+            background-color: #f1f0f5;
+        }
+    </style>
+</head>
+<body>
+    <div class='container-fluid' style="padding:0; margin:0;">
+        @Html.Raw(ViewData["data"])
+    </div>
+</body>
+</html>
+
+
+
+<script>
+    $(function () {
+       SetCSS();
+
+        //微信支付获取信息
+        if (typeof WeixinJSBridge == "undefined") {
+            if (document.addEventListener) {
+                document.addEventListener('WeixinJSBridgeReady', editAddress, false);
+            }
+            else if (document.attachEvent) {
+                document.attachEvent('WeixinJSBridgeReady', editAddress);
+                document.attachEvent('onWeixinJSBridgeReady', editAddress);
+            }
+        }
+        else {
+            editAddress();
+        }
+    })
+    function GetQueryString(name) {
+        var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+        var r = window.location.search.substr(1).match(reg);
+        if (r != null) return unescape(r[2]); return null;
+    }
+
+    function SetCSS() {
+        var imgUrl = $('#img').val();
+        $('.headSculpture').css('background-image',' url(' + imgUrl + ')');
+       
+    }
+    //微信支付获取共享地址
+    function editAddress() {
+
+        WeixinJSBridge.invoke(
+            'editAddress',
+            function (res) {
+                var addr1 = res.proviceFirstStageName;
+                var addr2 = res.addressCitySecondStageName;
+                var addr3 = res.addressCountiesThirdStageName;
+                var addr4 = res.addressDetailInfo;
+                var tel = res.telNumber;
+                var addr = addr1 + addr2 + addr3 + addr4;
+
+            }
+        );
+    }
+
+    function SubmitOrder() {
+        var dsMoney = parseFloat($("#money").val());
+        $("#famt").val(dsMoney);
+        if (dsMoney > 0) {
+            $("#form").submit();
+        }
+    }
+
+    function SubmiteBtns(obj) {
+        var money = parseFloat(obj.value);
+        $("#famt").val(money)
+        if (money>0) {
+        $("#form").submit();
+        }
+    }
+
+    function SurePay() {
+        var money = parseFloat($("#payfee").val());
+        $("#famt").val(money);
+        if (money > 0) {
+            $("#form").submit();
+
+        }
+    }
+</script>
+
