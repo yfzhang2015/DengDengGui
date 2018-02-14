@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using TipWeb.Models;
 
 namespace TipWeb
 {
@@ -18,13 +19,15 @@ namespace TipWeb
 
         public IConfiguration Configuration { get; }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddOptions();
+            services.Configure<AppSettings>(Configuration.GetSection("AppSettings"));
+           
             services.AddMvc();
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
             if (env.IsDevelopment())
@@ -45,6 +48,22 @@ namespace TipWeb
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
+        }
+
+        /// <summary>
+        /// 设置微信和支付宝参数
+        /// </summary>
+        /// <param name="appSetting"></param>
+        void BindConfig(AppSettings appSetting)
+        {
+            WxPayConfig.APPID = appSetting.WXAppID;
+            WxPayConfig.APPSECRET = appSetting.WXAppSecert;
+            WxPayConfig.KEY = appSetting.WXKey;
+            WxPayConfig.MCHID = appSetting.WXMchid;
+            WxPayConfig.NOTIFY_URL = $"http://{appSetting.DomainName}/notify";
+            WxPayConfig.SSLCERT_PASSWORD = appSetting.WXSSLCertPassword;
+            WxPayConfig.SSLCERT_PATH = appSetting.WXSSLCertPath;
+
         }
     }
 }
