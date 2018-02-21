@@ -27,7 +27,213 @@ namespace TipWeb.Controllers
         {
             return View();
         }
+        [HttpGet("wxpay")]
+        public IActionResult WxPay(string openid, string employeeid = "ry20180124000015")
+        {
 
+            var employeeList = employeeTemplateRelationRepository.QueryEmployeeDsSetMessage(employeeid).ToList();
+            if (employeeList != null && employeeList.Count > 0)
+            {
+
+                switch (employeeList[0].DSTemplateType)
+                {
+                    case 0:
+                        #region 自由输入模式
+                        var str = $@"<div class='container-fluid'>
+			<div class='row'>
+				<div class='rewardBox'>
+					<div class='rewardTitle'>{employeeList[0].CompanyName}</div>				
+					<div class='rewardComment container'>{employeeList[0].Message}</div>
+					<div class='container'>
+						<div class='starZan'>
+							<div class='star'><p>打赏</p><P>{employeeList[0].Count}</p><p>次</p></div>
+						</div>						
+					</div>
+					<div class='rewardPic'>
+						<div class='rewardPicBox'>
+							<div class='headSculpture' id='backimg'></div>
+							<div class='shade'>
+								<h1>{employeeList[0].EName}</h1>
+                                <input type='hidden' id='img' value='{employeeList[0].Picture}'/>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class='container-fluid'>
+			<div class='rewardPay'>
+				<input type='number' placeholder='请输入金额' id='money'/>
+				<form action = '/ShowWeiXinPay' method='get' id='form'>
+				<input type='hidden'name='openid' value='{openid}'/>
+				<input type = 'hidden' name='fAmt' id='famt'/>
+				<input type = 'hidden' name='employeeid'  value='{employeeid}'/>
+			</form>
+			</div>
+		</div>
+		<div class='container-fluid'>
+			<div class='rewardPaySure'>
+				<input type='button' value='确认支付' onclick='SubmitOrder()'/>
+			</div>
+		</div>";
+                        ViewData["data"] = str;
+                        #endregion
+                        break;
+                    case 1:
+                        #region 多额固定模式
+                        var str1 = $@"
+<div class='container-fluid'>
+			<div class='row'>
+				<div class='rewardBox'>
+					<div class='rewardTitle'>{employeeList[0].CompanyName}</div>				
+					<div class='rewardComment container'>{employeeList[0].Message}</div>
+					<div class='container'>
+						<div class='starZan'>
+							<div class='star'><p>打赏</p><P>{employeeList[0].Count}</p><p>次</p></div>
+						</div>						
+					</div>
+					<div class='rewardPic'>
+						<div class='rewardPicBox'>
+							<div class='headSculpture' id='backimg'></div>
+							<div class='shade'>
+								<h1>{employeeList[0].EName}</h1>
+                                <input type='hidden' id='img' value='{employeeList[0].Picture}'/>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+<div class='container-fluid'>
+			<div class='rewardPay'>
+<div class='row'>
+						<div class='col-xs-4 choiceTally'>
+							<input class='singleBox' type='button' value='{Convert.ToDecimal(employeeList[0].DS1).ToString("0.00")}' onclick='SubmiteBtns(this)'/>
+						</div>
+						<div class='col-xs-4 choiceTally'>
+							<input class='singleBox' type='button' value='{Convert.ToDecimal(employeeList[0].DS2).ToString("0.00")}' onclick='SubmiteBtns(this)'/>
+						</div>
+						<div class='col-xs-4 choiceTally'>
+							<input class='singleBox' type='button' value='{Convert.ToDecimal(employeeList[0].DS3).ToString("0.00")}' onclick='SubmiteBtns(this)'/>
+						</div>
+                       
+                        <form action = '/ShowWeiXinPay' method='get' id='form'>
+				<input type='hidden'name='openid' value='{openid}'/>
+				<input type = 'hidden' name='fAmt' id='famt'/>
+				<input type = 'hidden' name='employeeid'  value='{employeeid}'/>
+			</form>
+					</div>
+</div>
+</div>";
+                        ViewData["data"] = str1;
+                        #endregion
+                        break;
+                    case 2:
+                        var str3 = $@"
+<div class='container-fluid'>
+			<div class='row'>
+				<div class='rewardBox'>
+					<div class='rewardTitle'>{employeeList[0].CompanyName}</div>				
+					<div class='rewardComment container'>{employeeList[0].Message}</div>
+					<div class='container'>
+						<div class='starZan'>
+							<div class='star'><p>打赏</p><P>{employeeList[0].Count}</p><p>次</p></div>
+						</div>						
+					</div>
+					<div class='rewardPic'>
+						<div class='rewardPicBox'>
+							<div class='headSculpture' id='backimg'></div>
+							<div class='shade'>
+								<h1>{employeeList[0].EName}</h1>
+                                <input type='hidden' id='img' value='{employeeList[0].Picture}'/>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+<div class='container-fluid'>
+			<div class='rewardPay'>
+<div class='row'>
+						
+						<div class='col-xs-12 choiceTally'>
+							<input class='singleBox' type='button' value='{Convert.ToDecimal(employeeList[0].DS1).ToString("0.00")}' onclick='SubmiteBtns(this)'/>
+						</div>
+						
+                       
+                        <form action = '/ShowWeiXinPay' method='get' id='form'>
+				<input type='hidden'name='openid' value='{openid}'/>
+				<input type = 'hidden' name='fAmt' id='famt'/>
+				<input type = 'hidden' name='employeeid'  value='{employeeid}'/>
+			</form>
+					</div>
+</div>
+</div>";
+                        ViewData["data"] = str3;
+                        break;
+                    case 3:
+                        #region 自由多金额模式
+                        var str2 = $@"
+<div class='container-fluid'>
+			<div class='row'>
+				<div class='rewardBox'>
+					<div class='rewardTitle'>{employeeList[0].CompanyName}</div>				
+					<div class='rewardComment container'>{employeeList[0].Message}</div>
+					<div class='container'>
+						<div class='starZan'>
+							<div class='star'><p>打赏</p><P>{employeeList[0].Count}</p><p>次</p></div>
+						</div>						
+					</div>
+					<div class='rewardPic'>
+						<div class='rewardPicBox'>
+							<div class='headSculpture' id='backimg'></div>
+							<div class='shade'>
+								<h1>{employeeList[0].EName}</h1>
+                                <input type='hidden' id='img' value='{employeeList[0].Picture}'/>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+<div class='container-fluid'>
+			<div class='rewardPay'>
+<div class='row'>
+						<div class='col-xs-4 choiceTally'>
+							<input class='singleBox' type='button' value='{Convert.ToDecimal(employeeList[0].DS1).ToString("0.00")}' onclick='SubmiteBtns(this)'/>
+						</div>
+						<div class='col-xs-4 choiceTally'>
+							<input class='singleBox' type='button' value='{Convert.ToDecimal(employeeList[0].DS2).ToString("0.00")}' onclick='SubmiteBtns(this)'/>
+						</div>
+						<div class='col-xs-4 choiceTally'>
+							<input class='singleBox' type='button' value='{Convert.ToDecimal(employeeList[0].DS3).ToString("0.00")}' onclick='SubmiteBtns(this)'/>
+						</div>
+                        <input type='number' value='请输入金额' style='margin-top: 1rem;' id='payfee'/>
+                       <input type='button' value='确认支付' style='margin-top: 1rem;' onclick='SurePay()'/>
+                        <form action = '/ShowWeiXinPay' method='get' id='form'>
+				<input type='hidden'name='openid' value='{openid}'/>
+				<input type = 'hidden' name='fAmt' id='famt'/>
+				<input type = 'hidden' name='employeeid'  value='{employeeid}'/>
+			</form>
+					</div>
+</div>
+</div>";
+                        ViewData["data"] = str2;
+                        #endregion
+                        break;
+                    default:
+                        break;
+                }
+            }
+            else
+            {
+                ViewData["data"] = "<h1>请为员工使用模板</h1>";
+            }
+
+
+            return View();
+        }
         #region 获取GetOpenid
         /// <summary>
         /// 获取GetOpenid
@@ -64,5 +270,153 @@ namespace TipWeb.Controllers
             }
         }
         #endregion
+
+        #region 微信支付建立订单付款信息
+        /// <summary>
+        /// 微信支付建立订单付款信息
+        /// </summary>
+        /// <param name="openid"></param>
+        /// <param name="orderNo">订单号</param>
+        /// <returns></returns>
+        [HttpPost("showregistrationmessage")]
+        public IActionResult Product(string openid, decimal fAmt, int employeeid)
+        {
+            var orderNo = DateTime.Now.ToString("yyyyMMddHHmmssfff");
+            //支付调用
+            if (!string.IsNullOrEmpty(openid))
+            {
+                //支付金额
+                //var fAmt = Convert.ToDecimal(1);
+                if (fAmt == 0)
+                {
+                    return View();
+                }
+                else
+                {
+                    string url = $"http://{_setting.DomainName}/ShowWeiXinPay?openid=" + openid + "&total_fee=" + Convert.ToInt32(fAmt * 100) + "&orderNo=" + orderNo + "&employeeid=" + employeeid;
+                    return Redirect(url);
+                }
+
+            }
+            else
+            {
+                ViewData["error"] = "页面缺少参数，请返回重试";
+                return View();
+            }
+        }
+
+        #endregion
+
+        #region 微信支付
+
+        /// <summary>
+        /// 微信支付
+        /// </summary>
+        /// <param name="openid">openid</param>
+        /// <param name="total_fee">支付费用</param>
+        /// <param name="orderNo">订单号</param>
+        /// <returns></returns>
+        [HttpGet("ShowWeiXinPay")]
+        public IActionResult ShowWeiXInPay(string openid, string orderNo = "asdfsdgbadfgsdf", string employeeid = null, decimal fAmt = 0)
+        {
+            orderNo = commercialRepository.ProduceID(4);
+            var userAgent = (HttpContext.Request.Headers as Microsoft.AspNetCore.Server.Kestrel.Core.Internal.Http.FrameRequestHeaders).HeaderUserAgent.ToString().ToLower();
+            //检测是否给当前页面传递了相关参数
+            if (string.IsNullOrEmpty(openid))
+            {
+                ViewData["error"] = "页面传参出错,请返回重试";
+                Log.Error(this.GetType().ToString(), "This page have not get params, cannot be inited, exit...");
+                return View();
+            }
+            //若传递了相关参数，则调统一下单接口，获得后续相关接口的入口参数
+            var jsApiPay = new JsApiPay();
+            jsApiPay.openid = openid;
+            jsApiPay.total_fee = Convert.ToInt32(fAmt * 100);
+            jsApiPay.notice_url = $"{_setting.DomainName}/registerresult";
+            jsApiPay.out_trade_no = orderNo;
+            jsApiPay.body = "奖励金";
+            jsApiPay.attach = employeeid;
+            //JSAPI支付预处理
+            try
+            {
+                WxPayData unifiedOrderResult = jsApiPay.GetUnifiedOrderResult();
+                var wxJsApiParam = jsApiPay.GetJsApiParameters();//获取H5调起JS API参数                    
+                Log.Debug(this.GetType().ToString(), "wxJsApiParam : " + wxJsApiParam);
+                ViewData["wxJsApiParam"] = wxJsApiParam;
+            }
+            catch (Exception ex)
+            {
+                ViewData["error"] = $"下单失败，请返回重试,{ex.Message}";
+            }
+            return View();
+        }
+        #endregion
+
+        #region 微信回调
+        /// <summary>
+        /// 微信回调
+        /// </summary>
+        /// <returns></returns>
+        [HttpPost("registerresult")]
+        public string RegisterResult()
+        {
+            _log.Info($"------直接挂号方法调方法-------");
+
+            var bytes = new Byte[Convert.ToInt32(Request.ContentLength)];
+            try
+            {
+                Request.Body.Read(bytes, 0, bytes.Length);
+                var content = System.Text.Encoding.UTF8.GetString(bytes);
+                var backData = new WxPayData();
+                backData.FromXml(content);
+                var return_code = backData.GetValue("return_code")?.ToString().ToUpper();
+                var result_code = backData.GetValue("result_code")?.ToString().ToUpper();
+                //var Return_Code = backData.GetValue("return_code")?.ToString().ToUpper();
+                var out_order_no = backData.GetValue("out_trade_no")?.ToString().ToUpper();
+                var total_fee = backData.GetValue("total_fee")?.ToString();
+                var openid = backData.GetValue("openid")?.ToString();
+                var attach = backData.GetValue("attach")?.ToString();
+                var transanctionID = backData.GetValue("transaction_id")?.ToString();
+                if (return_code.ToUpper() == "SUCCESS" && result_code == "SUCCESS")
+                {
+                    var result = dsInfoRepository.QueryDsInfoRepository(out_order_no);
+                    if (result == null || result.Count() < 1)
+                    {
+                        var dsInfo = new TQMDSDsInfo();
+                        dsInfo.DsOpenID = openid;
+                        dsInfo.EmployeeID = attach;
+                        dsInfo.DsMoney = Convert.ToDecimal(total_fee) / 100;
+                        dsInfo.OrderNo = out_order_no;
+                        dsInfo.TransanctionID = transanctionID;
+                        dsInfoRepository.AddDsInfoRepository(dsInfo);
+                    }
+
+                    var returnXML = @"<xml>
+<return_code><![CDATA[SUCCESS]]></return_code>
+<return_msg><![CDATA[OK]]></return_msg>
+</xml>";
+                    return returnXML;
+                }
+                else
+                {
+                    var returnXML = $@"<xml>
+<return_code><![CDATA[FAIL]]></return_code>
+<return_msg><![CDATA[]]></return_msg>
+</xml>";
+                    return returnXML;
+                }
+            }
+            catch (Exception exc)
+            {
+                _log.Fatal($"未知的异常:{exc.Message}");
+                var returnXML = $@"<xml>
+<return_code><![CDATA[FAIL]]></return_code>
+<return_msg><![CDATA[]]></return_msg>
+</xml>";
+                return returnXML;
+            }
+        }
     }
+    #endregion
+}
 }
