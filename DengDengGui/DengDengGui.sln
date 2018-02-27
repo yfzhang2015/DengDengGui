@@ -40,7 +40,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "文档", "文档", "{8F2066
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DesignPatterns", "DesignPatterns\DesignPatterns.csproj", "{1018895D-C09D-4CD0-B446-1A06D05BF765}"
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TipAPI", "Tip\TipAPI\TipAPI.csproj", "{9531862F-9111-4C5E-A6E2-F63B18EA554C}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TipWeb", "Tip\TipWeb\TipWeb.csproj", "{8C5BE240-A37F-4075-A543-6EAC82F61E25}"
 EndProject
@@ -78,6 +77,10 @@ Global
 		{1018895D-C09D-4CD0-B446-1A06D05BF765}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1018895D-C09D-4CD0-B446-1A06D05BF765}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1018895D-C09D-4CD0-B446-1A06D05BF765}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8C5BE240-A37F-4075-A543-6EAC82F61E25}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8C5BE240-A37F-4075-A543-6EAC82F61E25}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8C5BE240-A37F-4075-A543-6EAC82F61E25}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8C5BE240-A37F-4075-A543-6EAC82F61E25}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
