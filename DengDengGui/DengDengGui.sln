@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.27130.2026
+VisualStudioVersion = 15.0.27130.2036
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GeneralBusinessSystem", "GeneralBusinessSystem\GeneralBusinessSystem.csproj", "{896A5701-3335-407C-9DA9-D7B4BCA96207}"
 EndProject
@@ -32,7 +32,14 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QuanMinDaShangPlatform", "Q
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tip", "Tip", "{A3717564-3135-45FD-AA89-F925EA612780}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TipAPI", "Tip\TipAPI\TipAPI.csproj", "{9531862F-9111-4C5E-A6E2-F63B18EA554C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TipAPI", "Tip\TipAPI\TipAPI.csproj", "{9531862F-9111-4C5E-A6E2-F63B18EA554C}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "文档", "文档", "{8F2066FB-71B7-47FC-8117-8CCA621C2E06}"
+	ProjectSection(SolutionItems) = preProject
+		C:\Users\GuiSUV\Desktop\script.sql = C:\Users\GuiSUV\Desktop\script.sql
+	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DesignPatterns", "DesignPatterns\DesignPatterns.csproj", "{1018895D-C09D-4CD0-B446-1A06D05BF765}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -64,6 +71,10 @@ Global
 		{9531862F-9111-4C5E-A6E2-F63B18EA554C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9531862F-9111-4C5E-A6E2-F63B18EA554C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9531862F-9111-4C5E-A6E2-F63B18EA554C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1018895D-C09D-4CD0-B446-1A06D05BF765}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1018895D-C09D-4CD0-B446-1A06D05BF765}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1018895D-C09D-4CD0-B446-1A06D05BF765}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1018895D-C09D-4CD0-B446-1A06D05BF765}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -75,6 +86,8 @@ Global
 		{359E778B-157E-4FE3-AA5F-B173AB8DF472} = {CAFD7866-29D5-4244-AF96-134A3713A367}
 		{1A254C02-FA52-4D4F-8C8A-3E392313D057} = {CAFD7866-29D5-4244-AF96-134A3713A367}
 		{9531862F-9111-4C5E-A6E2-F63B18EA554C} = {A3717564-3135-45FD-AA89-F925EA612780}
+		{8F2066FB-71B7-47FC-8117-8CCA621C2E06} = {A3717564-3135-45FD-AA89-F925EA612780}
+		{1018895D-C09D-4CD0-B446-1A06D05BF765} = {DF3C4063-38AB-4E78-92CF-E63E4E68F337}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {BA5C9A64-ABFD-4E2F-A92D-5999028F201D}
