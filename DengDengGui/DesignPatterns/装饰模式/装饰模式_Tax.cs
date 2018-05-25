@@ -38,6 +38,9 @@ namespace DesignPatterns.装饰模式
             Console.WriteLine($"这里要交1%的所得税:{tax} 你剩余：{Sum}");
         }
     }
+    /// <summary>
+    /// 装饰类
+    /// </summary>
     public class Decorator : ComputeTax
     {
         /// <summary>
