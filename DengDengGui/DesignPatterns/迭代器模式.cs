@@ -22,36 +22,38 @@ namespace DesignPatterns
     }
     public class ConcreteIterator : Iterator
     {
-        ConcreteAggregate aggregate;
+        readonly ConcreteAggregate _aggregate;
         int current = 0;
         public ConcreteIterator(ConcreteAggregate aggregate)
         {
-            this.aggregate = aggregate;
+            _aggregate = aggregate;
         }
         public override object CurrentItem()
         {
-            return aggregate[current];
+            return _aggregate[current];
         }
 
         public override object First()
         {
-            return aggregate[0];
+            return _aggregate[0];
         }
 
         public override bool IsDone()
         {
-            return current >= aggregate.Count ? true : false;
+            return current >= _aggregate.Count ? true : false;
         }
 
         public override object Next()
         {
-            object ret = null;
             current++;
-            if(current<aggregate.Count)
+            if (current < _aggregate.Count)
             {
-                ret = aggregate[current];                    
+                return _aggregate[current];
             }
-            return ret;
+            else
+            {
+                return null;
+            }
         }
     }
 
@@ -65,7 +67,11 @@ namespace DesignPatterns
 
     public class ConcreteAggregate : Aggregate
     {
-        IList<object> items = new List<object>();
+        readonly IList<object> _items;
+        public ConcreteAggregate()
+        {
+            _items = new List<object>();
+        }
         public override Iterator CreateIterator()
         {
             return new ConcreteIterator(this);
@@ -75,18 +81,18 @@ namespace DesignPatterns
         {
             get
             {
-                return items.Count;
+                return _items.Count;
             }
         }
         public object this[int index]
         {
             get
             {
-                return items[index];
+                return _items[index];
             }
             set
             {
-                items.Insert(index, value);
+                _items.Insert(index, value);
             }
         }
     }

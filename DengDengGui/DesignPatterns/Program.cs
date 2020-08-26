@@ -9,11 +9,11 @@ namespace DesignPatterns
     {
       
 
-        static void Main(string[] args)
+        static void Main()
         {
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
             //观察者模式
-            观察者模式.观察者模式_消息通知.Start();
+            //观察者模式.观察者模式_消息通知.Start();
 
             //装饰模式.装饰模式_Tax.Start();
             // return;
@@ -115,8 +115,11 @@ namespace DesignPatterns
         #region 策略模式客户端    
         static void Invock2()
         {
-            var context = new Context("1");
-            context.GetCompute();
+            var contextA = new Context("1");
+            contextA.GetCompute();
+
+            var contextB = new Context("2");
+            contextB.GetCompute();
         }
         #endregion
         #region 装饰模式客户端   
@@ -155,9 +158,25 @@ namespace DesignPatterns
         #region 原型模式客户端  
         static void Invock6()
         {
-            ConcretePrototype1 p1 = new ConcretePrototype1("abc");
-            ConcretePrototype1 c1 = (ConcretePrototype1)p1.Clone();
-            Console.WriteLine($"Cloned:{c1.ID}");
+            //同类不同对象复制
+            var pa1 = new ConcretePrototypeA("abc");
+            var clone_pa1 = (ConcretePrototypeA)pa1.Clone();
+            Console.WriteLine($"pa1.id=:{pa1.ID}");
+            Console.WriteLine($"clone_pa1.id={clone_pa1.ID}");
+
+            var pa2 = new ConcretePrototypeA("123");
+            var clone_pa2 = (ConcretePrototypeA)pa2.Clone();
+            Console.WriteLine($"pa2.id=:{pa2.ID}");
+            Console.WriteLine($"clone_pa2.id={clone_pa2.ID}");
+
+
+            //不同类复制
+            var pb1 = new ConcretePrototypeB("!@#$%^&*()_+");
+            var clone_pb1 = (ConcretePrototypeB)pb1.Clone();
+            Console.WriteLine($"pb1.id=:{pb1.ID}");
+            Console.WriteLine($"clone_pb1.id={clone_pb1.ID}");
+
+
         }
         #endregion
         #region 模板方法模式客户端  
@@ -194,8 +213,8 @@ namespace DesignPatterns
             aObsSub.Attach(new AObserver(aObsSub));
             aObsSub.Attach(new BObserver(aObsSub));
             aObsSub.Notify();
-
-            var bObsSub = new AObsSubject();
+            Console.WriteLine("----------------------");
+            var bObsSub = new BObsSubject();
             bObsSub.Attach(new AObserver(bObsSub));
             bObsSub.Attach(new BObserver(bObsSub));
             bObsSub.Attach(new AObserver(bObsSub));
@@ -235,12 +254,16 @@ namespace DesignPatterns
         #region 备忘录模式客户端  
         static void Invock14()
         {
-            Originator ori = new Originator();
-            ori.State = "开";
+            var ori = new Originator
+            {
+                State = "开"
+            };
             ori.Show();
 
-            Caretaker car = new Caretaker();
-            car.Memento = ori.CreateMemento();
+            var car = new Caretaker
+            {
+                Memento = ori.CreateMemento()
+            };
 
             ori.State = "关";
             ori.Show();
@@ -254,33 +277,30 @@ namespace DesignPatterns
         #region 组合模式客户端  
         static void Invock15()
         {
-            Composite root = new Composite("root");
+            var root = new Composite("root");
             root.Add(new Leaf("Leaf A"));
             root.Add(new Leaf("Leaf B"));
 
-            Composite comp = new Composite("comp");
-            comp.Add(new Leaf("Composite Leaf A"));
-            comp.Add(new Leaf("Composite Leaf B"));
-
-            root.Add(comp);
-
-            Composite comp1 = new Composite("comp1");
+            var comp1 = new Composite("Composite1");
             comp1.Add(new Leaf("Composite1 Leaf A"));
             comp1.Add(new Leaf("Composite1 Leaf B"));
-            comp.Add(comp1);
+            root.Add(comp1);
 
+            var comp2 = new Composite("Composite2");
+            comp2.Add(new Leaf("Composite2 Leaf A"));
+            comp2.Add(new Leaf("Composite2 Leaf B"));
+            comp1.Add(comp2);
 
             root.Add(new Leaf("Leaf C"));
-
             root.Add(new Leaf("Leaf D"));
 
-            root.Display(1);
+            root.Display();
         }
         #endregion
         #region 迭代器模式客户端  
         static void Invock16()
         {
-            ConcreteAggregate conAgg = new ConcreteAggregate();
+            var conAgg = new ConcreteAggregate();
             conAgg[0] = "aaaa";
             conAgg[1] = "bbbb";
             conAgg[2] = "cccc";
@@ -291,6 +311,7 @@ namespace DesignPatterns
 
             Iterator iterator = new ConcreteIterator(conAgg);
             object item = iterator.First();
+            Console.WriteLine($"First:{item}");
             while (!iterator.IsDone())
             {
                 Console.WriteLine($"{iterator.CurrentItem()}来了");
@@ -386,11 +407,13 @@ namespace DesignPatterns
         {
 
             ExtContext context = new ExtContext();
-            var list = new List<AbstractExperssion>();
-            list.Add(new TerminalExpression());
-            list.Add(new NoterminalExpression());
-            list.Add(new TerminalExpression());
-            list.Add(new TerminalExpression());
+            var list = new List<AbstractExperssion>
+            {
+                new TerminalExpression(),
+                new NoterminalExpression(),
+                new TerminalExpression(),
+                new TerminalExpression()
+            };
 
             foreach (var exp in list)
             {

@@ -15,7 +15,7 @@ namespace DesignPatterns
     /// </summary>
     public class Context
     {
-        Strategy _strategy;
+        readonly Strategy _strategy;
         /// <summary>
         /// 原策略构造
         /// </summary>

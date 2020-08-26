@@ -10,7 +10,7 @@ namespace DesignPatterns
 **************************************************************/
 
     /// <summary>
-    /// 抽象形状购建者
+    /// 抽象形状构建者
     /// </summary>
     public abstract class ShapeBuilder
     {
@@ -18,7 +18,7 @@ namespace DesignPatterns
         public abstract void FillColor();
     }
     /// <summary>
-    /// 圆形
+    /// 圆形构建者
     /// </summary>
     public class CircleBuilder : ShapeBuilder
     {
@@ -33,7 +33,7 @@ namespace DesignPatterns
         }
     }
     /// <summary>
-    /// 矩形
+    /// 矩形构建者
     /// </summary>
     public class RectangleBuilder : ShapeBuilder
     {
@@ -52,7 +52,7 @@ namespace DesignPatterns
     /// </summary>
     public class ShapeDirector
     {
-        ShapeBuilder _shapeBuilder;
+        readonly ShapeBuilder _shapeBuilder;
         public ShapeDirector(ShapeBuilder shapeBuilder)
         {
             _shapeBuilder = shapeBuilder;

@@ -14,7 +14,7 @@ namespace DesignPatterns
     /// </summary>
     public abstract class ObsSubject
     {
-        IList<Observer> _observers;
+        readonly IList<Observer> _observers;
         public ObsSubject()
         {
             _observers = new List<Observer>();
@@ -40,10 +40,10 @@ namespace DesignPatterns
         }
     }
     public class AObsSubject : ObsSubject
-    {  
+    {
     }
     public class BObsSubject : ObsSubject
-    {      
+    {
     }
     public abstract class Observer
     {
@@ -54,15 +54,15 @@ namespace DesignPatterns
     /// </summary>
     public class AObserver : Observer
     {
-        ObsSubject _coSub;
+        readonly ObsSubject _coSub;
         public AObserver(ObsSubject coSub)
         {
             _coSub = coSub;
         }
 
         public override void Update()
-        {
-            Console.WriteLine($"AObserver观察者更新了自己状态");
+        {          
+            Console.WriteLine($"AObserver接到了通知，观察者更新了自己状态");
         }
     }
     /// <summary>
@@ -70,7 +70,7 @@ namespace DesignPatterns
     /// </summary>
     public class BObserver : Observer
     {
-        ObsSubject _coSub;
+        readonly ObsSubject _coSub;
         public BObserver(ObsSubject coSub)
         {
             _coSub = coSub;
@@ -78,7 +78,7 @@ namespace DesignPatterns
 
         public override void Update()
         {
-            Console.WriteLine($"BObserver观察者更新了自己状态");
+            Console.WriteLine($"BObserver接到了通知，观察者更新了自己状态");
         }
     }
 

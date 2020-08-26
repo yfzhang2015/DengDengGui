@@ -21,7 +21,9 @@ namespace DesignPatterns
         public abstract void Display(int depth);
 
     }
-
+    /// <summary>
+    /// 无子节点，最后节点
+    /// </summary>
     public class Leaf : ComponentGroup
     {
         string _name;
@@ -45,26 +47,29 @@ namespace DesignPatterns
             Console.WriteLine("Leaf.Remove");
         }
     }
-
+    /// <summary>
+    /// 有子节点
+    /// </summary>
     public class Composite : ComponentGroup
     {
-        List<ComponentGroup> children = new List<ComponentGroup>();
+        readonly List<ComponentGroup> _children;
 
-        string _name;
+        readonly string _name;
         public Composite(string name) : base(name)
         {
+            _children = new List<ComponentGroup>();
             _name = name;
         }
 
         public override void Add(ComponentGroup cg)
         {
-            children.Add(cg);
+            _children.Add(cg);
         }
 
-        public override void Display(int depth)
+        public override void Display(int depth=1)
         {
             Console.WriteLine(new String('-', depth) + _name);
-            foreach (ComponentGroup cg in children)
+            foreach (ComponentGroup cg in _children)
             {
                 cg.Display(depth + 2);
             }
@@ -72,7 +77,7 @@ namespace DesignPatterns
 
         public override void Remove(ComponentGroup cg)
         {
-            children.Remove(cg);
+            _children.Remove(cg);
         }
     }
 }

@@ -6,7 +6,7 @@ namespace DesignPatterns
 {
     /****************************************************************************
     * 享元模式
-    * 运用共享技术有效地支持大量细料度对象
+    * 运用共享技术有效地支持“大量”细粒度对象
     ****************************************************************************/
     /// <summary>
     /// 享元类
@@ -37,13 +37,16 @@ namespace DesignPatterns
     }
     public class FlyweightFactory
     {
-        Dictionary<string, Flyweight> flyweights;
+        readonly Dictionary<string, Flyweight> flyweights;
         public FlyweightFactory()
         {
-            flyweights = new Dictionary<string, Flyweight>();
-            flyweights.Add("x", new ConcreteFlyweight());
-            flyweights.Add("y", new ConcreteFlyweight());
-            flyweights.Add("z", new ConcreteFlyweight());
+            //把共享的对象提前实例化好，放在字典集合中，需要时按key取出使用，不用大量实例化
+            flyweights = new Dictionary<string, Flyweight>
+            {
+                { "x", new ConcreteFlyweight() },
+                { "y", new ConcreteFlyweight() },
+                { "z", new ConcreteFlyweight() }
+            };
         }
         public Flyweight GetFlyweight(string key)
         {

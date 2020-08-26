@@ -25,16 +25,31 @@ namespace DesignPatterns
         public abstract Prototype Clone();
     }
     /// <summary>
-    /// 子类
+    /// 子类A
     /// </summary>
-    public class ConcretePrototype1 : Prototype
-    {
-        public ConcretePrototype1(string id) : base(id)
+    public class ConcretePrototypeA : Prototype
+    {        
+        public ConcretePrototypeA(string id) : base(id)
         {
         }
         public override Prototype Clone()
         {
-            Console.WriteLine("ConcretePrototype1.Clone");
+            Console.WriteLine("调用ConcretePrototypeA.Clone方法");
+            return (Prototype)this.MemberwiseClone();
+        }
+    }
+
+    /// <summary>
+    /// 子类B
+    /// </summary>
+    public class ConcretePrototypeB : Prototype
+    {
+        public ConcretePrototypeB(string id) : base(id)
+        {
+        }
+        public override Prototype Clone()
+        {
+            Console.WriteLine("调用ConcretePrototypeB.Clone方法");
             return (Prototype)this.MemberwiseClone();
         }
     }
