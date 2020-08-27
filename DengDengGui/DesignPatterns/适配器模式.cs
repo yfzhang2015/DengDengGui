@@ -11,7 +11,7 @@ namespace DesignPatterns
     /// <summary>
     /// 原期待类
     /// </summary>
-    public  class Target
+    public class Target
     {
         public virtual void Request()
         {
@@ -31,12 +31,17 @@ namespace DesignPatterns
     /// <summary>
     /// 适配类
     /// </summary>
-    public class Adapter:Target
+    public class Adapter : Target
     {
-        Adaptee adaptee = new Adaptee();
+        readonly Adaptee _adaptee;
+
+        public Adapter()
+        {
+            _adaptee = new Adaptee();
+        }
         public override void Request()
         {
-            adaptee.SpecificRequest();
+            _adaptee.SpecificRequest();
             Console.WriteLine("Adapter.Request");
         }
     }

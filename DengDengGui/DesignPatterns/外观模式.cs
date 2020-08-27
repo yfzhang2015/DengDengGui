@@ -13,9 +13,9 @@ namespace DesignPatterns
     /// </summary>
     public class Facade
     {
-        SubSystemOne _subOne;
-        SubSystemTow _subTow;
-        SubSystemThree _subThree;
+        readonly SubSystemOne _subOne;
+        readonly SubSystemTow _subTow;
+        readonly SubSystemThree _subThree;
         public Facade()
         {
             _subOne = new SubSystemOne();

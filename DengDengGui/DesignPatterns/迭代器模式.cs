@@ -23,7 +23,7 @@ namespace DesignPatterns
     public class ConcreteIterator : Iterator
     {
         readonly ConcreteAggregate _aggregate;
-        int current = 0;
+        int current;
         public ConcreteIterator(ConcreteAggregate aggregate)
         {
             _aggregate = aggregate;
@@ -40,7 +40,7 @@ namespace DesignPatterns
 
         public override bool IsDone()
         {
-            return current >= _aggregate.Count ? true : false;
+            return current >= _aggregate.Count;
         }
 
         public override object Next()

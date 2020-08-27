@@ -29,7 +29,7 @@ namespace DesignPatterns
             set
             {
                 _state = value;
-                Console.WriteLine($"状态：{_state.GetType().Name}");
+                Console.WriteLine($"StateContext.State属性赋值：：StateContext.State={ _state.GetType().Name}");
             }
         }
 
@@ -53,6 +53,7 @@ namespace DesignPatterns
         public override void Handle(StateContext context)
         {
             context.State = new StateB();
+            Console.WriteLine($"StateA.Handle状态：StateContext.State={ context.State.GetType().Name}");
         }
     }
     /// <summary>
@@ -63,6 +64,7 @@ namespace DesignPatterns
         public override void Handle(StateContext context)
         {
             context.State = new StateA();
+            Console.WriteLine($"StateB.Handle状态：StateContext.State={ context.State.GetType().Name}");
         }
     }
 

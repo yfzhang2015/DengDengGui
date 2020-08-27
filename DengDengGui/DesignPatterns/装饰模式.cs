@@ -39,7 +39,7 @@ namespace DesignPatterns
             if (Component != null)
             {
                 Component.Operation();
-                Console.WriteLine("Decorator.Operation");
+                Console.WriteLine($"{Component.GetType().Name},Decorator.Operation");
             }
         }
     }
@@ -52,11 +52,11 @@ namespace DesignPatterns
         {
             base.Operation();
             Console.WriteLine("ConcreteDecoratorA.Operation");
-            //A();
+            A();
         }
         void A()
         {
-            Console.WriteLine("ConcreteDecoratorA.A");
+            Console.WriteLine("这是ConcreteDecoratorA内部的方法A()");
         }
     }
     /// <summary>
@@ -68,11 +68,11 @@ namespace DesignPatterns
         {
             base.Operation();
             Console.WriteLine("ConcreteDecoratorB.Operation");
-           // B();
+            B();
         }
         void B()
         {
-            Console.WriteLine("ConcreteDecoratorB.B");
+            Console.WriteLine("这是ConcreteDecoratorB内部的方法B()");
         }
     }
 

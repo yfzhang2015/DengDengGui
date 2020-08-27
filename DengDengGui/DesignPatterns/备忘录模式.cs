@@ -9,7 +9,7 @@ namespace DesignPatterns
     * 在不破坏封闭性的前提下,捕获一个对象的内部状态,并在该对象之外保存这个状态.这样以后就可将该对象恢复到原先保存的状态
     ****************************************************************************/
     /// <summary>
-    /// 备忘录类，备访 state这个属性
+    /// 备忘录类，备忘 state这个属性
     /// </summary>
     public class Memento
     {
@@ -28,7 +28,7 @@ namespace DesignPatterns
         }
     }
     /// <summary>
-    /// 发起人类
+    /// 发起人
     /// </summary>
     public class Originator
     {

@@ -30,7 +30,7 @@ namespace DesignPatterns
     /// <summary>
     /// 抽象类
     /// </summary>
-    public class Abstraction
+    public abstract class  Abstraction
     {
         protected Implementor _implementor;
         public void SetImplementor(Implementor implementor)
@@ -38,10 +38,7 @@ namespace DesignPatterns
             _implementor = implementor;
         }
 
-        public virtual void Operation()
-        {
-            _implementor.Operation();
-        }
+        public abstract void Operation();
     }
     /// <summary>
     /// 被提炼的抽象
